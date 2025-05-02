@@ -1,0 +1,190 @@
+---
+title: "busco synteny plotter for multiple genomes"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+
+```{r}
+suppressPackageStartupMessages({
+  library("argparse")
+  library("dplyr")})
+```
+
+## Functions
+```{r}
+# read busco files
+read_buscos <- function(file_name, prefix){
+  chr_label <- paste0('chr', prefix)
+  df <- read.csv(file_name, sep = '\t', comment.char = '#', header = FALSE)[,c(0:6)]
+  colnames(df) <- c('busco', 'status', chr_label, paste0(prefix, 'start'), paste0(prefix, 'end'),
+                    paste0(prefix, 'strand'))
+  if ( any(grepl("[|]", df[, chr_label])) ){
+    df[, chr_label] <- trim_strings(trim_strings(df[, chr_label], ":", 2), "[|]", 2)
+  }
+  if ( any(grepl("[:]", df[, chr_label])) ){
+    df[, chr_label] <- trim_strings(df[, chr_label], ":", 1)
+  }
+  df <- df[df$status %in% c('Complete'),]
+  df <- subset(df, select=-c(status))
+  return(df)
+}
+
+#--
+
+trim_strings <- function(values, delimiter, index){
+  sapply(strsplit(values, delimiter), function(x){ x[index] })
+}
+
+#--
+
+perform_inverts <- function(df, Q_chromosomes){
+  Q_chr <- Q_chromosomes$chr
+  reorientated_alignments <- data.frame(matrix(ncol = length(df), nrow = 0))
+  colnames(reorientated_alignments) <- colnames(df)
+  for (q in Q_chr){
+    df_subset <- df[df$chrQ == q,]
+    if (Q_chromosomes[Q_chromosomes$chr == q,]$invert == "TRUE"){
+      Q_end_value <- max(df_subset$Qend)
+      df_subset$Qstart <- (df_subset$Qstart - Q_end_value)*-1 # should technically be length of chr not R_end value
+      df_subset$Qend <- (df_subset$Qend - Q_end_value)*-1 # should technically be length of chr not R_end value
+      #df_subset$Qstrand[df_subset$Qstrand == '-'] <- '--'
+      #df_subset$Qstrand[df_subset$Qstrand == '+'] <- '-'
+      #df_subset$Qstrand[df_subset$Qstrand == '--'] <- '+'
+      df_subset$Qstart_temp <- df_subset$Qstart
+      df_subset$Qstart <- df_subset$Qend
+      df_subset$Qend <- df_subset$Qstart_temp
+      df_subset <- subset(df_subset, select = -c(Qstart_temp))
+      reorientated_alignments <- rbind(reorientated_alignments, df_subset)
+    }
+    else{ # no flip!
+      reorientated_alignments <- rbind(reorientated_alignments, df_subset)
+    }
+    
+  }
+  return(reorientated_alignments)
+}
+
+#--
+
+offset_chr <- function(df, q_or_r, chr_offset, chr_order){
+  counter = 0
+  offset = 0
+  offset_list <- list()
+  offset_alignments <- data.frame(matrix(ncol = 10, nrow = 0))
+  chr_prefix <- paste0('chr', q_or_r)
+  #chr_order <- unique(df[[chr_prefix]]) # no longer needed as specify order in function
+  chrStart <- paste0(q_or_r, 'start')
+  chrEnd <- paste0(q_or_r, 'end')
+  for (i in chr_order){
+    chr_df <- df[df[[chr_prefix]] == i,]
+    max_end <- max(chr_df[[chrStart]])
+    if (counter != 0){ # only need to offset start/end if this is not the first chr
+      chr_df <- chr_df %>% arrange(Rstart) # sort by ref regardless of it ref or query
+      chr_df[[chrStart]] <- chr_df[[chrStart]] + offset  # allows for accumulative chr positions
+      chr_df[[chrEnd]] <- chr_df[[chrEnd]] + offset # allows for accumulative chr positions
+    }
+    offset_alignments <- rbind(offset_alignments, chr_df)
+    offset_list <- append(offset_list, offset)
+    offset <- offset + max_end + chr_offset # accumulative offset
+    counter <- counter + 1
+  }
+  output_list <- list('df' = offset_alignments, 'offset_list' = offset_list, 'chr_order'=chr_order)
+  return(output_list)
+}
+
+#--
+
+plot_one_ref_chr <- function(df, cols, 
+                             adjustment_length_R, adjustment_length_Q, y_offset, alpha=1){ 
+  df$Qstart <- df$Qstart + adjustment_length_Q
+  df$Qend <- df$Qend + adjustment_length_Q
+  df$Rstart <- df$Rstart + adjustment_length_R
+  df$Rend <- df$Rend + adjustment_length_R
+  Qstarts <-df$Qstart
+  Qends <- df$Qend
+  Rstarts <- df$Rstart # was alignments
+  Rends <- df$Rend # was alignments
+  
+  #cols = c(col1, col2)
+  #border = ifelse(sign(Rends - Rstarts) == sign(Qends - Qstarts), cols[1], cols[2]) # if R&Q are same sign, use blue, else use red
+  #col = border
+  for (i in 1:nrow(df)){ # curved lines- sigmoid connector = x1,y1,x2,y2
+    busco_id <- df[i,]$busco
+    if (busco_id %in% names(cols)){
+      col <- cols[[busco_id]]
+    }else{
+      col <- "grey"
+    }
+    border = ifelse(sign(Rends - Rstarts) == sign(Qends - Qstarts), col, col)
+    lines.to.poly(sigmoid.connector(Qstarts[i], 1-gap-y_offset, Rstarts[i], 0+gap-y_offset, vertical=T),
+                  sigmoid.connector(Qends[i], 1-gap-y_offset, Rends[i], 0+gap-y_offset, vertical=T),
+                  col = adjustcolor(col[i], alpha.f=0.1), 
+                  border=ifelse(show_outline==FALSE, NA, adjustcolor(border[i], alpha.f=alpha)), lwd=lwd)
+  }
+}
+
+#--
+
+lines.to.poly <- function(l1,l2, col=NULL, border=NULL, lwd=NULL){
+  polygon(c(l1[,1],rev(l2[,1])), c(l1[,2],rev(l2[,2])), col=col, border=border)
+}
+
+#--
+
+sigmoid.connector <- function(x1,y1,x2,y2, curvature=10, steps=50, vertical=FALSE){
+  if (vertical==TRUE) {
+    vals <- c(x1,y1,x2,y2)
+    x1 <- vals[2]
+    x2 <- vals[4]
+    y1 <- vals[1]
+    y2 <- vals[3]
+  }
+  x <- seq(x1,x2,(x2-x1)/steps)
+  x_norm <- (x-(x1+x2)/2)/((x2-x1)/2)
+  y_norm <- 1/(1+exp(-x_norm*curvature))
+  y <- y1+(y_norm*(y2-y1))
+  if (vertical==TRUE) return(cbind(y,x))
+  cbind(x,y)
+}
+
+t_col <- function(color, percent = 50, name = NULL) {
+  rgb.val <- col2rgb(color)
+  t.col <- rgb(rgb.val[1], rgb.val[2], rgb.val[3],
+               max = 255,
+               alpha = (100 - percent) * 255 / 100,
+               names = name)
+  return(t.col)
+}
+
+```
+
+```{r}
+minimum_buscos <- 0
+chr_offset = 20000000 # TODO make this automatically a prop of chr length
+
+make_alignments_table <- function(R_df, R_chroms, Q_df, Q_chroms){
+  alignments <- merge(Q_df, R_df, buy = 'busco')
+  alignments <- alignments %>% group_by(chrR) %>% filter(n() > minimum_buscos) %>% ungroup()
+  # apply any filters
+  R_chroms <- R_chroms %>% filter(chr %in% alignments$chrR)
+  R_chroms <- R_chroms %>% arrange(order)
+  Q_chroms <- Q_chroms %>% filter(chr %in% alignments$chrQ)
+  chr_order_R <- R_chroms$chr # extract order of chr
+  Q_chroms <- Q_chroms %>% arrange(order)
+  chr_order_Q <- Q_chroms$chr #extract order of chr
+  alignments$alg <- NA
+  alignments <- perform_inverts(alignments, Q_chroms)
+  offset_alignments_Q <- offset_chr(alignments, 'Q', chr_offset, chr_order_Q)
+  offset_alignments_RQ <- offset_chr(offset_alignments_Q$df, 'R', chr_offset, chr_order_R)
+  alignments <- offset_alignments_RQ$df
+  offset_list_R <- offset_alignments_RQ$offset_list
+  offset_list_Q <- offset_alignments_Q$offset_list
+  output_list <- list('alignments' = alignments, 'chr_order_R' = chr_order_R, 'chr_order_Q' = chr_order_Q,
+                      'offset_list_R'=offset_list_R, 'offset_list_Q'=offset_list_Q)
+  return(output_list)
+}
+```
