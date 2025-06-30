@@ -28,7 +28,8 @@ clean_data <- function(data) {
   data.frame(chrQ.y = cleaned_values)
 }
 ################################################################################
-root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
+#root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
+root <- paste0(getwd(), "/")
 ################################################################################
 # color palette
 pal <- c("M1" = "#1573afff", "M2" = "#e59d38ff", "M3" = "#f0e354ff", 

@@ -5,7 +5,8 @@ library('tidyverse')
 library('ggplot2')
 library('gsheet')
 ################################################################################
-root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
+#root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
+root <- paste0(getwd(), "/")
 ################################################################################
 # color palette
 pal <- c("M1" = "#1573afff", "M2" = "#e59d38ff", "M3" = "#f0e354ff", 

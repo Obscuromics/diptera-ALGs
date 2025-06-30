@@ -9,7 +9,7 @@ library(dplyr)
 library(phytools)
 ################################################################################
 #root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
-root <- getwd()
+root <- paste0(getwd(), "/")
 tree <- read.tree(paste0(root, "data/315_supermatrix.phy.treefile"))
 names <- read.table(paste0(root, "data/acc_names_match.txt"), sep = ",")
 

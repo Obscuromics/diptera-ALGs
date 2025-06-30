@@ -5,7 +5,8 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 ################################################################################
-root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
+#root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
+root <- paste0(getwd(), "/")
 ################################################################################
 # A - tree with families
 diptera_info <- read.table(paste0(root, "data/names_acc_fam_2.csv"), sep = ",", header = TRUE)
