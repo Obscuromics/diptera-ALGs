@@ -5,8 +5,8 @@ library('tidyverse')
 library('ggplot2')
 library('gsheet')
 ################################################################################
-#root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
-root <- paste0(getwd(), "/")
+root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
+#root <- paste0(getwd(), "/")
 ################################################################################
 # color palette
 pal <- c("M1" = "#1573afff", "M2" = "#e59d38ff", "M3" = "#f0e354ff", 
@@ -138,16 +138,20 @@ buffer <- 1e5
 
 # Build plot
 p <- ggplot(df_wide) + 
-  geom_rect(aes_string(
-    xmin = paste0(start_x, " - buffer"),
-    xmax = paste0(end_x,   " + buffer"),
-    ymin = paste0(start_y, " - buffer"),
-    ymax = paste0(end_y,   " + buffer"),
-    fill = "ALG",
-    colour = "ALG"
-  )) +
-  geom_vline(data = chr_info_x, aes(xintercept = cum_end), color = "grey80", size = 0.2) +
-  geom_hline(data = chr_info_y, aes(yintercept = cum_end), color = "grey80", size = 0.2) +
+  #geom_rect(aes_string(
+  #  xmin = paste0(start_x, " - buffer"),
+  #  xmax = paste0(end_x,   " + buffer"),
+  #  ymin = paste0(start_y, " - buffer"),
+  #  ymax = paste0(end_y,   " + buffer"),
+  #  fill = "ALG",
+  #  colour = "ALG"
+  #), size = 1.5) +
+  geom_point(aes_string(
+    x = paste0(start_x, " - buffer"), 
+    y = paste0(start_y, " - buffer"), 
+    fill = "ALG", colour = "ALG")) +
+  geom_vline(data = chr_info_x, aes(xintercept = cum_end), color = "grey80", linewidth = 0.2) +
+  geom_hline(data = chr_info_y, aes(yintercept = cum_end), color = "grey80", linewidth = 0.2) +
   
   scale_fill_manual(values = pal) +
   scale_colour_manual(values = pal) +
@@ -164,19 +168,19 @@ p <- ggplot(df_wide) +
     name = paste0(gsub("_", " ", sp_y), " (Mb)\n"),
     sec.axis = sec_axis(~., breaks = chr_labels_y$mid, labels = chr_labels_y$chromosome)
   ) +
-  
   theme_bw()
 
   p <- p + theme(
     panel.background = element_blank(),
     panel.grid = element_blank(),
-    axis.text.x.top = element_text(angle=90, size=8),
-    axis.text.y.right = element_text(size=8),
-    axis.text = element_text(size=8),
-    axis.title = element_text(size=10),
+    axis.text.x.top = element_text(angle=90, size=14),
+    axis.text.x.bottom = element_text(size=14),
+    axis.title.x.bottom = element_text(size=18),
+    axis.text.y.right = element_text(size=14),
+    axis.text.y.left = element_text(size=14),
+    axis.title.y.left = element_text(size=18),
     legend.position = "none"
   )
 
 ggsave(paste0(root, "figures/two_species_dotplot.svg"), plot = p, dpi = 600, height = 10.25, width = 11.58)
 ggsave(paste0(root, "figures/two_species_dotplot.png"), plot = p, dpi = 600, height = 10.25, width = 11.58)
-
