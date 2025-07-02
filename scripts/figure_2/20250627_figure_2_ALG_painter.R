@@ -218,6 +218,6 @@ plt_n_markers <- ggplot(agg, aes(x = ALG_label, y = n_markers, fill = ALG)) +
   theme_bw() +
   theme(legend.position = "none")
 
-ggsave(paste0(root, "figures/n_buscos_per_ALGs.png"), plot = plt_n_markers, dpi = 600)
-ggsave(paste0(root, "figures/n_buscos_per_ALGs.svg"), plot = plt_n_markers, dpi = 600)
+ggsave(paste0(root, "figures/n_buscos_per_ALGs.png"), plot = plt_n_markers, dpi = 600, width = 10, height = 6)
+ggsave(paste0(root, "figures/n_buscos_per_ALGs.svg"), plot = plt_n_markers, dpi = 600, width = 10, height = 6)
 ################################################################################

@@ -165,16 +165,18 @@ p <- ggplot(df_wide) +
     sec.axis = sec_axis(~., breaks = chr_labels_y$mid, labels = chr_labels_y$chromosome)
   ) +
   
-  theme_bw() +
-  theme(
+  theme_bw()
+
+  p <- p + theme(
     panel.background = element_blank(),
     panel.grid = element_blank(),
-    axis.text.x.top = element_text(angle=90, size=5),
-    axis.text.y.right = element_text(size=5),
-    axis.text = element_text(size=5),
-    axis.title = element_text(size=7),
+    axis.text.x.top = element_text(angle=90, size=8),
+    axis.text.y.right = element_text(size=8),
+    axis.text = element_text(size=8),
+    axis.title = element_text(size=10),
     legend.position = "none"
   )
 
-ggsave(paste0(root, "figures/two_species_dotplot.svg"), plot = p, dpi = 600)
-ggsave(paste0(root, "figures/two_species_dotplot.png"), plot = p, dpi = 600)
+ggsave(paste0(root, "figures/two_species_dotplot.svg"), plot = p, dpi = 600, height = 10.25, width = 11.58)
+ggsave(paste0(root, "figures/two_species_dotplot.png"), plot = p, dpi = 600, height = 10.25, width = 11.58)
+
