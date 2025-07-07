@@ -8,8 +8,8 @@ library(ggplot2)
 library(dplyr)
 library(phytools)
 ################################################################################
-#root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
-root <- paste0(getwd(), "/")
+root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
+#root <- paste0(getwd(), "/")
 tree <- read.tree(paste0(root, "data/315_supermatrix.phy.treefile"))
 names <- read.table(paste0(root, "data/acc_names_match.txt"), sep = ",")
 
@@ -85,6 +85,13 @@ sorted_data_tips_desc <- as.data.frame(sorted_data_tips_desc)
 ################################################################################
 # plot chromosome number and genome size
 
+# set chromosome number and genome size of the outgroup to 0 to remove from the plot, 
+# but keep it so the plots align well with the tree
+
+outgroup <- "Panorpa_germanica"
+sorted_data_tips_desc$genome_size[sorted_data_tips_desc$label == outgroup] <- 0
+sorted_data_tips_desc$num_chrom[sorted_data_tips_desc$label == outgroup] <- 0
+
 sorted_data_tips_desc$group <- (cumsum(
   sorted_data_tips_desc$family != dplyr::lag(sorted_data_tips_desc$family, default = sorted_data_tips_desc$family[1])) %% 2) + 1
 
@@ -101,8 +108,7 @@ fig1_hap <- ggplot(sorted_data_tips_desc, aes(x = num_chrom, y = factor(y, level
         axis.text.y = element_blank(),
         axis.title.y = element_blank(),
         axis.title.x = element_blank(),
-        legend.position = "none") +
-  annotate(xmin = 6, xmax = 7, )
+        legend.position = "none")
 
 #fig1_hap
 
@@ -132,17 +138,19 @@ fig1_size <- ggplot(sorted_data_tips_desc, aes(x = genome_size, y = factor(y, le
 #ggsave(paste0(root, "figures/figure_1_size.png"), plot=fig1_size, width=2, height=13, dpi=600)
 
 ################################################################################
+require("ggpubr")
 
 # arrange three plots together
 plt_all <- ggarrange(tree_show + fig1_size + fig1_hap, nrow = 1)
-ggsave(paste0(root, "figures/fig1_first_three.png"), plot=plt_all, dpi=600)
-ggsave(paste0(root, "figures/fig1_first_three.svg"), plot=plt_all, dpi=600)
+ggsave(paste0(root, "figures/fig1_first_three.png"), plot=plt_all, dpi=600, width = 6, height = 10)
+ggsave(paste0(root, "figures/fig1_first_three.svg"), plot=plt_all, dpi=600, width = 6, height = 10)
 
 ################################################################################
 # plot species to family connector
+require("viridis")
 
 # reverse the order
-sorted_data_tips_desc <- sorted_data_tips_desc %>% arrange(y)
+sorted_data_tips_desc <- sorted_data_tips_desc %>% filter(!label == outgroup) %>% arrange(y) 
 
 number_of_species <- nrow(sorted_data_tips_desc)
 families <- unique(sorted_data_tips_desc$family)
@@ -160,14 +168,35 @@ curveMaker <- function(x1, y1, x2, y2, ...){
          x1, x2, add = TRUE, ...)
 }
 
+# sepcies richness
+diptera_org <- read.table(paste0(root, "data/diptera_org.tsv"), header = FALSE)
+colnames(diptera_org) <- c("family", "count")
+count2color <- data.frame(count = sort(unique(diptera_org$count)), color = viridis(length(unique(diptera_org$count))))
+diptera_org <- left_join(diptera_org, count2color, by = "count")
+sorted_data_tips_desc <- left_join(sorted_data_tips_desc, diptera_org, by = "family")
+sorted_data_tips_desc$color[is.na(sorted_data_tips_desc$count)] <- "grey60"
+
 pdf(paste0(root, 'figures/figure_1_sp_family_connectors.pdf'), width = 4, height = 10)
 
 plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = F, xlab = '', ylab = '')
-text(0.60, family_y, families, cex = 0.50, pos = 4)
+text(0.60, family_y, families, cex = 0.70, pos = 4)
 
-
-for ( i in 1:nrow(sorted_data_tips_desc)){ 
-  curveMaker(0.05, species_y[sorted_data_tips_desc[i, 'label']], 0.6, family_y[sorted_data_tips_desc[i, 'family']])
+x1 <- 0.05
+x2 <- 0.6
+for ( i in 1:nrow(sorted_data_tips_desc)){
+  fam <- families[i]
+  col <- sorted_data_tips_desc$color[sorted_data_tips_desc$family == fam]
+  border <- sorted_data_tips_desc$color[sorted_data_tips_desc$family == fam]
+  all_species <- sorted_data_tips_desc[sorted_data_tips_desc[, 'family'] == fam, 'label']
+  ys1 <- max(species_y[all_species])
+  ys2 <- min(species_y[all_species])
+  yf <- family_y[fam]
+  top_curve <- curveMaker(x1, ys1, x2, yf)
+  bot_curve <- curveMaker(x1, ys2, x2, yf)
+  polygon(c(top_curve[['x']], rev(bot_curve[['x']])), c(top_curve[['y']], rev(bot_curve[['y']])), 
+          col = col, border = border)
+  
+  #curveMaker(0.05, species_y[sorted_data_tips_desc[i, 'label']], 0.6, family_y[sorted_data_tips_desc[i, 'family']])
 }
 
 dev.off()
