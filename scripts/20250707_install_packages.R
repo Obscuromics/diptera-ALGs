@@ -10,6 +10,10 @@ conditional_install <- function(package){
 conditional_install('ape')
 conditional_install('phytools')
 conditional_install('rphylopic')
+conditional_install('viridis')
+conditional_install('gsheet')
+conditional_install('ggpubr')
+conditional_install('svglite')
 
 ## for bioconductor packages
 if(!("ggtree" %in% installed.packages()[,"Package"])){

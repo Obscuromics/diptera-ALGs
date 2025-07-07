@@ -2,20 +2,24 @@
 # excluded species marked in red
 # separately plot traits: BUSCO completeness, genome size, haploid chromosome number
 ################################################################################
-library(ape)
-library(ggtree)
-library(ggplot2)
-library(dplyr)
-library(phytools)
+require('ape')
+require('ggtree')
+require('ggplot2')
+require('dplyr')
+require('phytools')
+require('gsheet')
+require("ggpubr")
+require("viridis")
+
 ################################################################################
 #root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
-root <- paste0(getwd(), "/")
+# root <- paste0(getwd(), "/")
 tree <- read.tree("data/diptera.supermatrix.phy.treefile")
 # names <- read.table("data/acc_names_match.txt", sep = ",")
-root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
+# root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
 #root <- paste0(getwd(), "/")
-tree <- read.tree(paste0(root, "data/315_supermatrix.phy.treefile"))
-names <- read.table(paste0(root, "data/acc_names_match.txt"), sep = ",")
+# tree <- read.tree(paste0(root, "data/diptera.supermatrix.phy.treefile"))
+# names <- read.table(paste0(root, "data/acc_names_match.txt"), sep = ",")
 
 # change accessions to species names
 # tip_labels <- tree$tip.label
@@ -63,14 +67,14 @@ tree_show <- ggtree(tree_clean)
   #            linetype = "dotted", linesize = 0.05, size = 1.2) +
   #scale_color_manual(values = c("TRUE" = "red", "FALSE" = "black")) +
   #theme(legend.position = "none") 
-tree_show
+# tree_show
 
 # safe image
 # ggsave(paste0(root, "figures/figure_1_tree.png"), plot=tree_show, width=10, height=13, dpi=600)
 
 ################################################################################
 # extract information about the genomes
-require('gsheet')
+
 all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM/edit?usp=sharing", format='csv'),
                             stringsAsFactors = F, header = T, check.names = F)
 genome_data <- all_genome_data[all_genome_data[, 'TO ADD'] == 'KEEP', ]
@@ -143,16 +147,15 @@ fig1_size <- ggplot(sorted_data_tips_desc, aes(x = genome_size, y = factor(y, le
 #ggsave(paste0(root, "figures/figure_1_size.png"), plot=fig1_size, width=2, height=13, dpi=600)
 
 ################################################################################
-require("ggpubr")
+
 
 # arrange three plots together
 plt_all <- ggarrange(tree_show + fig1_size + fig1_hap, nrow = 1)
-ggsave(paste0(root, "figures/fig1_first_three.png"), plot=plt_all, dpi=600, width = 6, height = 10)
-ggsave(paste0(root, "figures/fig1_first_three.svg"), plot=plt_all, dpi=600, width = 6, height = 10)
+ggsave("figures/fig1_first_three.png", plot=plt_all, dpi=600, width = 6, height = 10)
+ggsave("figures/fig1_first_three.svg", plot=plt_all, dpi=600, width = 6, height = 10)
 
 ################################################################################
 # plot species to family connector
-require("viridis")
 
 # reverse the order
 sorted_data_tips_desc <- sorted_data_tips_desc %>% filter(!label == outgroup) %>% arrange(y) 
@@ -174,14 +177,14 @@ curveMaker <- function(x1, y1, x2, y2, ...){
 }
 
 # sepcies richness
-diptera_org <- read.table(paste0(root, "data/diptera_org.tsv"), header = FALSE)
+diptera_org <- read.table("tables/diptera_org.tsv", header = FALSE)
 colnames(diptera_org) <- c("family", "count")
 count2color <- data.frame(count = sort(unique(diptera_org$count)), color = viridis(length(unique(diptera_org$count))))
 diptera_org <- left_join(diptera_org, count2color, by = "count")
 sorted_data_tips_desc <- left_join(sorted_data_tips_desc, diptera_org, by = "family")
 sorted_data_tips_desc$color[is.na(sorted_data_tips_desc$count)] <- "grey60"
 
-pdf(paste0(root, 'figures/figure_1_sp_family_connectors.pdf'), width = 4, height = 10)
+pdf('figures/figure_1_sp_family_connectors.pdf', width = 4, height = 10)
 
 plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = F, xlab = '', ylab = '')
 text(0.60, family_y, families, cex = 0.70, pos = 4)
