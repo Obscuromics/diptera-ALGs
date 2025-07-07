@@ -8,23 +8,28 @@ library(ggplot2)
 library(dplyr)
 library(phytools)
 ################################################################################
+#root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
+root <- paste0(getwd(), "/")
+tree <- read.tree("data/diptera.supermatrix.phy.treefile")
+# names <- read.table("data/acc_names_match.txt", sep = ",")
 root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
 #root <- paste0(getwd(), "/")
 tree <- read.tree(paste0(root, "data/315_supermatrix.phy.treefile"))
 names <- read.table(paste0(root, "data/acc_names_match.txt"), sep = ",")
 
 # change accessions to species names
-tip_labels <- tree$tip.label
-name_mapping <- setNames(names$V2, names$V1)
-new_tip_labels <- ifelse(tip_labels %in% names(name_mapping), 
-                         name_mapping[tip_labels], 
-                         tip_labels)
-tree$tip.label <- new_tip_labels
+# tip_labels <- tree$tip.label
+# name_mapping <- setNames(names$V2, names$V1)
+# new_tip_labels <- ifelse(tip_labels %in% names(name_mapping), 
+#                          name_mapping[tip_labels], 
+#                          tip_labels)
+# tree$tip.label <- new_tip_labels
 
 # remove two unused outgroups
-tip_to_remove <- c("Danaus_plexippus",
-                   "Limnephilus_lunatus")
-tree_clean <- drop.tip(tree, tip_to_remove)
+# tip_to_remove <- c("Danaus_plexippus",
+#                    "Limnephilus_lunatus")
+# tree_clean <- drop.tip(tree, tip_to_remove)
+tree_clean <- tree
 
 # color 24 species that were excluded
 colour_tips <- c("Myopa_testacea",
@@ -61,7 +66,7 @@ tree_show <- ggtree(tree_clean)
 tree_show
 
 # safe image
-#ggsave(paste0(root, "figures/tree_figure_1.png"), plot=tree_show, width=10, height=13, dpi=600)
+# ggsave(paste0(root, "figures/figure_1_tree.png"), plot=tree_show, width=10, height=13, dpi=600)
 
 ################################################################################
 # extract information about the genomes
