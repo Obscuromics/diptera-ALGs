@@ -149,7 +149,8 @@ fig1_size <- ggplot(sorted_data_tips_desc, aes(x = genome_size, y = factor(y, le
 
 
 # arrange three plots together
-plt_all <- ggarrange(tree_show, fig1_size, fig1_hap, nrow = 1, ncol = 3, widths = c(3,1,1))
+# plt_all <- ggarrange(tree_show, fig1_size, fig1_hap, nrow = 1, ncol = 3, widths = c(3,1,1)) # this breaks alignment of the figures
+plt_all <- ggarrange(tree_show + fig1_size + fig1_hap, nrow = 1)
 ggsave("figures/fig1_first_three.png", plot=plt_all, dpi=600, width = 6, height = 10)
 ggsave("figures/fig1_first_three.svg", plot=plt_all, dpi=600, width = 6, height = 10)
 
