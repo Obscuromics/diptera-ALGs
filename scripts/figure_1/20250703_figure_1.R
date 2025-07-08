@@ -33,7 +33,6 @@ tree <- read.tree("data/diptera.supermatrix.phy.treefile")
 # tip_to_remove <- c("Danaus_plexippus",
 #                    "Limnephilus_lunatus")
 # tree_clean <- drop.tip(tree, tip_to_remove)
-tree_clean <- tree
 
 # color 24 species that were excluded
 colour_tips <- c("Myopa_testacea",
@@ -61,7 +60,7 @@ colour_tips <- c("Myopa_testacea",
                  "Melieria_crassipennis",
                  "Eupeodes_corollae")
 
-tree_show <- ggtree(tree_clean)
+tree_show <- ggtree(tree)
   #geom_tree(aes(color = label %in% colour_tips), size = 0.5) +
   #geom_tiplab(aes(color = "black"), align = TRUE, offset = 0.05, 
   #            linetype = "dotted", linesize = 0.05, size = 1.2) +
@@ -150,7 +149,7 @@ fig1_size <- ggplot(sorted_data_tips_desc, aes(x = genome_size, y = factor(y, le
 
 
 # arrange three plots together
-plt_all <- ggarrange(tree_show + fig1_size + fig1_hap, nrow = 1)
+plt_all <- ggarrange(tree_show, fig1_size, fig1_hap, nrow = 1, ncol = 3, widths = c(3,1,1))
 ggsave("figures/fig1_first_three.png", plot=plt_all, dpi=600, width = 6, height = 10)
 ggsave("figures/fig1_first_three.svg", plot=plt_all, dpi=600, width = 6, height = 10)
 
@@ -159,21 +158,29 @@ ggsave("figures/fig1_first_three.svg", plot=plt_all, dpi=600, width = 6, height 
 
 # reverse the order
 sorted_data_tips_desc <- sorted_data_tips_desc %>% filter(!label == outgroup) %>% arrange(y) 
-
+# table(sorted_data_tips_desc[, 'family'])
 number_of_species <- nrow(sorted_data_tips_desc)
 families <- unique(sorted_data_tips_desc$family)
 number_of_families <- length(families)
 
-species_y <- 1:number_of_species / number_of_species
+species_step <- (1 / number_of_species)
+species_y <- (1:number_of_species / number_of_species) - (species_step / 2)
 names(species_y) <- sorted_data_tips_desc$label
 
-family_y <- 1:number_of_families / number_of_families
+family_step <- (1 / number_of_families)
+family_y <- (1:number_of_families / number_of_families) - (family_step / 2)
 names(family_y) <- families
 
-# code fgrid# code from https://stackoverflow.com/a/32100956/29281675
-curveMaker <- function(x1, y1, x2, y2, ...){
-  curve( plogis( x, scale = 0.08, loc = (x1 + x2) /2 ) * (y2-y1) + y1, 
-         x1, x2, add = TRUE, ...)
+# Inpired by code here: https://stackoverflow.com/a/32100956/29281675
+curve_manual <- function(x1, y1, x2, y2, scale = 0.08, plot = F, ...){
+  line_resolution = 1001
+  curve_list <- list()
+  curve_list[['x']] <- seq(x1, x2, len = line_resolution)
+  curve_list[['y']] <- plogis( seq(0, 1, len = line_resolution), scale = scale, loc = 0.5 ) * (y2 - y1) + y1
+  if ( plot ){
+    lines(curve_list[['x']], curve_list[['y']], ...)
+  }
+  return(curve_list)
 }
 
 # sepcies richness
@@ -189,8 +196,9 @@ pdf('figures/figure_1_sp_family_connectors.pdf', width = 4, height = 10)
 plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = F, xlab = '', ylab = '')
 text(0.60, family_y, families, cex = 0.70, pos = 4)
 
-x1 <- 0.05
+x1 <- 0.4
 x2 <- 0.6
+curviness <- 0.10
 for ( i in 1:nrow(sorted_data_tips_desc)){
   fam <- families[i]
   col <- sorted_data_tips_desc$color[sorted_data_tips_desc$family == fam]
@@ -199,12 +207,11 @@ for ( i in 1:nrow(sorted_data_tips_desc)){
   ys1 <- max(species_y[all_species])
   ys2 <- min(species_y[all_species])
   yf <- family_y[fam]
-  top_curve <- curveMaker(x1, ys1, x2, yf)
-  bot_curve <- curveMaker(x1, ys2, x2, yf)
+  top_curve <- curve_manual(x1, ys1 + (species_step / 6), x2, yf, scale = curviness)
+  bot_curve <- curve_manual(x1, ys2 - (species_step / 6), x2, yf, scale = curviness)
   polygon(c(top_curve[['x']], rev(bot_curve[['x']])), c(top_curve[['y']], rev(bot_curve[['y']])), 
-          col = col, border = border)
-  
-  #curveMaker(0.05, species_y[sorted_data_tips_desc[i, 'label']], 0.6, family_y[sorted_data_tips_desc[i, 'family']])
+          col = col, border = col)
+  # rect(0.37, ys2 - (species_step / 2), 0.39, ys1 + (species_step / 2), col = col[1], border = NA) # , bty = 'n'
 }
 
 dev.off()
