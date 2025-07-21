@@ -41,25 +41,32 @@ clean_data <- function(data) {
 
 parser <- ArgumentParser()
 parser$add_argument("-f", "--family", 
-    help="The name of the dipteran family to plot (first letter capitalised; ex.: Sciaridae)")
+    help="The name of the dipteran family to plot (first letter capitalised; ex.: Sciaridae)", default = "")
+parser$add_argument("-l", "--list_of_species", 
+    help="A name of a text file with a species list (one per line, underscores between genus and species name)", default = "")
 parser$add_argument("-o", "--output",  
     dest="o", help="Base of the output name (.png will be attached)")
 parser$add_argument("-p", "--paint_by",  
-    help="What reference should be used for painting")
+    help="What reference should be used for painting", default = 'ALGs')
 parser$add_argument("-s", "--subsample", default = 0,
-    help="If there is more than -s genomes, subsample to this number")
+    help="If there is more than -s genomes selected, subsample to this number")
 
 args <- parser$parse_args()
 
 family <- args$f
-busco_asn_file <- 'data/syngraph/syngraph_pruning1/syngraph.pruned.ALGs.inferred.tsv' # 'Diptera_ALG_new.tsv'
+species_list_file <- args$l 
+busco_asn_file <- 'data/ALG_assignments_pruned2_m100.tsv' # 'Diptera_ALG_new.tsv'
 output_file <-  paste0(args$o, '.png')
 chromosome_files_dir <- 'data/diptera_chromosome_files/'
 busco_files_dir <- "data/busco_tables/"
 
+if (family == "" && species_list_file == ""){
+  stop("Either a list of species, or family needs to be specified.")
+}
+
 ################################################################################
 ALG_data <- read.table(busco_asn_file, col.names = c('busco', 'chrQ'))
-head(ALG_data)
+# head(ALG_data)
 rownames(ALG_data) <- ALG_data[, 'busco']
 
 # internal_node_directory <- 'ALG_to_muller_nodes_with_6'
@@ -105,13 +112,31 @@ rownames(ALG_data) <- ALG_data[, 'busco']
 all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM/edit?usp=sharing", format='csv'),
                             stringsAsFactors = F, header = T, check.names = F)
 
-all_genome_data <- all_genome_data[all_genome_data[, 'TO ADD'] == 'KEEP', ]
+all_genome_data <- all_genome_data[all_genome_data[, 'TO ADD'] %in% c('KEEP', 'OUTGROUP'), ]
 
 # species_table <- read.table('20250510_reference_genome_table.tsv', sep = '\t', header = T)
 # species_table <- species_table[!(species_table[, 'excluded_from_ALG_inference'] %in% c('busco_fail', 'dupl_fail')), ]
 # length(species_table[, 'accession'])
 
-family_table <- all_genome_data[grepl(family, all_genome_data[, 'family']), ]
+print(paste("Loaded ", nrow(all_genome_data), "genomes."))
+
+family_table <- all_genome_data
+
+if ( nchar(family) != 0 ){
+  family_table <- family_table[grepl(family, family_table[, 'family']), ]
+  print(paste("Subsetting to ", nrow(family_table), " members of", family, 'family'))
+}
+
+if ( nchar(species_list_file) != 0 ){
+  species_to_plot <- read.table(species_list_file, header = F)[, 1]
+  
+  row.names(family_table) <- family_table[, 'species']
+
+  family_table <- family_table[species_to_plot, ]
+  print(paste("Subsetting to ", nrow(family_table), " species in the specified list"))
+}
+
+# head(family_table)
 
 if (nrow(family_table) > args$s & args$s != 0){
   family_table <- family_table[sample(1:nrow(family_table), args$s), ]
@@ -128,8 +153,9 @@ busco_files <- paste0(species_to_plot, '.syngraph.buscos.tsv')
 
 ################################################################################
 
-alg_pal <- c("d1" = "#169e73ff", "d2" = "#e59d38ff", "d3" = "#1573afff",
-         "d4" = "#f0e354ff", "d5" = "#60b5e1ff", "d6" = "black", "100" = "white")
+source("scripts/20250620_colour_pal.R")
+# alg_pal <- c("d1" = "#169e73ff", "d2" = "#e59d38ff", "d3" = "#1573afff",
+#          "d4" = "#f0e354ff", "d5" = "#60b5e1ff", "d6" = "black", "100" = "white")
 
 new_colnames <- c("busco", "chrQ", "Qstart", "Qend")
 
@@ -206,12 +232,12 @@ for (j in 1:length(busco_files)) {
   }
   result <- append(result, list(busco_data_ALG_sorted[nrow(busco_data_ALG_sorted), ]))
   busco_data_ALG_final <- do.call(rbind, result)
-  head(busco_data_ALG_final, 100)
-  tail(busco_data_ALG_final, 100)
+  # head(busco_data_ALG_final, 100)
+  # tail(busco_data_ALG_final, 100)
   # remove everything but chrQ.y
   busco_data_ALG_final <- busco_data_ALG_final %>%
     select(-busco, -chrQ.x)
-  head(busco_data_ALG_final, 100)
+  # head(busco_data_ALG_final, 100)
   
   # clean edges of chromosomes
   cleaned_data <- clean_data(busco_data_ALG_final)
