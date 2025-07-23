@@ -1,0 +1,11 @@
+{
+	"input_tsv" : "${launchDir}/data/infer_alg_input.tsv",
+	"busco_db" : "diptera_odb12",
+	"busco_download_path" : "/data/tol/resources/busco/latest/",
+	"iqtree_model" : "Q.insect+I+G4",
+	"iqtree_outgroup" : "Panorpa_germanica",
+	"syngraph_reference" : "Panorpa_germanica",
+	"taxon" : "diptera",
+	"outdir" : "${launchDir}/data/results/infer_alg_diptera",
+	"from_busco_input_tsv" : "${launchDir}/data/from_busco_input.tsv"
+}
