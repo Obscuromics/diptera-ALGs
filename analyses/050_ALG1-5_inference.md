@@ -44,6 +44,37 @@ syngraph tabulate -g data/results/infer_alg_diptera/syngraph/diptera.pruned2.syn
 ```
 If you run this as is the output files will overwrite the last analysis I did so could edit those.
 
+#### Selection of species
+
+```R
+# cd ~/Projects/ALGs/syngraph
+
+library(gsheet)
+library(ape)
+
+tree <- read.tree("./data/results/infer_alg_diptera/iqtree/diptera.supermatrix.phy.treefile")
+
+all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM/edit?usp=sharing", format='csv'),
+                            stringsAsFactors = F, header = T, check.names = F)
+
+# all_genome_data <- all_genome_data[all_genome_data[, 'TO ADD'] %in% c('KEEP', 'OUTGROUP'), ]
+species_in_the_tree <- sapply(all_genome_data[, 'species'], function(x){x %in% tree$tip.label})
+species_with_decent_busco_and_allowed_to_be_used <- !(all_genome_data[, 'excluded_from_ALG_inference'] == "removed (B)" | all_genome_data[, 'excluded_from_ALG_inference'] == "removed (U)")
+drosohilids <- all_genome_data[, 'family'] == 'Drosophilidae'
+# species_to_list <- species_in_the_tree[species_in_the_tree[, 'excluded_from_ALG_inference'] == '', 'species']
+species_to_list <- all_genome_data[drosohilids & species_in_the_tree & species_with_decent_busco_and_allowed_to_be_used, 'species']
+
+write.table(data.frame(sp = species_to_list), file = 'data/pruning6_droshophilidae_keep_list.txt', col.names = F, quote = F, row.names = F)
+```
+
+now move all the species out, and back only those Julia used.
+
+```bash
+mv ./data/results/infer_alg_diptera/syngraph_busco_tables/* ./data/results/infer_alg_diptera/excluded_syngraph_busco_tables/
+
+while read species; do echo $species; mv ./data/results/infer_alg_diptera/excluded_syngraph_busco_tables/"$species".syngraph.buscos.tsv ./data/results/infer_alg_diptera/syngraph_busco_tables/; done < data/pruning6_droshophilidae_keep_list.txt
+```
+
 #### Kamil's attempt 3
 
 The first attempt was to run syngraph with `-m 100`, that worked for the ALGs, but internal nodes were messed up. I will redo the run while excluding all those Julia excluded.
@@ -87,6 +118,53 @@ syngraph infer -g data/results/infer_alg_diptera/syngraph/diptera.pruned.syngrap
 
 syngraph tabulate -g data/results/infer_alg_diptera/syngraph/mrange/diptera.pruned3.m"$m".syngraph_infer.with_ancestors.pickle -o data/results/infer_alg_diptera/syngraph/mrange/diptera.pruned3.m"$m".syngraph_tabulate
 done
+```
+
+These did not work at all. I have no idea what happened. I think I need to come back to basics. Can I regenerate Julia's results if I use the same genomes? Perhpas at the beginning I will remove those that we were asked to remove, but that's nearly identical dataset. None of the removed flies is likely going to change much.
+
+#### Attempt 5 - getting back to species Julia selected
+
+and now rerun syngraph
+
+```bash
+./scripts/prep_syngraph_tree.py 
+
+syngraph build -d data/results/infer_alg_diptera/syngraph_busco_tables -m -o data/results/infer_alg_diptera/syngraph/diptera.juliaset.syngraph_build
+
+for m in 87 100 150 200; do echo $m; 
+syngraph infer -g data/results/infer_alg_diptera/syngraph/diptera.juliaset.syngraph_build.pickle -t data/results/infer_alg_diptera/diptera.pruned.newick -m $m -r 2 -a quick -s Bibio_marci -o data/results/infer_alg_diptera/syngraph/mrange/diptera.juliaset.m"$m".syngraph_infer > data/results/infer_alg_diptera/syngraph/mrange/diptera.juliaset.m"$m".log
+
+syngraph tabulate -g data/results/infer_alg_diptera/syngraph/mrange/diptera.juliaset.m"$m".syngraph_infer.with_ancestors.pickle -o data/results/infer_alg_diptera/syngraph/mrange/diptera.juliaset.m"$m".syngraph_tabulate
+done
+```
+
+This also failed for all `n1` nodes predicting 2, 2, 3 and 3 ALGs.
+
+##### Just drosophilids
+
+```bash
+mv ./data/results/infer_alg_diptera/syngraph_busco_tables/* data/results/infer_alg_diptera/excluded_syngraph_busco_tables/
+while read species; do echo $species; mv ./data/results/infer_alg_diptera/excluded_syngraph_busco_tables/"$species".syngraph.buscos.tsv ./data/results/infer_alg_diptera/syngraph_busco_tables/; done < data/pruning6_droshophilidae_keep_list.txt
+
+./scripts/prep_syngraph_tree.py 
+./syngraph build -d data/results/infer_alg_diptera/syngraph_busco_tables -m -o data/results/infer_alg_diptera/syngraph/drosophilidae.syngraph_build
+
+./syngraph infer -g data/results/infer_alg_diptera/syngraph/drosophilidae.syngraph_build.pickle -t data/results/infer_alg_diptera/diptera.pruned.newick -m 100 -r 2 -a quick -s Drosophila_melanogaster -o data/results/infer_alg_diptera/syngraph/drosophilidae.syngraph_infer > data/results/infer_alg_diptera/syngraph/drosophilidae.syngraph.log
+
+# syngraph tabulate -g data/results/infer_alg_diptera/syngraph/diptera.pruned3.syngraph_infer.with_ancestors.pickle -o data/results/infer_alg_diptera/syngraph/diptera.pruned3.syngraph_tabulate
+
+##### 5 drosophilids
+
+mv ./data/results/infer_alg_diptera/syngraph_busco_tables/* ./data/results/infer_alg_diptera/excluded_syngraph_busco_tables/
+
+while read species; do echo $species; mv ./data/results/infer_alg_diptera/excluded_syngraph_busco_tables/"$species".syngraph.buscos.tsv ./data/results/infer_alg_diptera/syngraph_busco_tables/; done < data/pruning7_5_droshophilidae_keep_list.txt
+
+./scripts/prep_syngraph_tree.py 
+
+./syngraph build -d data/results/infer_alg_diptera/syngraph_busco_tables -m -o data/results/infer_alg_diptera/syngraph/drosophilidae_minimal5.syngraph_build
+
+./syngraph infer -g data/results/infer_alg_diptera/syngraph/drosophilidae_minimal5.syngraph_build.pickle -t data/results/infer_alg_diptera/diptera.pruned.newick -m 100 -r 2 -a quick -s Drosophila_miranda -o data/results/infer_alg_diptera/syngraph/drosophilidae_minimal5.syngraph_infer 
+
 ```
 
 ### Parsing results
@@ -205,33 +283,38 @@ write.table(data.frame(node = tree$node.label[tree$node.label != '']), 'data/syn
 I will try to write it in the way that if we have to redo this, I will be able to regenerate all the things...
 
 ```bash
-SYNGTAB=data/syngraph/diptera.pruned3.syngraph_tabulate.table.tsv
-SYNGNWK=data/syngraph/diptera.pruned3.syngraph_infer.newick.txt
+SYNGTAB=data/syngraph/sam/diptera.pruned.syngraph_infer.min_dist_outgroups.m160.syngraph_tabulate.table.tsv
+SYNGNWK=data/syngraph/sam/diptera.pruned.syngraph_infer.min_dist_outgroups.m160.newick.txt
+# data/syngraph/diptera.pruned3.syngraph_infer.newick.txt
 
 rm data/syngraph/node_assignments/* # clean previous node assignments
-Rscript scripts/20250718_tree2internal_nodes.R -t $SYNGNWK -o data/syngraph/all
+Rscript scripts/20250718_tree2internal_nodes.R -t $SYNGNWK -o data/syngraph/sam/all
 # this also plots the tree as "figures/syngraph_tree_with_nodes.pdf"
 
 while read node; do 
     echo $node; 
     # node
     awk -v node="$node" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $SYNGTAB > data/syngraph/node_assignments/"$node"_asgn.tsv
-done < data/syngraph/all_internal_nodes.tsv
+done < data/syngraph/sam/all_internal_nodes.tsv
 ```
 
 and now using `n1` and `n2` nodes, define ALGs1 - 5. The ALG 6 is added too, but that is described in the following .md file.
 
 ```bash
-Rscript scripts/20250719_ALG_definition.R -o data/syngraph.pruned3.100.ALGs.inferred.tsv
+ALGs=data/diptera.pruned.syngraph_infer.min_dist_outgroups.m160.tsv
+Rscript scripts/20250719_ALG_definition.R -o $ALGs
 ```
-
 
 ### Painting of internal nodes
 
 ```bash
-ALGs=data/ALG_assignments_pruned2_m100.tsv
 while read node; do 
     echo $node
     Rscript scripts/plot_node.R -n $node -a $ALGs -o data/syngraph/node_plots/$node
-done < data/syngraph/all_internal_nodes.tsv
+done < data/syngraph/sam/all_internal_nodes.tsv
+```
+
+```
+$ALGs
+
 ```
