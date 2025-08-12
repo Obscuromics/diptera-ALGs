@@ -5,12 +5,14 @@ library('tidyverse')
 library('ggplot2')
 library('gsheet')
 ################################################################################
-root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
+# root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
 #root <- paste0(getwd(), "/")
 ################################################################################
 # color palette
-pal <- c("M1" = "#1573afff", "M2" = "#e59d38ff", "M3" = "#f0e354ff", 
-         "M4" = "#169e73ff", "M5" = "#60b5e1ff", "M6" = "black", "unassigned" = "grey")
+# pal <- c("M1" = "#1573afff", "M2" = "#e59d38ff", "M3" = "#f0e354ff", 
+#          "M4" = "#169e73ff", "M5" = "#60b5e1ff", "M6" = "black", "unassigned" = "grey")
+source('scripts/20250620_colour_pal.R')
+pal <- c(pal, "unassigned" = "grey")
 ################################################################################
 
 target_species <- c("Bibio_marci", "Ptychoptera_contaminata")
@@ -23,13 +25,12 @@ target_species_data <- all_genome_data %>% filter(species %in% target_species) %
 target_species_data$accession <- sub("\\.[0-9]", "", target_species_data$accession)
 
 # load BUSCO data
-busco_files_list <- paste0(root, "data/BUSCO_data/", unique(target_species_data$accession), ".tsv")
+busco_files_list <- paste0("data/busco_tables/", unique(target_species_data$species), ".syngraph.buscos.tsv")
 buscos <- bind_rows(lapply(busco_files_list, read.table))
 colnames(buscos) <- c("marker", "chromosome", "start", "end")
 
 # read BUSCO to ALG file
-n3 <- read.table(paste0(root, "data/minus26_89_n3.tsv"), header = TRUE, sep = "\t")[1:2]
-colnames(n3) <- c("marker", "ALG")
+n3 <- read.table("data/diptera.no_plecia.mindist.m165_n1_n2.tsv", header = TRUE, sep = "\t", col.names = c("marker", "ALG"))
 
 ################################################################################
 # merge everything with the main table
@@ -182,5 +183,5 @@ p <- ggplot(df_wide) +
     legend.position = "none"
   )
 
-ggsave(paste0(root, "figures/two_species_dotplot.svg"), plot = p, dpi = 600, height = 10.25, width = 11.58)
-ggsave(paste0(root, "figures/two_species_dotplot.png"), plot = p, dpi = 600, height = 10.25, width = 11.58)
+ggsave("figures/two_species_dotplot.svg", plot = p, dpi = 600, height = 10.25, width = 11.58)
+ggsave("figures/two_species_dotplot.png", plot = p, dpi = 600, height = 10.25, width = 11.58)
