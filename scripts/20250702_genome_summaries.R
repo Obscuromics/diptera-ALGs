@@ -15,6 +15,7 @@ if (any(duplicated(genome_in_analysis[, 'taxon_id']))){ # all species are unique
 genome_in_analysis <- genome_in_analysis[genome_in_analysis[, 'species'] != 'Panorpa_germanica', ]
 
 print(paste("Dipteran species:", nrow(genome_in_analysis)))
+print(paste("Dipteran families:", length(table(genome_in_analysis[, 'family']))))
 
 # head(genome_in_analysis)
 chromsome_numbers <- genome_in_analysis[,'n_chromosomes_in_fasta-y']

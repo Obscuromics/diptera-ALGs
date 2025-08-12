@@ -46,8 +46,10 @@ parser$add_argument("-l", "--list_of_species",
     help="A name of a text file with a species list (one per line, underscores between genus and species name)", default = "")
 parser$add_argument("-o", "--output",  
     dest="o", help="Base of the output name (.png will be attached)")
-parser$add_argument("-p", "--paint_by",  
-    help="What reference should be used for painting", default = 'ALGs')
+parser$add_argument("-a", "--alg-set",  
+    help="File with BUSCO to ALG assignments", default = 'data/ALG_assignments_pruned2_m100.tsv')
+# parser$add_argument("-p", "--paint_by",  
+#     help="What reference should be used for painting", default = 'ALGs')
 parser$add_argument("-s", "--subsample", default = 0,
     help="If there is more than -s genomes selected, subsample to this number")
 
@@ -55,7 +57,7 @@ args <- parser$parse_args()
 
 family <- args$f
 species_list_file <- args$l 
-busco_asn_file <- 'data/ALG_assignments_pruned2_m100.tsv' # 'Diptera_ALG_new.tsv'
+busco_asn_file <- args$a # 'Diptera_ALG_new.tsv'
 output_file <-  paste0(args$o, '.png')
 chromosome_files_dir <- 'data/diptera_chromosome_files/'
 busco_files_dir <- "data/busco_tables/"
@@ -124,7 +126,7 @@ family_table <- all_genome_data
 
 if ( nchar(family) != 0 ){
   family_table <- family_table[grepl(family, family_table[, 'family']), ]
-  print(paste("Subsetting to ", nrow(family_table), " members of", family, 'family'))
+  print(paste("Plotting ", nrow(family_table), " members of", family, 'family'))
 }
 
 if ( nchar(species_list_file) != 0 ){
@@ -194,13 +196,21 @@ for (j in 1:length(busco_files)) {
   busco_data <- busco_data[busco_data[, 2] %in% chrom_data[, 1], ] # Remove BUSCOs on non-chromosmal scaffolds
 
   # Match ALG identity of BUSCOs to genome of interest
-  if ( args$p == 'muller' ){
-    busco_data_ALG <- merge(busco_data, muller_blocks[, c("busco", "chrQ")], by = "busco", all.x = TRUE)
-  } else {
+  # if ( args$p == 'muller' ){
+  #   busco_data_ALG <- merge(busco_data, muller_blocks[, c("busco", "chrQ")], by = "busco", all.x = TRUE)
+  # } else {
     busco_data_ALG <- merge(busco_data, ALG_data[, c("busco", "chrQ")], by = "busco", all.x = TRUE)
-  }
+  # }
   busco_data_ALG <- busco_data_ALG[!is.na(busco_data_ALG$chrQ.y), ] # Remove unassigned BUSCOs
   
+  print("In BUSCOs in the genome")
+  print(table(busco_data_ALG[, "chrQ.y"]))
+  print("In BUSCOs assigned to ALGs")
+  print(table(ALG_data[, c("chrQ")]))
+  print("Proportion")
+  print(round(table(busco_data_ALG[, "chrQ.y"]) / table(ALG_data[, c("chrQ")]), 2))
+
+
   # Sort data by order of chromosomes
   chromosomes <- unique(busco_data_ALG$chrQ.x)
   chromosomes <- sort(chromosomes)
@@ -268,11 +278,11 @@ for (j in 1:length(busco_files)) {
   busco_data_ALG_final$bin <- bin_vector
   df_aggregated <- as.data.frame(table(busco_data_ALG_final$bin, busco_data_ALG_final$chrQ.y))
   colnames(df_aggregated) <- c("bin", "value", "count")
-  if(args$p == 'muller'){
-    pal <- block_pal
-  } else {
+  # if(args$p == 'muller'){
+  #   pal <- block_pal
+  # } else {
     pal <- alg_pal
-  }
+  # }
   df_aggregated$fill_color <- factor(df_aggregated$value, levels = names(pal))
   
   # Generate the plot

@@ -3,6 +3,8 @@ suppressPackageStartupMessages(library(argparse))
 parser <- ArgumentParser()
 parser$add_argument("-o", "--output",  
     dest="o", help="Name of the output table with defined ALGs 1-5.")
+parser$add_argument("-n", "-node", default = 'n1n2',  
+    dest="n", help="Spedify node that defines the linkage groups (default, overlap of n1 and n2)")
 
 args <- parser$parse_args()
 
@@ -20,37 +22,62 @@ row.names(bibio_odb10_asn) <- bibio_odb10_asn[, 'chr']
 
 bibio_odb12 <- read.table('data/busco_tables/Bibio_marci.syngraph.buscos.tsv', col.names = c('busco_odb12', 'chr', 'from', 'to'))
 
-# read n1
-# read n2
-n1 <- read.table("data/syngraph/node_assignments/n1_asgn.tsv", col.names = c('busco', 'n1'))
-n2 <- read.table('data/syngraph/node_assignments/n2_asgn.tsv', col.names = c('busco', 'n2'))
+alg_groups <- list()
 
-syngraph <- merge(n1, n2) # this will drop all those missing in one or the other
-syngraph[, 'ALG'] <- NA
+if (args$n == 'n1n2'){
+    # read n1
+    # read n2
+    n1 <- read.table("data/syngraph/node_assignments/n1_asgn.tsv", col.names = c('busco', 'n1'))
+    n2 <- read.table('data/syngraph/node_assignments/n2_asgn.tsv', col.names = c('busco', 'n2'))
 
-# double check both those are 5
-print(length(unique(n1[, 'n1'])))
-print(length(unique(n2[, 'n2'])))
+    syngraph <- merge(n1, n2) # this will drop all those missing in one or the other
+    syngraph[, 'ALG'] <- NA
 
-# sorted table shows 5 corresponding ALGs + several genes that moved around, those we can ignore
-table_of_groups <- sort(table(paste(syngraph[, 'n1'], syngraph[, 'n2'])), T) # 4 LGs, not 5
-table_of_groups
+    # double check both those are 5
+    print(length(unique(n1[, 'n1'])))
+    print(length(unique(n2[, 'n2'])))
 
-dominant_alg_pairs <- strsplit(names(table_of_groups)[1:5], ' ')
+    # sorted table shows 5 corresponding ALGs + several genes that moved around, those we can ignore
+    table_of_groups <- sort(table(paste(syngraph[, 'n1'], syngraph[, 'n2'])), T) # 4 LGs, not 5
+    print(table_of_groups)
+
+    dominant_alg_pairs <- strsplit(names(table_of_groups)[1:5], ' ')
+
+
+    for (ALG in 1:5){
+        n1_name <- dominant_alg_pairs[[ALG]][1]
+        n2_name <- dominant_alg_pairs[[ALG]][2]
+        alg_rows <- which(syngraph[, 'n1'] == n1_name & syngraph[, 'n2'] == n2_name)
+
+        alg_groups[[ALG]] <- syngraph[alg_rows, 'busco']
+    }
+} else {
+    syngraph <- read.table(paste0("data/syngraph/node_assignments/", args$n ,"_asgn.tsv"), col.names = c('busco', 'node'))
+    syngraph[, 'ALG'] <- NA
+
+    table_of_groups <- sort(table(syngraph[, 'node']), T)
+    print(table_of_groups)
+
+    for ( ALG in 1:length(table_of_groups)){
+        alg_name <- names(table_of_groups)[ALG]
+        alg_rows <- which(syngraph[, 'node'] == alg_name)
+        alg_groups[[ALG]] <- syngraph[alg_rows, 'busco']
+    }
+
+}
+
+row.names(syngraph) <- syngraph[, 'busco']
 
 for (ALG in 1:5){
-    n1_name <- dominant_alg_pairs[[ALG]][1]
-    n2_name <- dominant_alg_pairs[[ALG]][2]
-    alg_rows <- which(syngraph[, 'n1'] == n1_name & syngraph[, 'n2'] == n2_name)
-
-    chr_in_bibio <- names(sort(table(bibio_odb12[bibio_odb12[, 'busco_odb12'] %in% syngraph[alg_rows, 'busco'], 'chr']), T)[1])
+    chr_in_bibio <- names(sort(table(bibio_odb12[bibio_odb12[, 'busco_odb12'] %in% alg_groups[[ALG]], 'chr']), T)[1])
     alg_label <- paste0('d', bibio_odb10_asn[chr_in_bibio, 'alg'])
     
-    syngraph[alg_rows, 'ALG'] <- alg_label
+    syngraph[alg_groups[[ALG]], 'ALG'] <- alg_label
+    print(paste(names(table_of_groups)[ALG], "assigned as", alg_label, "with", length(alg_groups[[ALG]]), "marker genes"))
 }
 
 ### Comment out the next few lines if not to include the dot.
-ALGs_pruned_with_dot <- read.table('data/ALG_assignments_pruned_m100.tsv', col.names = c('busco', 'ALG'))
+ALGs_pruned_with_dot <- read.table('data/ALG6_BUSCOs.tsv', col.names = c('busco', 'ALG'))
 ALG6_buscos <- ALGs_pruned_with_dot[ALGs_pruned_with_dot[, 'ALG'] == 'd6', ] # take only LG from the first good reconstruction of the ancestral state
 ALG6_buscos <- ALG6_buscos[!(ALG6_buscos[, 'busco'] %in% syngraph[, 'busco']), ] # remove buscos assigned to other LGs
 

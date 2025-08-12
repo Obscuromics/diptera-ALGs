@@ -32,8 +32,10 @@ clean_data <- function(data) {
 root <- paste0(getwd(), "/")
 ################################################################################
 # color palette
-pal <- c("M1" = "#1573afff", "M2" = "#e59d38ff", "M3" = "#f0e354ff", 
-         "M4" = "#169e73ff", "M5" = "#60b5e1ff", "M6" = "black", "100" = "white")
+# pal <- c("M1" = "#1573afff", "M2" = "#e59d38ff", "M3" = "#f0e354ff", 
+#          "M4" = "#169e73ff", "M5" = "#60b5e1ff", "M6" = "black", "100" = "white")
+source()
+
 ################################################################################
 n3 <- read.table(paste0(root, "data/minus26_89_n3.tsv"), header = TRUE, sep = "\t")
 ALG_6 <- read.table(paste0(root, "data/small_dot_ALG.txt"), header = TRUE, sep = "\t")
