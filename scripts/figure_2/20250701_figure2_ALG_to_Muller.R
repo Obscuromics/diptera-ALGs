@@ -5,41 +5,57 @@ library(dplyr)
 library(ggplot2)
 library(gridExtra)
 ################################################################################
-#root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
 root <- paste0(getwd(), "/")
 ################################################################################
 # read busco files
-read_buscos_2 <- function(file_name, prefix){
+read_buscos_2 <- function(file_name, prefix, buscos_to_alg){
   chr_label <- paste0('chr', prefix)
-  df <- read.csv(file_name, sep = '\t', comment.char = '#', header = FALSE)
-  colnames(df) <- c('busco', chr_label, paste0(prefix, 'start'), paste0(prefix, 'end'))
-  return(df)
+  df <- read.csv(file_name, sep = '\t', comment.char = '#', header = FALSE,
+                 na.strings = c("", "NA"))
+  colnames(df) <- c("busco", "chr")
+  df <- left_join(df, buscos_to_alg)
+  df <- df %>% na.omit() %>% arrange(chr)
+  
+  df_out <- NULL
+  
+  # add start and end coordinates
+  for(d in unique(df$chr)){
+    d_df <- df[df$chr == d,]
+    d_df <- d_df %>% arrange(desc(ALG))
+    d_df$start <- seq(from = 0, by = 30000, length.out = nrow(d_df))
+    d_df$end <- seq(from = 30000, by = 30000, length.out = nrow(d_df))
+    df_out <- rbind(df_out, d_df[,c('busco', 'chr', 'start', 'end')])
+  }
+  
+  colnames(df_out) <- c('busco', chr_label, paste0(prefix, 'start'), paste0(prefix, 'end'))
+  return(df_out)
 }
+
 ################################################################################
 # these are the 5 internal nodes, where rearrangement events from ALGs
 # to Muller elements happen
-busco_files <- c("n3.tsv",
-                 "n13_final.tsv",
-                 "n21_final.tsv",
-                 "n35_final.tsv",
-                 "n51_final.tsv",
-                 "n101_final.tsv")
+busco_files <- c("diptera.no_plecia.mindist.m165_n1_n2.tsv",
+                 "n13_asgn.tsv",
+                 "n21_asgn.tsv",
+                 "n36_asgn.tsv",
+                 "n59_asgn.tsv",
+                 "n105_asgn.tsv",
+                 "n271_asgn.tsv")
 
-chrom_files <- c("n3_chrominf.tsv",
+chrom_files <- c("diptera.no_plecia.mindist.m165_n1_n2_chrominf.tsv",
                  "n13_chrominf.tsv",
                  "n21_chrominf.tsv",
-                 "n35_chrominf.tsv",
-                 "n51_chrominf.tsv",
-                 "n101_chrominf.tsv")
+                 "n36_chrominf.tsv",
+                 "n59_chrominf.tsv",
+                 "n105_chrominf.tsv",
+                 "n271_chrominf.tsv")
 ################################################################################
 directory <- paste0(root, "data/ALG_to_Muller")
-pal <- c("M1" = "#1573afff", "M2" = "#e59d38ff", "M3" = "#f0e354ff", 
-         "M4" = "#169e73ff", "M5" = "#60b5e1ff", "M6" = "black")
+pal <- c("d1" = "#169e73ff", "d2" = "#e59d38ff", "d3" = "#1573afff",
+         "d4" = "#f0e354ff", "d5" = "#60b5e1ff", "d6" = "black", "100" = "white")
 ################################################################################
 # read ALGs
-n3 <- read.table(paste0(root, "data/minus26_89_n3.tsv"), header = TRUE, sep = "\t")[1:2]
-ALG_6 <- read.table(paste0(root, "data/small_dot_ALG.txt"), header = TRUE, sep = "\t")[1:2]
-buscos_to_alg <- rbind(n3, ALG_6)
+buscos_to_alg <- read.table(paste0(root, "data/diptera.no_plecia.mindist.m165_n1_n2.tsv"), header = TRUE, sep = "\t")[1:2]
 colnames(buscos_to_alg) <- c("busco", "ALG")
 
 # add color code
@@ -54,7 +70,7 @@ minimum_buscos = 1
 devtools::source_url("https://github.com/Obscuromics/synteny_plotter/blob/dev/scripts/helper_functions.R?raw=TRUE")
 
 # initiate reference
-ref_df <- read_buscos_2(busco_list[1], 'R')
+ref_df <- read_buscos_2(busco_list[1], 'R', buscos_to_alg)
 ref_chroms <- read.table(chrom_list[1], sep = '\t', header = TRUE)
 ref_chroms <- ref_chroms %>% arrange(order)
 
@@ -72,7 +88,7 @@ temp_ref_df <- ref_df
 
 for (file in busco_list[-1]){
   i <- match(file, busco_list)
-  query_df <- read_buscos_2(file, 'Q')
+  query_df <- read_buscos_2(file, 'Q', buscos_to_alg)
   query_chroms <- read.table(chrom_list[i], sep = '\t', header = TRUE)
   
   # get sizes
@@ -162,9 +178,9 @@ for (file in busco_list[-1]){
       segments(Qfirst+adjustment_length_Q, 1-gap-y_offset, 
                Qlast+adjustment_length_Q, 1-gap-y_offset, lwd = 10)
       
-      text(x = ((Qlast+Qfirst+1)/2)+adjustment_length_Q, y = 1-gap-y_offset, 
-           label = query_chroms[query_chroms$chr == i,]$annot,
-           srt = 0, cex = 0.5, col = "grey")
+      #text(x = ((Qlast+Qfirst+1)/2)+adjustment_length_Q, y = 1-gap-y_offset, 
+      #     label = query_chroms[query_chroms$chr == i,]$annot,
+      #     srt = 0, cex = 0.5, col = "grey")
       
     }
   }
@@ -188,9 +204,9 @@ for (file in busco_list[-1]){
     segments(Rfirst+adjustment_length_R, gap-y_offset, 
              Rlast+adjustment_length_R, gap-y_offset, lwd = 10)
     
-    text(x = ((Rlast+Rfirst+1)/2)+adjustment_length_R, y = gap-y_offset, 
-         label = ref_chroms[ref_chroms$chr == i,]$annot,
-         srt = 0, cex = 0.5, col = "grey")
+    #text(x = ((Rlast+Rfirst+1)/2)+adjustment_length_R, y = gap-y_offset, 
+    #     label = ref_chroms[ref_chroms$chr == i,]$annot,
+    #     srt = 0, cex = 0.5, col = "grey")
   }
   
   main_counter <- main_counter + 5
