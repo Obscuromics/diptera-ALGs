@@ -52,6 +52,8 @@ parser$add_argument("-a", "--alg-set",
 #     help="What reference should be used for painting", default = 'ALGs')
 parser$add_argument("-s", "--subsample", default = 0,
     help="If there is more than -s genomes selected, subsample to this number")
+parser$add_argument("--keep-order", action="store_true", default=FALSE,
+    dest="keep", help="Use the order of species as in the list/table.")
 
 args <- parser$parse_args()
 
@@ -104,12 +106,6 @@ rownames(ALG_data) <- ALG_data[, 'busco']
 
 # table(muller_blocks[, 'chrQ'])
 
-# block_pal <- c("D1a" = "#25d8a0ff", "D1b" = "#168a65ff",
-#                "D2a" = "#ffbd60ff", "D2b" = "#f29717ff", 
-#                "D3a" = "#299ae2ff", "D3b" = "#0471b7ff",
-#                "D4a" = "#f0e354ff", "D4b" = "#e2d119ff",
-#                "D5" = "#60b5e1ff", "D6" = "black", "100" = "white") #Regular D5: #60b5e1ff
-
 ################################################################################
 all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM/edit?usp=sharing", format='csv'),
                             stringsAsFactors = F, header = T, check.names = F)
@@ -144,7 +140,11 @@ if (nrow(family_table) > args$s & args$s != 0){
   family_table <- family_table[sample(1:nrow(family_table), args$s), ]
 }
 
-family_table <- family_table[order(family_table[, 'species'], decreasing = TRUE), ]
+if ( args$keep ){
+  family_table <- family_table[nrow(family_table):1, ]
+} else {
+  family_table <- family_table[order(family_table[, 'species'], decreasing = TRUE), ]
+}
 
 accesions_to_plot <- family_table[, 'accession']
 species_to_plot <- family_table[, 'species']
