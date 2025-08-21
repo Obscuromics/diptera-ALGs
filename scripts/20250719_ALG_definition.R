@@ -1,12 +1,23 @@
 suppressPackageStartupMessages(library(argparse))
 
 parser <- ArgumentParser()
-parser$add_argument("-o", "--output",  
+parser$add_argument("-o", "-output",  
     dest="o", help="Name of the output table with defined ALGs 1-5.")
 parser$add_argument("-n", "-node", default = 'n1n2',  
     dest="n", help="Spedify node that defines the linkage groups (default, overlap of n1 and n2)")
+parser$add_argument("-lgn", "-linkage_group_name", default = 'd',  
+    dest="lgn", help="The prefix name for the specified lg")
 
 args <- parser$parse_args()
+# args$o <- 'tables/ALG_brachycera'
+# args$n <- 'n21'
+# args$lgn <- 'db'
+
+# d - diptra
+# db - brachycera
+# ds - schizophora
+# dm - culicidae (m for mosquitos)
+# dc - chironomidae -> impossible with the current run
 
 # read bibio BUSCOs;
 # read old assignments
@@ -67,22 +78,51 @@ if (args$n == 'n1n2'){
 }
 
 row.names(syngraph) <- syngraph[, 'busco']
+node2lg <- rep('X', length(table_of_groups))
+names(node2lg) <- names(table_of_groups)
 
-for (ALG in 1:5){
-    chr_in_bibio <- names(sort(table(bibio_odb12[bibio_odb12[, 'busco_odb12'] %in% alg_groups[[ALG]], 'chr']), T)[1])
-    alg_label <- paste0('d', bibio_odb10_asn[chr_in_bibio, 'alg'])
-    
-    syngraph[alg_groups[[ALG]], 'ALG'] <- alg_label
-    print(paste(names(table_of_groups)[ALG], "assigned as", alg_label, "with", length(alg_groups[[ALG]]), "marker genes"))
+if (args$lgn == 'd'){
+    for (ALG in 1:5){
+        chr_in_bibio <- names(sort(table(bibio_odb12[bibio_odb12[, 'busco_odb12'] %in% alg_groups[[ALG]], 'chr']), T)[1])
+        alg_label <- paste0('d', bibio_odb10_asn[chr_in_bibio, 'alg'])
+        
+        syngraph[alg_groups[[ALG]], 'ALG'] <- alg_label
+        print(paste(names(table_of_groups)[ALG], "assigned as", alg_label, "with", length(alg_groups[[ALG]]), "marker genes"))
+    }
+} else {
+    for (ALG in 1:length(table_of_groups)){
+        node_name <- names(table_of_groups)[ALG]
+        ALG2Bibio <- sort(table(bibio_odb12[bibio_odb12[, 'busco_odb12'] %in% alg_groups[[ALG]], 'chr']), T)
+        chr_in_bibio <- names(ALG2Bibio[1])
+        alg_label <- paste0(args$lgn, bibio_odb10_asn[chr_in_bibio, 'alg'])
+        print(paste(names(table_of_groups)[ALG], "assigned as", alg_label, "with", length(alg_groups[[ALG]]), "marker genes"))
+
+        if ( alg_label %in% node2lg){
+            node2lg[alg_label == node2lg] <- paste0(alg_label, 'a')
+            node2lg[node_name] <- paste0(alg_label, 'b')
+        } else {
+            node2lg[node_name] <- alg_label
+        }
+    }
 }
+
+syngraph[, 'ALG'] <- node2lg[syngraph[, 'node']]
+    # syngraph[alg_groups[[ALG]], 'ALG'] <- alg_label
+
+
 
 ### Comment out the next few lines if not to include the dot.
 ALGs_pruned_with_dot <- read.table('data/ALG6_BUSCOs.tsv', col.names = c('busco', 'ALG'))
 ALG6_buscos <- ALGs_pruned_with_dot[ALGs_pruned_with_dot[, 'ALG'] == 'd6', ] # take only LG from the first good reconstruction of the ancestral state
+# sum((ALG6_buscos[, 'busco'] %in% syngraph[, 'busco']))
 ALG6_buscos <- ALG6_buscos[!(ALG6_buscos[, 'busco'] %in% syngraph[, 'busco']), ] # remove buscos assigned to other LGs
+if ( args$lgn != 'd'){
+    ALG6_buscos$ALG <- paste0(args$lgn, 6)
+}
 
 final_ALGs <- rbind(syngraph[!is.na(syngraph[, 'ALG']), c('busco', 'ALG')], ALG6_buscos)
 final_ALGs <- final_ALGs[order(final_ALGs[, 2], final_ALGs[, 1]), ]
 
 # 'data/syngraph.pruned2.100.ALGs.inferred.tsv'
+# args$o = 'tables/ALG_syngraph.pruned2.100.ALGs_brachycera.tsv'
 write.table(final_ALGs, file = args$o, col.names = F, row.names = F, quote = F, sep = '\t')
