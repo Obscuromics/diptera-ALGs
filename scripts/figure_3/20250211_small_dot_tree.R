@@ -8,16 +8,16 @@ library(ggplot2)
 library(dplyr)
 ################################################################################
 # tree information for minus_26 (5 ALGs at n3, -m 89 -r 2 -a quick)
-tree2 <- read.tree("C:/Users/julia/Documents/Kamil/trees/syngraph.infer.m89.2.quick.newick_minus26.txt")
-names <- read.table("C:/Users/julia/Documents/Kamil/trees/acc_names_match.txt", sep = ",")
+tree2 <- read.tree("data/diptera.supermatrix.phy.treefile")
+# names <- read.table("C:/Users/julia/Documents/Kamil/trees/acc_names_match.txt", sep = ",")
 ################################################################################
 # exchange accession number for species names on the tree
 tip_labels <- tree2$tip.label
-name_mapping <- setNames(names$V2, names$V1)
-new_tip_labels <- ifelse(tip_labels %in% names(name_mapping), 
-                         name_mapping[tip_labels], 
-                         tip_labels)
-tree2$tip.label <- new_tip_labels
+# name_mapping <- setNames(names$V2, names$V1)
+# new_tip_labels <- ifelse(tip_labels %in% names(name_mapping), 
+#                          name_mapping[tip_labels], 
+#                          tip_labels)
+# tree2$tip.label <- new_tip_labels
 ################################################################################
 # make a ggtree
 tt <- ggtree(tree2)
@@ -26,8 +26,8 @@ tt <- ggtree(tree2)
 
 # I have manually/ qualitatively assessed fate of ALG 6 in each genome
 # by looking at paintings of genomes in colours of ALGs
-file_path <- "C:/Users/julia/Documents/Kamil/txt/small_dot_status.csv"
-small_dot_defin <- read.csv(file_path, header = FALSE, sep = ",")
+file_path <- "data/species_and_ALG6_chromosomes.tsv"
+small_dot_defin <- read.table(file_path, header = F)
 head(small_dot_defin)
 
 # fusion of information on small dot to tree data object
