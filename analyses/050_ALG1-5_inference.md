@@ -437,8 +437,7 @@ This created `data/ALG6_BUSCOs.tsv`. Now using `n1` and `n2` nodes, define ALGs1
 Rscript scripts/20250719_ALG_definition.R -o data/"$RUN"_n3.tsv -n n3
 Rscript scripts/20250719_ALG_definition.R -o data/"$RUN"_n1.tsv -n n1
 Rscript scripts/20250719_ALG_definition.R -o data/"$RUN"_n1_n2.tsv
-
-``
+```
 
 ```bash
 mkdir -p figures/ALG_testing
