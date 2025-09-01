@@ -13,11 +13,11 @@ args <- parser$parse_args()
 # args$n <- 'n21'
 # args$lgn <- 'db'
 
-# d - diptra
-# db - brachycera
-# ds - schizophora
-# dm - culicidae (m for mosquitos)
-# dc - chironomidae -> impossible with the current run
+# d - diptra; n1n2
+# db - brachycera; n21 (should be n13, but I want all 4 splits)
+# ds - schizophora and surphidae; n133
+# dm - culicidae (m for mosquitos); n5
+# dc - chironomidae -> impossible with the current run;
 
 # read bibio BUSCOs;
 # read old assignments
@@ -25,6 +25,13 @@ AGLs_odb10 <- read.table('data/Diptera_ALG_odb10.tsv', col.names = c('busco_odb1
 bibio_odb10 <- read.table('data/Bibio_marci.buscos.odb10.tsv', col.names = c('busco_odb10', 'chr', 'from', 'to'))
 odb10_labels_bibio <- merge(bibio_odb10, AGLs_odb10)
 bibio_alt_assignment_table <- sort(table(paste(odb10_labels_bibio[ , 'chr'], odb10_labels_bibio[ , 'ALG'])), T)[1:5]
+
+dros_odb12 <- read.table('data/busco_tables/Drosophila_melanogaster.syngraph.buscos.tsv', col.names = c('busco_odb10', 'chr', 'from', 'to'))
+# removing the dot
+dros_odb12 <- dros_odb10[dros_odb10[, 'chr'] != "NC_004353.4", ]
+
+# table(dros_odb10[, 'chr'])
+# RENAME CHROMOSOMES TO ME
 
 list_of_asn <- strsplit(names(bibio_alt_assignment_table), ' ')
 bibio_odb10_asn <- data.frame(chr = sapply(list_of_asn, function(x){ x[1] } ), alg = sapply(list_of_asn, function(x){ x[2] } ))
@@ -88,6 +95,16 @@ if (args$lgn == 'd'){
         
         syngraph[alg_groups[[ALG]], 'ALG'] <- alg_label
         print(paste(names(table_of_groups)[ALG], "assigned as", alg_label, "with", length(alg_groups[[ALG]]), "marker genes"))
+    }
+} 
+if (args$lgn == 'ds') {
+    for (ALG in 1:length(table_of_groups)){
+        node_name <- names(table_of_groups)[ALG]
+        ALG2ME <- sort(table(dros_odb12[dros_odb12[, 'busco_odb12'] %in% alg_groups[[ALG]], 'chr']), T)
+        chr_in_bibio <- names(ALG2ME[1])
+        alg_label <- paste0(args$lgn, bibio_odb10_asn[chr_in_bibio, 'alg'])
+        print(paste(names(table_of_groups)[ALG], "assigned as", alg_label, "with", length(alg_groups[[ALG]]), "marker genes"))
+        node2lg[node_name] <- alg_label
     }
 } else {
     for (ALG in 1:length(table_of_groups)){

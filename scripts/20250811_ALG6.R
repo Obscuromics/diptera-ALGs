@@ -3,14 +3,19 @@ suppressPackageStartupMessages(library(gsheet))
 suppressPackageStartupMessages(library(ape))
 
 parser <- ArgumentParser()
-parser$add_argument("-t", "--tree",  
+parser$add_argument("-t", "--syngraph-tree",  
     dest="t", help="Path to the tree that was used for the syngraph run")
 
 args <- parser$parse_args()
 
+# syngraph_tree_file <- args$t
+syngraph_tree_file <- 'data/syngraph/diptera.no_plecia.mindist.m165.newick.txt'
+
 dmel_busco <- read.table('data/busco_tables/Drosophila_melanogaster.syngraph.buscos.tsv', header = F)
 # syngraph_tree <- read.tree('data/syngraph/diptera.pruned.syngraph_infer.newick.txt')
-syngraph_tree <- read.tree(args$t) # 'data/syngraph/diptera.no_plecia.mindist.m165.newick.txt'
+# syngraph_tree <- read.tree(args$t) # 'data/syngraph/diptera.no_plecia.mindist.m165.newick.txt'
+
+syngraph_tree <- read.tree(syngraph_tree_file)
 
 # 336 tips
 
@@ -25,12 +30,12 @@ all_busco_files <- dir('data/busco_tables/')
 #                             stringsAsFactors = F, header = T, check.names = F)
 # all_genome_data <- all_genome_data[all_genome_data[, 'TO ADD'] == 'KEEP', ]
 
-all_busco_files %in% paste0(syngraph_tree$tip.label, ".syngraph.buscos.tsv") 
+print('Are all syngraph species in the directory?')
+all(paste0(syngraph_tree$tip.label, ".syngraph.buscos.tsv") %in% all_busco_files)
 
 files_used_for_syngraph <- paste0(syngraph_tree$tip.label, ".syngraph.buscos.tsv") 
 
-busco_file <- files_used_for_syngraph[[4]]
-
+# busco_file <- files_used_for_syngraph[[4]]
 # getTheSizeOfTheMostDottedCh <- function(busco_file){
 #     busco_tab <- read.table(paste0('data/busco_tables/', busco_file), header = F)
 #     busco_per_ch <- table(busco_tab[, 2])
@@ -57,7 +62,7 @@ busco_file <- files_used_for_syngraph[[4]]
 
 # plot(as.numeric(dot_tab[, 'buscos']) ~ as.numeric(dot_tab[, 'dot_buscos']), ylim = c(0, 300))
 
-getTheDot <- function(busco_file){
+getDotCandidate <- function(busco_file){
     busco_tab <- read.table(paste0('data/busco_tables/', busco_file), header = F)
     busco_per_ch <- table(busco_tab[, 2])
 
@@ -74,7 +79,7 @@ getTheDot <- function(busco_file){
     return(NA)
 }
 
-dot_chromosomes <- sapply(files_used_for_syngraph, getTheDot)
+dot_chromosomes <- sapply(files_used_for_syngraph, getDotCandidate)
 dot_overview <- data.frame(species = names(dot_chromosomes), dot = as.character(dot_chromosomes))
 
 mean(!is.na(dot_overview[, 2]))
@@ -103,9 +108,4 @@ dev.off()
 
 ALG6 <- data.frame(V1 = names(species_with_dot_buscos)[(species_with_dot_buscos / length(buscos_on_dots)) > 0.4], V2 = 'd6')
 
-# ALGs <- read.table('data/syngraph/syngraph.pruned.100.ALGs.inferred.tsv')
-
-# any(ALG6[, 1] %in% ALGs[, 1])
-
-# all_ALGs <- rbind(ALGs, ALG6)
 write.table(ALG6, file = 'data/ALG6_BUSCOs.tsv', quote = F, sep = '\t', col.names = F, row.names = F)
