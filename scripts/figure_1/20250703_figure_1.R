@@ -34,31 +34,32 @@ tree <- read.tree("data/diptera.supermatrix.phy.treefile")
 #                    "Limnephilus_lunatus")
 # tree_clean <- drop.tip(tree, tip_to_remove)
 
+# TODO: colour species excluded from the analysis
 # color 24 species that were excluded
-colour_tips <- c("Myopa_testacea",
-                 "Melieria_omissa",
-                 "Drosophila_pseudoobscura",
-                 "Eupeodes_latifasciatus",
-                 "Syrphus_vitripennis",
-                 "Drosophila_helvetica",
-                 "Drosophila_lowei",
-                 "Baccha_elongata",
-                 "Pseudolycoriella_hygida",
-                 "Drosophila_miranda",
-                 "Drosophila_athabasca",
-                 "Drosophila_affinis",
-                 "Anopheles_parensis",
-                 "Anopheles_longipalpis",
-                 "Anopheles_rivulorum",
-                 "Drosophila_nebulosa",
-                 "Drosophila_gunungcola",
-                 "Drosophila_willistoni",
-                 "Anopheles_vaneedeni",
-                 "Scaeva_pyrastri",
-                 "Eupeodes_luniger",
-                 "Meiosimyza_platycephala",
-                 "Melieria_crassipennis",
-                 "Eupeodes_corollae")
+# colour_tips <- c("Myopa_testacea",
+#                  "Melieria_omissa",
+#                  "Drosophila_pseudoobscura",
+#                  "Eupeodes_latifasciatus",
+#                  "Syrphus_vitripennis",
+#                  "Drosophila_helvetica",
+#                  "Drosophila_lowei",
+#                  "Baccha_elongata",
+#                  "Pseudolycoriella_hygida",
+#                  "Drosophila_miranda",
+#                  "Drosophila_athabasca",
+#                  "Drosophila_affinis",
+#                  "Anopheles_parensis",
+#                  "Anopheles_longipalpis",
+#                  "Anopheles_rivulorum",
+#                  "Drosophila_nebulosa",
+#                  "Drosophila_gunungcola",
+#                  "Drosophila_willistoni",
+#                  "Anopheles_vaneedeni",
+#                  "Scaeva_pyrastri",
+#                  "Eupeodes_luniger",
+#                  "Meiosimyza_platycephala",
+#                  "Melieria_crassipennis",
+#                  "Eupeodes_corollae")
 
 tree_show <- ggtree(tree)
   #geom_tree(aes(color = label %in% colour_tips), size = 0.5) +
