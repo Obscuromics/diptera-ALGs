@@ -39,3 +39,44 @@ tree_plt <- ggtree(pruned_tree, layout = "roundrect", size = 0.8) +
 
 ggsave(paste0(root, "figures/tree_families_only_wide.png"), plot = tree_plt, width = 30, height = 30, dpi = 600)
 ggsave(paste0(root, "figures/tree_families_only_wide.svg"), plot = tree_plt, width = 30, height = 30, dpi = 600)
+
+################################################################################
+#sam edit
+#this is taking the first species in each family as a family representative
+
+library(ape)
+library(ggtree)
+library(gsheet)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+tree <- read.tree('diptera.supermatrix.phy.treefile')
+all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM/edit?usp=sharing", format='csv'),
+                            stringsAsFactors = F, header = T, check.names = F)
+genome_data <- all_genome_data[all_genome_data[, 'TO ADD'] == 'KEEP', ]
+species_family_tab <- genome_data[, c('species', 'family')]
+
+one_species_per_family_df <- species_family_tab %>%
+  distinct(family, .keep_all = TRUE)
+
+tips_to_keep <- c('Panorpa_germanica', one_species_per_family_df$species)
+pruned_tree <- drop.tip(tree, setdiff(tree$tip.label, tips_to_keep))
+
+sorted_one_species_per_family_df <- one_species_per_family_df %>%
+  mutate(species = factor(species, levels = pruned_tree$tip.label)) %>%
+  arrange(species)
+
+tip_labels <- c(sorted_one_species_per_family_df$family, 'Panorpidae')
+pruned_tree$tip.label <- tip_labels
+
+rooted_tree <- root(pruned_tree, outgroup = 'Panorpidae', resolve.root = TRUE)
+
+tree_plt <- ggtree(rooted_tree, layout = "roundrect", size = 1.5) + 
+  geom_tiplab(size = 10, align = TRUE, offset = 0.05, linesize = 1, linetype = "dotted") +
+  xlim(NA, 1.5) +
+  theme(plot.margin = margin(10, 10, 10, 10),
+        legend.position = "right")
+
+ggsave("figures/tree_families_only_wide.png", plot = tree_plt, width = 30, height = 30, dpi = 200)
+ggsave("figures/tree_families_only_wide.svg", plot = tree_plt, width = 30, height = 30, dpi = 600)
