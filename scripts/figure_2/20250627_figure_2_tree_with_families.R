@@ -50,6 +50,7 @@ library(gsheet)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(phytools)
 
 tree <- read.tree('diptera.supermatrix.phy.treefile')
 all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM/edit?usp=sharing", format='csv'),
@@ -70,10 +71,11 @@ sorted_one_species_per_family_df <- one_species_per_family_df %>%
 tip_labels <- c(sorted_one_species_per_family_df$family, 'Panorpidae')
 pruned_tree$tip.label <- tip_labels
 
-rooted_tree <- root(pruned_tree, outgroup = 'Panorpidae', resolve.root = TRUE)
+rooted_tree <- reroot(pruned_tree, node.number = which(tip_labels == 'Panorpidae'), position =  node.depth.edgelength(pruned_tree)[which(tip_labels == 'Panorpidae')]/4)
 
 tree_plt <- ggtree(rooted_tree, layout = "roundrect", size = 1.5) + 
   geom_tiplab(size = 10, align = TRUE, offset = 0.05, linesize = 1, linetype = "dotted") +
+  geom_rootedge() +
   xlim(NA, 1.5) +
   theme(plot.margin = margin(10, 10, 10, 10),
         legend.position = "right")
