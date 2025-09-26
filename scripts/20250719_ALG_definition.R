@@ -9,9 +9,15 @@ parser$add_argument("-lgn", "-linkage_group_name", default = 'd',
     dest="lgn", help="The prefix name for the specified lg")
 
 args <- parser$parse_args()
+# Rscript scripts/20250719_ALG_definition.R -o tables/ALG_syngraph.m165.ALGs_schizophora_syrphidae.tsv -n n133 -lgn ds
+
 # args$o <- 'tables/ALG_brachycera'
 # args$n <- 'n21'
 # args$lgn <- 'db'
+
+args$o <- 'tables/ALG_syngraph.m165.ALGs_schizophora_syrphidae.tsv'
+args$n <- 'n133'
+args$lgn <- 'ds'
 
 # d - diptra; n1n2
 # db - brachycera; n21 (should be n13, but I want all 4 splits)
@@ -26,11 +32,27 @@ bibio_odb10 <- read.table('data/Bibio_marci.buscos.odb10.tsv', col.names = c('bu
 odb10_labels_bibio <- merge(bibio_odb10, AGLs_odb10)
 bibio_alt_assignment_table <- sort(table(paste(odb10_labels_bibio[ , 'chr'], odb10_labels_bibio[ , 'ALG'])), T)[1:5]
 
-dros_odb12 <- read.table('data/busco_tables/Drosophila_melanogaster.syngraph.buscos.tsv', col.names = c('busco_odb10', 'chr', 'from', 'to'))
+dros_odb12 <- read.table('data/busco_tables/Drosophila_melanogaster.syngraph.buscos.tsv', col.names = c('busco_odb12', 'chr', 'from', 'to'))
 # removing the dot
-dros_odb12 <- dros_odb10[dros_odb10[, 'chr'] != "NC_004353.4", ]
+dros_odb12 <- dros_odb12[dros_odb12[, 'chr'] != "NC_004353.4", ]
 
-# table(dros_odb10[, 'chr'])
+# table of drosophila SEUQENCE vs ARM
+
+drosophila_chromosomes <- data.frame('chr' = c('NC_004354.4', 'NT_033779.5', 'NT_033778.4', 'NT_037436.4', 'NT_033777.3', 'NC_004353.4'),
+                                     'arm' = c('X', '2L', '2R', '3L', '3R', 'dot'),
+                                     'ME' = c('A', 'B', 'C', 'D', 'E', 'F'),
+                                     'alg' = paste0('ds', 1:6))
+rownames(drosophila_chromosomes) <- drosophila_chromosomes[, 'chr']
+# NC_004354.4 X A ds1
+# NT_033779.5 2L B ds2
+# NT_033778.4 2R C ds3
+# NT_037436.4 3L D ds4
+# NT_033777.3 3R E ds5
+# NC_004353.4 dot F ds6
+
+
+
+# table(dros_odb12[, 'chr'])
 # RENAME CHROMOSOMES TO ME
 
 list_of_asn <- strsplit(names(bibio_alt_assignment_table), ' ')
@@ -101,8 +123,8 @@ if (args$lgn == 'ds') {
     for (ALG in 1:length(table_of_groups)){
         node_name <- names(table_of_groups)[ALG]
         ALG2ME <- sort(table(dros_odb12[dros_odb12[, 'busco_odb12'] %in% alg_groups[[ALG]], 'chr']), T)
-        chr_in_bibio <- names(ALG2ME[1])
-        alg_label <- paste0(args$lgn, bibio_odb10_asn[chr_in_bibio, 'alg'])
+        chr_in_dros <- names(ALG2ME[1])
+        alg_label <- drosophila_chromosomes[chr_in_dros, 'alg']
         print(paste(names(table_of_groups)[ALG], "assigned as", alg_label, "with", length(alg_groups[[ALG]]), "marker genes"))
         node2lg[node_name] <- alg_label
     }

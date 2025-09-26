@@ -152,6 +152,7 @@ fig1_size <- ggplot(sorted_data_tips_desc, aes(x = genome_size, y = factor(y, le
 # arrange three plots together
 # plt_all <- ggarrange(tree_show, fig1_size, fig1_hap, nrow = 1, ncol = 3, widths = c(3,1,1)) # this breaks alignment of the figures
 plt_all <- ggarrange(tree_show + fig1_size + fig1_hap, nrow = 1)
+print('Generating figures/fig1_first_three.svg and figures/fig1_first_three.png')
 ggsave("figures/fig1_first_three.png", plot=plt_all, dpi=600, width = 6, height = 10)
 ggsave("figures/fig1_first_three.svg", plot=plt_all, dpi=600, width = 6, height = 10)
 
@@ -193,6 +194,7 @@ diptera_org <- left_join(diptera_org, count2color, by = "count")
 sorted_data_tips_desc <- left_join(sorted_data_tips_desc, diptera_org, by = "family")
 sorted_data_tips_desc$color[is.na(sorted_data_tips_desc$count)] <- "grey60"
 
+print('Generating figures/figure_1_sp_family_connectors.pdf')
 pdf('figures/figure_1_sp_family_connectors.pdf', width = 4, height = 10)
 
 plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = F, xlab = '', ylab = '')
