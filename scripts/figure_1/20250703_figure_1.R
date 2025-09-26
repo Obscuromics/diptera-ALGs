@@ -61,7 +61,14 @@ tree <- read.tree("data/diptera.supermatrix.phy.treefile")
 #                  "Melieria_crassipennis",
 #                  "Eupeodes_corollae")
 
-tree_show <- ggtree(tree)
+scale_factor <- 8
+outgroup <- "Panorpa_germanica"
+tip_labels <- tree$tip.label
+
+rooted_tree <- reroot(tree, node.number = which(tip_labels == outgroup), position =  node.depth.edgelength(tree)[which(tip_labels == outgroup)] / scale_factor)
+
+
+tree_show <- ggtree(rooted_tree)
   #geom_tree(aes(color = label %in% colour_tips), size = 0.5) +
   #geom_tiplab(aes(color = "black"), align = TRUE, offset = 0.05, 
   #            linetype = "dotted", linesize = 0.05, size = 1.2) +
@@ -97,7 +104,6 @@ sorted_data_tips_desc <- as.data.frame(sorted_data_tips_desc)
 # set chromosome number and genome size of the outgroup to 0 to remove from the plot, 
 # but keep it so the plots align well with the tree
 
-outgroup <- "Panorpa_germanica"
 sorted_data_tips_desc$genome_size[sorted_data_tips_desc$label == outgroup] <- 0
 sorted_data_tips_desc$num_chrom[sorted_data_tips_desc$label == outgroup] <- 0
 
@@ -150,8 +156,8 @@ fig1_size <- ggplot(sorted_data_tips_desc, aes(x = genome_size, y = factor(y, le
 
 
 # arrange three plots together
-# plt_all <- ggarrange(tree_show, fig1_size, fig1_hap, nrow = 1, ncol = 3, widths = c(3,1,1)) # this breaks alignment of the figures
-plt_all <- ggarrange(tree_show + fig1_size + fig1_hap, nrow = 1)
+plt_all <- ggarrange(tree_show, fig1_size, fig1_hap, nrow = 1, ncol = 3, widths = c(3,1,1)) # this breaks alignment of the figures
+# plt_all <- ggarrange(tree_show + fig1_size + fig1_hap, nrow = 1)
 print('Generating figures/fig1_first_three.svg and figures/fig1_first_three.png')
 ggsave("figures/fig1_first_three.png", plot=plt_all, dpi=600, width = 6, height = 10)
 ggsave("figures/fig1_first_three.svg", plot=plt_all, dpi=600, width = 6, height = 10)
