@@ -73,8 +73,15 @@ for (sp in unique(all_genome_data[, 'species'])){
 
 write.table(all_genome_data, 'tables/chromosomes_vs_ALGs.tsv', quote = F, sep = '\t', row.names = F, col.names = T)
 
-###################################################
+####################################################################
 
+################ Showing species and family name ###################
+#diptera_taxa <- read.csv("data/diptera_taxa.csv", header = T)
+
+#all_genome_data$family <- diptera_taxa$family[
+#  match(all_genome_data$species, diptera_taxa$species)
+#]
+####################################################################
 
 ########### PLOTTING SEX CHR ###############
 
@@ -97,27 +104,122 @@ for ( i in 1:nrow(sorted_data_tips_desc)){
   if(any(sp_tab[, 'X'])){
     chrom_to_plot <- sp_tab[sp_tab[, 'X'], ]
     chr_number <- nrow(chrom_to_plot)
-    total_ch_space <- 1 - ((chr_number - 1) * between_chr_gap_size)
-    per_ch_space <- total_ch_space / chr_number
-    y_bot <- species_y[species] - (species_step / 2)
-    y_top <- species_y[species] + (species_step / 2)
-    for (sex_ch in 1:chr_number){
-      bar_subset <- unlist(chrom_to_plot[sex_ch, paste0('d', 1:6)])
+
+    # species 'band' (single row)
+    y_mid <- species_y[species]
+    y_bot <- y_mid - (species_step / 2)
+    y_top <- y_mid + (species_step / 2)
+
+    # horizontal layout: split x ∈ [0,1] into chr_number panels with gaps
+    gap_x <- between_chr_gap_size
+    total_bar_width <- 1 - max(chr_number - 1, 0) * gap_x
+    per_bar_width <- total_bar_width / chr_number
+    
+    for (k in 1:chr_number){
+      x_left  <- (k - 1) * (per_bar_width + gap_x)
+      x_right <- x_left + per_bar_width
+
+      vals <- as.numeric(chrom_to_plot[k, paste0('d', 1:6)])
+      vals[is.na(vals)] <- 0
+      s <- sum(vals)
+      if (s <= 0) next
       # making sure the order in the plot will be consisent
 
-      columns_to_plot <- c(0, cumsum(bar_subset)) / sum(bar_subset)
+      edges01 <- c(0, cumsum(vals) / s)
+      edges   <- x_left + (x_right - x_left) * edges01
 
-      for(i in 1:length(bar_subset)){
-          rect(columns_to_plot[i], y_bot,
-               columns_to_plot[i + 1], y_top, 
-              col = pal[i], bty = 'n')
+      for(j in 1:6){
+          rect(edges[j], y_bot,
+               edges[j + 1], y_top, 
+              col = pal[j])
       }
     }
   }
 
+  ## left side: species name
+  #text(x = -0.02, y = species_y[species], labels = species,
+  #     xpd = TRUE, adj = 1, cex = 0.3)
+  
+  ## right side: family name
+  #fam <- unique(sp_tab$family)
+  #if (length(fam) > 1) fam <- fam[1]   # just in case
+  #text(x = 1.02, y = species_y[species], labels = fam,
+  #     xpd = TRUE, adj = 0, cex = 0.3)
 }
 
 dev.off()
+
+############################################
+
+########### PLOTTING SEX CHR - SUBSET ###############
+
+selected_species <- scan("data/diptera_taxa_selected.txt", what = character())
+# only keep rows of sorted_data_tips_desc that match species in the file
+sorted_data_tips_desc_subset <- subset(sorted_data_tips_desc, label %in% selected_species)
+
+number_of_species_subset <- nrow(sorted_data_tips_desc_subset)
+species_step_subset <- (1 / number_of_species_subset)
+species_y_subset <- (1:number_of_species_subset / number_of_species_subset) - (species_step_subset / 2)
+names(species_y_subset) <- rev(sorted_data_tips_desc_subset$label)
+between_chr_gap_size <- 0.1
+
+pdf('figures/sex_chrom_base_selected_family.pdf', height = 26, width = 3)
+
+plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = F, xlab = '', ylab = '')
+
+for ( i in 1:nrow(sorted_data_tips_desc_subset)){
+  species <- as.character(sorted_data_tips_desc_subset[i, 'label'])
+  sp_tab <- all_genome_data[all_genome_data[, 'species'] == species, ]
+  
+  if(any(sp_tab[, 'X'])){
+    chrom_to_plot <- sp_tab[sp_tab[, 'X'], ]
+    chr_number <- nrow(chrom_to_plot)
+
+    # species 'band' (single row)
+    y_mid <- species_y_subset[species]
+    y_bot <- y_mid - (species_step_subset / 2)
+    y_top <- y_mid + (species_step_subset / 2)
+
+    # horizontal layout: split x ∈ [0,1] into chr_number panels with gaps
+    gap_x <- between_chr_gap_size
+    total_bar_width <- 1 - max(chr_number - 1, 0) * gap_x
+    per_bar_width <- total_bar_width / chr_number
+    
+    for (k in 1:chr_number){
+      x_left  <- (k - 1) * (per_bar_width + gap_x)
+      x_right <- x_left + per_bar_width
+
+      vals <- as.numeric(chrom_to_plot[k, paste0('d', 1:6)])
+      vals[is.na(vals)] <- 0
+      s <- sum(vals)
+      if (s <= 0) next
+      # making sure the order in the plot will be consisent
+
+      edges01 <- c(0, cumsum(vals) / s)
+      edges   <- x_left + (x_right - x_left) * edges01
+
+      for(j in 1:6){
+          rect(edges[j], y_bot,
+               edges[j + 1], y_top, 
+              col = pal[j])
+      }
+    }
+  }
+
+  ## left side: species name
+  #text(x = -0.02, y = species_y_subset[species], labels = species,
+  #     xpd = TRUE, adj = 1, cex = 0.3)
+  
+  ## right side: family name
+  #fam <- unique(sp_tab$family)
+  #if (length(fam) > 1) fam <- fam[1]   # just in case
+  #text(x = 1.02, y = species_y_subset[species], labels = fam,
+  #     xpd = TRUE, adj = 0, cex = 0.3)
+}
+
+dev.off()
+
+#####################################################
 
 # # ALG_data <- ref_df
 # # ref_df <- read_buscos_2("C:/Users/julia/Documents/Kamil/busco_fulltable/all_tol/ALG_to_muller/n3.tsv", 'R')
