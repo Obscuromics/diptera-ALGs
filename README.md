@@ -63,6 +63,20 @@ Rscript scripts/plot_dotplot.R -s1 Tipula_fascipennis -s2 Tipula_scripta -o figu
 Rscript scripts/plot_dotplot.R -s1 Tipula_fascipennis -s2 Nephrotoma_flavescens -o figures/dotplot_Tipula_5_fascipennis_Nephrotoma_flavescens
 
 
+Rscript scripts/plot_dotplot.R -s1 Tipula_fascipennis -s2 Tipula_helvola -o figures/dotplot_Tipula_1_fascipennis_Tipula_helvola
+Rscript scripts/plot_dotplot.R -s1 Tipula_fascipennis -s2 Tipula_lateralis -o figures/dotplot_Tipula_2_fascipennis_Tipula_lateralis
+Rscript scripts/plot_dotplot.R -s1 Tipula_fascipennis -s2 Tipula_unca -o figures/dotplot_Tipula_3_fascipennis_Tipula_unca
+Rscript scripts/plot_dotplot.R -s1 Tipula_fascipennis -s2 Tipula_scripta -o figures/dotplot_Tipula_4_fascipennis_Tipula_scripta
+Rscript scripts/plot_dotplot.R -s1 Tipula_fascipennis -s2 Nephrotoma_flavescens -o figures/dotplot_Tipula_5_fascipennis_Nephrotoma_flavescens
+
+Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Chironomus_tentans -o figures/_dotplots/dotplot_Chironomus_riparius_1_Chironomus_tentans
+Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Chironomus_striatipennis -o figures/_dotplots/dotplot_Chironomus_riparius_2_Chironomus_striatipennis
+Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Polypedilum_vanderplanki -o figures/_dotplots/dotplot_Chironomus_riparius_3_Polypedilum_vanderplanki
+Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Smittia_aterrima -o figures/_dotplots/dotplot_Chironomus_riparius_4_Smittia_aterrima
+Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Propsilocerus_akamusi -o figures/_dotplots/dotplot_Chironomus_riparius_5_Smittia_aterrima
+
+
+
 
 
 ```
