@@ -19,6 +19,7 @@ library(gsheet)
 ################################################################################
 
 ####################### WHICH CHROMOSOMES ARE THE X? ###########
+# tables/sex_chromosome_turnover_types.tsv
 x_chromosome_files <- dir('data/diptera_chromosome_files', pattern = "x.txt", full.names = T)
 x_chromosomes <- as.vector(unlist(sapply(x_chromosome_files, read.table)))
 
@@ -72,6 +73,7 @@ for (sp in unique(all_genome_data[, 'species'])){
 }
 
 write.table(all_genome_data, 'tables/chromosomes_vs_ALGs.tsv', quote = F, sep = '\t', row.names = F, col.names = T)
+# all_genome_data <- read.table('tables/chromosomes_vs_ALGs.tsv', sep = '\t', header = T)
 
 ####################################################################
 
@@ -105,6 +107,9 @@ for ( i in 1:nrow(sorted_data_tips_desc)){
     chrom_to_plot <- sp_tab[sp_tab[, 'X'], ]
     chr_number <- nrow(chrom_to_plot)
 
+    if (chr_number > 1){
+      print(species)
+    }
     # species 'band' (single row)
     y_mid <- species_y[species]
     y_bot <- y_mid - (species_step / 2)
@@ -153,7 +158,7 @@ dev.off()
 
 ########### PLOTTING SEX CHR - SUBSET ###############
 
-selected_species <- scan("data/diptera_taxa_selected.txt", what = character())
+selected_species <- scan("tables/sex_chromosome_turnover_types.tsv", what = character())
 # only keep rows of sorted_data_tips_desc that match species in the file
 sorted_data_tips_desc_subset <- subset(sorted_data_tips_desc, label %in% selected_species)
 
@@ -163,7 +168,7 @@ species_y_subset <- (1:number_of_species_subset / number_of_species_subset) - (s
 names(species_y_subset) <- rev(sorted_data_tips_desc_subset$label)
 between_chr_gap_size <- 0.1
 
-pdf('figures/sex_chrom_base_selected_family.pdf', height = 26, width = 3)
+pdf('figures/sex_chrom_base_selected_family.pdf', height = 30, width = 8)
 
 plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = F, xlab = '', ylab = '')
 
@@ -206,15 +211,15 @@ for ( i in 1:nrow(sorted_data_tips_desc_subset)){
     }
   }
 
-  ## left side: species name
-  #text(x = -0.02, y = species_y_subset[species], labels = species,
-  #     xpd = TRUE, adj = 1, cex = 0.3)
+  # left side: species name
+  text(x = -0.02, y = species_y_subset[species], labels = species,
+      xpd = TRUE, adj = 1, cex = 0.3)
   
-  ## right side: family name
-  #fam <- unique(sp_tab$family)
-  #if (length(fam) > 1) fam <- fam[1]   # just in case
-  #text(x = 1.02, y = species_y_subset[species], labels = fam,
-  #     xpd = TRUE, adj = 0, cex = 0.3)
+  # right side: family name
+  fam <- unique(sp_tab$family)
+  if (length(fam) > 1) fam <- fam[1]   # just in case
+  text(x = 1.02, y = species_y_subset[species], labels = fam,
+      xpd = TRUE, adj = 0, cex = 0.3)
 }
 
 dev.off()
