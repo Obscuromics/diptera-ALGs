@@ -70,15 +70,18 @@ getDotCandidate <- function(busco_file){
     if (nrow(just_dot) != 0 ){
         dot_buscos_per_ch <- table(just_dot[, 2])
         chr_name <- names(which.max(dot_buscos_per_ch))
-        buscos <- as.numeric(busco_per_ch[names(which.max(dot_buscos_per_ch))])
+        # chr_names <- names(dot_buscos_per_ch)
+        buscos <- as.numeric(busco_per_ch[names(which.max(dot_buscos_per_ch))])\
+        # buscos <- as.numeric(busco_per_ch[chr_names])
         dot_buscos <- max(dot_buscos_per_ch)
-        if (buscos < 150){
-            return(chr_name)
+        if (any(buscos < 150)){
+            return(chr_names[buscos < 150])
         }
     }
     return(NA)
 }
 
+# getDotCandidate('Dolichopus_virgultorum.syngraph.buscos.tsv')
 dot_chromosomes <- sapply(files_used_for_syngraph, getDotCandidate)
 dot_overview <- data.frame(species = names(dot_chromosomes), dot = as.character(dot_chromosomes))
 
