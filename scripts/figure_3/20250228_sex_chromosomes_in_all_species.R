@@ -77,154 +77,274 @@ write.table(all_genome_data, 'tables/chromosomes_vs_ALGs.tsv', quote = F, sep = 
 
 ####################################################################
 
-################ Showing species and family name ###################
-#diptera_taxa <- read.csv("data/diptera_taxa.csv", header = T)
-
-#all_genome_data$family <- diptera_taxa$family[
-#  match(all_genome_data$species, diptera_taxa$species)
-#]
-####################################################################
 
 ########### PLOTTING SEX CHR ###############
 
 source('scripts/20250620_colour_pal.R')
 
-number_of_species <- nrow(sorted_data_tips_desc)
-species_step <- (1 / number_of_species)
-species_y <- (1:number_of_species / number_of_species) - (species_step / 2)
-names(species_y) <- rev(sorted_data_tips_desc$label)
-between_chr_gap_size <- 0.1
-
-pdf('figures/sex_chrom_base.pdf', height = 26, width = 3)
-
-plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = F, xlab = '', ylab = '')
-
-for ( i in 1:nrow(sorted_data_tips_desc)){
-  species <- as.character(sorted_data_tips_desc[i, 'label'])
-  sp_tab <- all_genome_data[all_genome_data[, 'species'] == species, ]
+plot_sex_chrom <- function(pdf_file,
+                           mode = c("relative", "absolute"),
+                           family_gap = 0.0,
+                           pdf_height = 26,
+                           pdf_width  = 3,
+                           multiX_species = character(),
+                           show_species_labels = FALSE,
+                           show_family_labels  = FALSE,
+                           label_cex   = 0.3,
+                           label_offset = 0.02,
+                           subset_species_file = NULL,
+                           subset_species      = NULL,
+                           between_chr_gap_size = 0.1,
+                           draw_borders = FALSE,
+                           border_col   = "black") {
   
-  if(any(sp_tab[, 'X'])){
-    chrom_to_plot <- sp_tab[sp_tab[, 'X'], ]
-    chr_number <- nrow(chrom_to_plot)
-
-    if (chr_number > 1){
-      print(species)
+  mode <- match.arg(mode)
+  
+  ## ---------------- CONFIG ----------------
+  pal   <- alg_pal
+  d_cols <- paste0("d", 1:6)
+  
+  ## ---------------- INPUT SUBSET (optional) ----------------
+  species_to_plot <- sorted_data_tips_desc$label
+  
+  if (!is.null(subset_species_file)) {
+    subset_from_file <- tryCatch(
+      scan(subset_species_file, what = character(), quiet = TRUE),
+      error = function(e) character()
+    )
+    species_to_plot <- intersect(species_to_plot, subset_from_file)
+  }
+  
+  if (!is.null(subset_species)) {
+    species_to_plot <- intersect(species_to_plot, subset_species)
+  }
+  
+  sdd <- subset(sorted_data_tips_desc, label %in% species_to_plot)
+  
+  if (nrow(sdd) == 0) {
+    stop("No species to plot after applying subset filters.")
+  }
+  
+  ## ---------------- HELPERS ----------------
+  sum_d_cols <- function(df) {
+    if (nrow(df) == 0) return(rep(0, length(d_cols)))
+    m <- as.matrix(df[, d_cols, drop = FALSE])
+    mode(m) <- "numeric"
+    m[is.na(m)] <- 0
+    colSums(m)
+  }
+  
+  norm <- function(x) tolower(trimws(x))
+  multiX_set <- norm(multiX_species)
+  labels_set <- norm(sdd$label)
+  not_found  <- setdiff(multiX_set, labels_set)
+  if (length(not_found) > 0) {
+    message("multiX_species not found in plot labels (will be treated as merged): ",
+            paste(not_found, collapse = ", "))
+  }
+  
+  ## ---------------- FAMILY INFO (for gaps and/or labels) ----------------
+  if (family_gap > 0 || show_family_labels) {
+    diptera_taxa <- read.csv("data/diptera/diptera_taxa.csv", header = TRUE)
+    sdd$family <- diptera_taxa$family[
+      match(sdd$label, diptera_taxa$species)
+    ]
+    sdd$family[is.na(sdd$family)] <- "Unknown"
+  } else {
+    sdd$family <- NA_character_
+  }
+  
+  ## ---------------- VERTICAL LAYOUT ----------------
+  number_of_species <- nrow(sdd)
+  
+  if (family_gap > 0) {
+    plot_species_order <- rev(sdd$label)
+    fam_vec_plot <- sdd$family[ match(plot_species_order, sdd$label) ]
+    
+    family_change_idx <- if (number_of_species > 1) {
+      which(fam_vec_plot[-1] != fam_vec_plot[-length(fam_vec_plot)])
+    } else integer(0)
+    
+    usable_height <- 1 - length(family_change_idx) * family_gap
+    if (usable_height <= 0) stop("family_gap too large for the number of family transitions.")
+    species_step <- usable_height / number_of_species
+    
+    y_mids <- numeric(number_of_species)
+    cursor <- species_step / 2
+    for (i in 1:number_of_species) {
+      y_mids[i] <- cursor
+      cursor <- cursor + species_step
+      if (i %in% family_change_idx) cursor <- cursor + family_gap
     }
-    # species 'band' (single row)
+    
+    species_y <- setNames(y_mids, plot_species_order)
+    
+  } else {
+    species_step <- (1 / number_of_species)
+    y_mids <- (1:number_of_species / number_of_species) - (species_step / 2)
+    species_y <- setNames(y_mids, rev(sdd$label))
+  }
+  
+  ## ---------------- ABSOLUTE MODE PREPASS ----------------
+  global_max <- 1
+  if (mode == "absolute") {
+    bar_totals <- c()
+    for (i in 1:nrow(sdd)) {
+      species <- as.character(sdd[i, "label"])
+      sp_tab <- all_genome_data[all_genome_data[, "species"] == species, , drop = FALSE]
+      if (!any(sp_tab[, "X"])) next
+      x_rows <- sp_tab[sp_tab[, "X"], , drop = FALSE]
+      
+      spec_key <- norm(species)
+      if (spec_key %in% multiX_set) {
+        if (nrow(x_rows) > 0) {
+          m <- as.matrix(x_rows[, d_cols, drop = FALSE]); mode(m) <- "numeric"; m[is.na(m)] <- 0
+          bar_totals <- c(bar_totals, rowSums(m))
+        }
+      } else {
+        merged_vals <- sum_d_cols(x_rows)
+        bar_totals <- c(bar_totals, sum(merged_vals))
+      }
+    }
+    global_max <- if (length(bar_totals)) max(bar_totals) else 1
+  }
+  
+  ## ---------------- PLOT ----------------
+  pdf(pdf_file, height = pdf_height, width = pdf_width)
+  plot(NULL, xlim = c(0, 1), ylim = c(0, 1),
+       axes = FALSE, xlab = "", ylab = "")
+  
+  for (i in 1:nrow(sdd)) {
+    species <- as.character(sdd[i, "label"])
+    sp_tab  <- all_genome_data[all_genome_data[, "species"] == species, ]
+    if (!any(sp_tab[, "X"])) next
+    
+    x_rows <- sp_tab[sp_tab[, "X"], , drop = FALSE]
+    
+    spec_key <- norm(species)
+    if (spec_key %in% multiX_set) {
+      chrom_to_plot <- x_rows
+    } else {
+      merged_vals <- sum_d_cols(x_rows)
+      chrom_to_plot <- x_rows[1, , drop = FALSE]
+      chrom_to_plot[1, d_cols] <- merged_vals
+      chrom_to_plot <- chrom_to_plot[1, , drop = FALSE]
+    }
+    
+    chr_number <- nrow(chrom_to_plot)
     y_mid <- species_y[species]
     y_bot <- y_mid - (species_step / 2)
     y_top <- y_mid + (species_step / 2)
-
-    # horizontal layout: split x ∈ [0,1] into chr_number panels with gaps
-    gap_x <- between_chr_gap_size
-    total_bar_width <- 1 - max(chr_number - 1, 0) * gap_x
-    per_bar_width <- total_bar_width / chr_number
     
-    for (k in 1:chr_number){
+    gap_x <- between_chr_gap_size
+    total_bar_width <- max(1 - max(chr_number - 1, 0) * gap_x, 0)
+    if (total_bar_width == 0 && chr_number > 0) {
+      gap_x <- (1 - 0.02) / max(chr_number - 1, 1)
+      total_bar_width <- 1 - (chr_number - 1) * gap_x
+    }
+    per_bar_width <- if (chr_number > 0) total_bar_width / chr_number else 0
+    
+    for (k in 1:chr_number) {
       x_left  <- (k - 1) * (per_bar_width + gap_x)
       x_right <- x_left + per_bar_width
-
-      vals <- as.numeric(chrom_to_plot[k, paste0('d', 1:6)])
+      
+      vals <- as.numeric(chrom_to_plot[k, d_cols, drop = TRUE])
       vals[is.na(vals)] <- 0
       s <- sum(vals)
       if (s <= 0) next
-      # making sure the order in the plot will be consisent
-
-      edges01 <- c(0, cumsum(vals) / s)
-      edges   <- x_left + (x_right - x_left) * edges01
-
-      for(j in 1:6){
-          rect(edges[j], y_bot,
-               edges[j + 1], y_top, 
-              col = pal[j])
+      
+      if (mode == "relative") {
+        edges01 <- c(0, cumsum(vals) / s)
+        edges   <- x_left + (x_right - x_left) * edges01
+        for (j in 1:6) rect(edges[j], y_bot, edges[j + 1], y_top, col = pal[j], border = if (draw_borders) border_col else NA)
+      } else {
+        cum_abs <- c(0, cumsum(vals)) / global_max
+        edges_abs <- x_left + pmin(cum_abs, 1) * per_bar_width
+        for (j in 1:6) rect(edges_abs[j], y_bot, edges_abs[j + 1], y_top, col = pal[j], border = if (draw_borders) border_col else NA)
       }
     }
+    
+    ## ---------- OPTIONAL LABELS ----------
+    if (show_species_labels) {
+      text(x = 0 - label_offset, y = y_mid, labels = species,
+           xpd = TRUE, adj = 1, cex = label_cex)
+    }
+    if (show_family_labels && !is.na(sdd$family[i])) {
+      text(x = 1 + label_offset, y = y_mid, labels = sdd$family[i],
+           xpd = TRUE, adj = 0, cex = label_cex)
+    }
   }
-
-  ## left side: species name
-  #text(x = -0.02, y = species_y[species], labels = species,
-  #     xpd = TRUE, adj = 1, cex = 0.3)
   
-  ## right side: family name
-  #fam <- unique(sp_tab$family)
-  #if (length(fam) > 1) fam <- fam[1]   # just in case
-  #text(x = 1.02, y = species_y[species], labels = fam,
-  #     xpd = TRUE, adj = 0, cex = 0.3)
+  dev.off()
 }
 
-dev.off()
+# Full dataset, relative
+plot_sex_chrom(
+  pdf_file = "sex_chrom_base_relative.pdf",
+  mode = "relative",
+  #family_gap = 0.001,
+  #subset_species_file = "tables/sex_chromosome_turnover_types.tsv",
+  #pdf_height = 30, pdf_width = 8,
+  show_species_labels = FALSE,
+  show_family_labels  = FALSE,
+  #label_cex = 0.3,
+  #between_chr_gap_size = 0.1,
+  multiX_species = c("Dolichopus_virgultorum", "Sicus_ferrugineus"),
+  draw_borders = TRUE,
+  border_col   = "black"
+)
+
+
+# Full dataset, absolute
+plot_sex_chrom(
+  pdf_file = "sex_chrom_base_absolute.pdf",
+  mode = "absolute",
+  #family_gap = 0.001,
+  #subset_species_file = "tables/sex_chromosome_turnover_types.tsv",
+  #pdf_height = 30, pdf_width = 8,
+  show_species_labels = FALSE,
+  show_family_labels  = FALSE,
+  #label_cex = 0.3,
+  #between_chr_gap_size = 0.1,
+  multiX_species = c("Dolichopus_virgultorum", "Sicus_ferrugineus"),
+  draw_borders = TRUE,
+  border_col   = "black"
+)
+
+# Subset dataset, relative
+plot_sex_chrom(
+  pdf_file = "sex_chrom_subset_relative.pdf",
+  mode = "relative",
+  family_gap = 0.01,
+  subset_species_file = "tables/sex_chromosome_turnover_types.tsv",
+  pdf_height = 8, pdf_width = 8,
+  show_species_labels = FALSE,
+  show_family_labels  = FALSE,
+  #label_cex = 0.3,
+  #between_chr_gap_size = 0.1,
+  multiX_species = c("Dolichopus_virgultorum", "Sicus_ferrugineus"),
+  draw_borders = TRUE,
+  border_col   = "black"
+)
+
+
+# Subset dataset, absolute
+plot_sex_chrom(
+  pdf_file = "sex_chrom_subset_absolute.pdf",
+  mode = "absolute",
+  family_gap = 0.01,
+  subset_species_file = "tables/sex_chromosome_turnover_types.tsv",
+  pdf_height = 8, pdf_width = 8,
+  show_species_labels = FALSE,
+  show_family_labels  = FALSE,
+  #label_cex = 0.3,
+  #between_chr_gap_size = 0.1,
+  multiX_species = c("Dolichopus_virgultorum", "Sicus_ferrugineus"),
+  draw_borders = TRUE,
+  border_col   = "black"
+)
 
 ############################################
-
-########### PLOTTING SEX CHR - SUBSET ###############
-
-selected_species <- scan("tables/sex_chromosome_turnover_types.tsv", what = character())
-# only keep rows of sorted_data_tips_desc that match species in the file
-sorted_data_tips_desc_subset <- subset(sorted_data_tips_desc, label %in% selected_species)
-
-number_of_species_subset <- nrow(sorted_data_tips_desc_subset)
-species_step_subset <- (1 / number_of_species_subset)
-species_y_subset <- (1:number_of_species_subset / number_of_species_subset) - (species_step_subset / 2)
-names(species_y_subset) <- rev(sorted_data_tips_desc_subset$label)
-between_chr_gap_size <- 0.1
-
-pdf('figures/sex_chrom_base_selected_family.pdf', height = 30, width = 8)
-
-plot(NULL, xlim = c(0, 1), ylim = c(0, 1), axes = F, xlab = '', ylab = '')
-
-for ( i in 1:nrow(sorted_data_tips_desc_subset)){
-  species <- as.character(sorted_data_tips_desc_subset[i, 'label'])
-  sp_tab <- all_genome_data[all_genome_data[, 'species'] == species, ]
-  
-  if(any(sp_tab[, 'X'])){
-    chrom_to_plot <- sp_tab[sp_tab[, 'X'], ]
-    chr_number <- nrow(chrom_to_plot)
-
-    # species 'band' (single row)
-    y_mid <- species_y_subset[species]
-    y_bot <- y_mid - (species_step_subset / 2)
-    y_top <- y_mid + (species_step_subset / 2)
-
-    # horizontal layout: split x ∈ [0,1] into chr_number panels with gaps
-    gap_x <- between_chr_gap_size
-    total_bar_width <- 1 - max(chr_number - 1, 0) * gap_x
-    per_bar_width <- total_bar_width / chr_number
-    
-    for (k in 1:chr_number){
-      x_left  <- (k - 1) * (per_bar_width + gap_x)
-      x_right <- x_left + per_bar_width
-
-      vals <- as.numeric(chrom_to_plot[k, paste0('d', 1:6)])
-      vals[is.na(vals)] <- 0
-      s <- sum(vals)
-      if (s <= 0) next
-      # making sure the order in the plot will be consisent
-
-      edges01 <- c(0, cumsum(vals) / s)
-      edges   <- x_left + (x_right - x_left) * edges01
-
-      for(j in 1:6){
-          rect(edges[j], y_bot,
-               edges[j + 1], y_top, 
-              col = pal[j])
-      }
-    }
-  }
-
-  # left side: species name
-  text(x = -0.02, y = species_y_subset[species], labels = species,
-      xpd = TRUE, adj = 1, cex = 0.3)
-  
-  # right side: family name
-  fam <- unique(sp_tab$family)
-  if (length(fam) > 1) fam <- fam[1]   # just in case
-  text(x = 1.02, y = species_y_subset[species], labels = fam,
-      xpd = TRUE, adj = 0, cex = 0.3)
-}
-
-dev.off()
-
-#####################################################
 
 # # ALG_data <- ref_df
 # # ref_df <- read_buscos_2("C:/Users/julia/Documents/Kamil/busco_fulltable/all_tol/ALG_to_muller/n3.tsv", 'R')
