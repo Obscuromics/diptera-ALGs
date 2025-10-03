@@ -274,6 +274,21 @@ plot_sex_chrom <- function(pdf_file,
            xpd = TRUE, adj = 0, cex = label_cex)
     }
   }
+
+    ## ---------------- AXIS ----------------
+  if (mode == "relative") {
+    # 0 to 1 → percentage
+    axis(1, at = seq(0, 1, by = 0.2),
+         labels = paste0(seq(0, 100, by = 20), "%"),
+         cex.axis = 0.7, line = 0)
+  } else {
+    # absolute → scale using global_max
+    # Decide a nice tick step
+    pretty_breaks <- pretty(c(0, global_max), n = 5)
+    axis(1, at = pretty_breaks / global_max,
+         labels = pretty_breaks,
+         cex.axis = 0.7, line = 0)
+  }
   
   dev.off()
 }
@@ -294,7 +309,6 @@ plot_sex_chrom(
   border_col   = "black"
 )
 
-
 # Full dataset, absolute
 plot_sex_chrom(
   pdf_file = "sex_chrom_base_absolute.pdf",
@@ -311,6 +325,7 @@ plot_sex_chrom(
   border_col   = "black"
 )
 
+
 # Subset dataset, relative
 plot_sex_chrom(
   pdf_file = "sex_chrom_subset_relative.pdf",
@@ -326,7 +341,6 @@ plot_sex_chrom(
   draw_borders = TRUE,
   border_col   = "black"
 )
-
 
 # Subset dataset, absolute
 plot_sex_chrom(
