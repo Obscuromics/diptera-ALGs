@@ -19,6 +19,26 @@ Rscript scripts/20250702_genome_summaries.R
 
  - [drafting slideck](https://docs.google.com/presentation/d/1M6Vxeka0wPZDs_RF7VTUbJoILGp6jp1BJcpDHgwQSoI/edit?usp=sharing)
 
+### Plots
+
+Genric
+
+```bash
+mkdir -p figures/paints
+# dotplot
+Rscript scripts/plot_dotplot.R -s1 Bibio_marci -s2 Ptychoptera_contaminata -o figures/dotplot_test
+# paintings
+Rscript scripts/ALG_painter_ME_building_blocks.R -a tables/ALGs_syngraph_diptera.tsv -l tables/selected_mosquitos.tsv -o figures/paints/mosquito_pick
+Rscript scripts/ALG_painter_ME_building_blocks.R -a tables/ALGs_syngraph_diptera.tsv -f Tabanidae -o figures/paints/Tabanidae
+# table of chromosome vs ancestry
+Rscript scripts/table_of_chromosomes_vs_ancestry.R -s Machimus_atricapillus -a tables/ALGs_syngraph_diptera.tsv
+```
+
+Static
+
+```bash
+Rscript scripts/plot_tree_with_ALGs_at_nodes.R # generates 'figures/syngraph_tree_of_changes.pdf'
+```
 
 #### Figure 3
 
@@ -34,6 +54,8 @@ scripts/figure_3/20250228_sex_chromosomes_in_all_species.R
 
 
 ### plotting dotplots
+
+
 
 
 ```bash
@@ -74,9 +96,4 @@ Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Chironomus_striatipen
 Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Polypedilum_vanderplanki -o figures/_dotplots/dotplot_Chironomus_riparius_3_Polypedilum_vanderplanki
 Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Smittia_aterrima -o figures/_dotplots/dotplot_Chironomus_riparius_4_Smittia_aterrima
 Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Propsilocerus_akamusi -o figures/_dotplots/dotplot_Chironomus_riparius_5_Smittia_aterrima
-
-
-
-
-
 ```
