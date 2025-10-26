@@ -28,7 +28,7 @@ mkdir -p figures/paints
 # dotplot
 Rscript scripts/plot_dotplot.R -s1 Bibio_marci -s2 Ptychoptera_contaminata -o figures/dotplot_test
 # paintings
-Rscript scripts/ALG_painter_ME_building_blocks.R -a tables/ALGs_syngraph_diptera.tsv -l tables/selected_mosquitos.tsv -o figures/paints/mosquito_pick
+Rscript scripts/ALG_painter_ME_building_blocks.R -a tables/ALGs_syngraph_diptera.tsv -l tables/species_lists/selected_mosquitos.tsv -o figures/paints/mosquito_pick
 Rscript scripts/ALG_painter_ME_building_blocks.R -a tables/ALGs_syngraph_diptera.tsv -f Tabanidae -o figures/paints/Tabanidae
 # table of chromosome vs ancestry
 Rscript scripts/table_of_chromosomes_vs_ancestry.R -s Machimus_atricapillus -a tables/ALGs_syngraph_diptera.tsv
@@ -53,10 +53,14 @@ scripts/figure_3/20250228_sex_chromosomes_in_all_species.R
 - [The task list](https://github.com/orgs/Obscuromics/projects/1)
 
 
+### Paintings
+
+```bash
+Rscript scripts/ALG_painter_ME_building_blocks.R -a tables/ALGs_syngraph_diptera.tsv -l tables/species_lists/selected_mosquitos.tsv -o figures/paints/mosquito_pick # selected culicomorphan genomes
+Rscript scripts/ALG_painter_ME_building_blocks.R -a tables/ALGs_syngraph_diptera.tsv -l tables/species_lists/excluded_species -o figures/paints/excluded
+```
+
 ### plotting dotplots
-
-
-
 
 ```bash
 Rscript scripts/plot_dotplot.R -s1 Bibio_marci -s2 Ptychoptera_contaminata -o figures/dotplot_test

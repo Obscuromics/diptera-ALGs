@@ -1,5 +1,6 @@
 require('ggtree')
 require('dplyr')
+require('ggplot2')
 
 dot_overview <- read.table('data/species_and_ALG6_chromosomes.tsv')
 phylo_tree_file <- 'data/diptera.supermatrix.phy.treefile'
