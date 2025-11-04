@@ -469,3 +469,375 @@ done < $SYNGNODES$"_internal_nodes.tsv"
 # mkdir -p figures/wo_chironomids/gnats
 # for family in Anisopodidae Bibionidae Cecidomyiidae Sciaridae Mycetophilidae; do Rscript scripts/ALG_painter_ME_building_blocks.R -o figures/wo_chironomids/gnats/"$family"_no_chiro_m165_n12 -a data/diptera.no_chiro.syngraph_infer.min_dist.m165_n1_n2.tsv -f $family; done
 ```
+
+```bash
+cd data/syngraph/alg6
+tail -n+2 diptera.dot.mindist.m1.syngraph_infer.reconstruction_order.tsv | cut -f 2 | sort | uniq > all_nodes
+mkdir nodes
+while read node; do 
+    echo $node; 
+    # node
+    awk -v node="$node" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' diptera.dot.syngraph_tabulate.table.tsv > nodes/"$node"_asgn.tsv
+done < all_nodes
+cd ../../..
+```
+
+```R
+ALG6_Julia <- read.table('data/ALG6_BUSCOs.tsv')
+
+ALG6_syngraph <- read.table('data/syngraph/alg6/nodes/n1_asgn.tsv')
+
+ALG6_syngraph[, 1] %in% ALG6_Julia[, 1]
+ALG6_Julia[, 1] %in% ALG6_syngraph[, 1]
+# good overlap, but far from perfect
+
+ALGs <- read.table('tables/ALGs_syngraph_diptera.tsv')
+row.names(ALGs) <- ALGs[, 1]
+
+already_defined <- ALG6_syngraph[ALG6_syngraph[, 1] %in% ALGs[, 1], 1]
+ALGs[already_defined, ][ALGs[already_defined, 2] != 'd6', ] 
+
+#  162912at7147 d2
+#  164810at7147 d1
+#  60829at7147 d1
+#  75965at7147 d1
+#  61998at7147 d1
+#  173520at7147 d1
+#  245796at7147 d1
+
+wo_old_ALG6 <- ALGs[ALGs[, 2] != 'd6', ]
+
+sum(wo_old_ALG6[, 1] %in% ALG6_syngraph[, 1])
+wo_old_previous_ALG6 <- wo_old_ALG6[!(wo_old_ALG6[, 1] %in% ALG6_syngraph[, 1]), ]
+
+sum(ALG6_syngraph[, 1] %in% wo_old_ALG6[, 1])
+wo_prev_asn_ALG6_syngraph <- ALG6_syngraph[!(ALG6_syngraph[, 1] %in% wo_old_ALG6[, 1]), ]
+
+ALGs_syngraph <- rbind(wo_old_previous_ALG6, data.frame(V1 = c(ALG6_syngraph[, 1]), V2= 'd6'))
+ALGs_syngraph_large_dominant <- rbind(wo_old_ALG6, data.frame(V1 = c(wo_prev_asn_ALG6_syngraph[, 1]), V2= 'd6'))
+
+write.table(ALGs_syngraph, file = 'tables/ALGs_syngraph_diptera_syngraph_ALG6.tsv', col.names = F, quote = F, row.names = F)
+write.table(ALGs_syngraph_large_dominant, file = 'tables/ALGs_syngraph_diptera_syngraph_ALG6_large_dominant.tsv', col.names = F, quote = F, row.names = F)
+```
+
+These 7 genes have conflicting definitions between ALG6 and ALG1-5 runs.
+
+### Bootstraping
+
+Files
+
+```
+/lustre/scratch126/tol/teams/jaron/users/se13/diptera_alg/data/results/infer_alg_diptera/syngraph_bootstrapping/results
+/lustre/scratch126/tol/teams/jaron/users/se13/diptera_alg/scripts/bsub_light_bootstrap_syngraph.sh
+/lustre/scratch126/tol/teams/jaron/users/se13/diptera_alg/data/results/infer_alg_diptera/diptera.pruned.newick
+
+mkdir -p data/syngraph/bootstrap
+scp farm:/lustre/scratch126/tol/teams/jaron/users/se13/diptera_alg/data/results/infer_alg_diptera/diptera.pruned.newick data/syngraph/bootstrap/
+scp -r farm:/lustre/scratch126/tol/teams/jaron/users/se13/diptera_alg/data/results/infer_alg_diptera/syngraph_bootstrapping/results data/syngraph/bootstrap/
+```
+
+I killed the process after downloading ~50 of them. which is enough to explore.
+
+Doublechecking the tree.
+
+```R
+library(ape)
+
+bootstrap_tree <- read.tree('data/syngraph/bootstrap/diptera.pruned.newick')
+alg_tree <- read.tree('data/syngraph/diptera.no_plecia.mindist.m165.newick.txt')
+
+bootstrap_tree$tip.label == alg_tree$tip.label
+# T
+bootstrap_tree$node.label == alg_tree$node.label
+# F, but the number is the same
+
+head(bootstrap_tree$node.label)
+# [1] "0"       "1100.00" "2100.00" "3100.00" "4100.00" "5100.00"
+head(alg_tree$node.label)
+# [1] ""    "n1"  "n3"  "n7"  "n13" "n21"
+```
+
+All good I think. 
+
+Extracing all nodes 1 and 2 assignments.
+
+```bash
+ls results/* > replicates
+mkdir -p n1n2_nodes
+
+while read file; do
+    replicate=$(echo $file | cut -f 2 -d '.')
+    echo $replicate; 
+    # node
+    awk -v node="n1" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n1.tsv
+    awk -v node="n2" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n2.tsv
+done < replicates
+```
+
+Check 
+   1. do they ahve the same number of ALGs (% of cases) 
+
+```R
+library(pheatmap)
+
+# ALGs_initial <- read.table('tables/ALGs_syngraph_diptera.tsv', col.names = c('busco', 'ALG'))
+replicate <- 1
+
+
+# dir('data/syngraph/bootstrap/n1n2_nodes/', pattern = 'n1.tsv')
+# replicates <- sapply(strsplit(dir('n1n2_nodes/', pattern = 'n1.tsv'), '[.]'), function(x){ as.numeric(x[2]) } )
+replicates <- 1:1000
+replicate_asn <- list()
+
+for (replicate in replicates) {
+    print(replicate)
+
+    n1_asn <- read.table(paste0('n1n2_nodes/bootstrap.', replicate, '.n1.tsv'), col.names = c('busco', 'n1'))
+    n2_asn <- read.table(paste0('n1n2_nodes/bootstrap.', replicate, '.n2.tsv'), col.names = c('busco', 'n2'))
+
+    n1_asn[, 1] <- sapply(strsplit(n1_asn[, 1], '[.]'), function(x){x[1]})
+    n2_asn[, 1] <- sapply(strsplit(n2_asn[, 1], '[.]'), function(x){x[1]})
+
+    # any(rowSums(table(n1_asn[, 1], n1_asn[, 2]) > 0) > 1)
+    # This means that no artificial replicates ever got different assignments
+
+    asn <- data.frame(busco = unique(c(n1_asn[, 1], n2_asn[, 1])), 'n1' = 'unasn', 'n2' = 'unasn')
+    row.names(asn) <- asn[, 1]
+
+    asn[n1_asn[, 1], 'n1'] <- n1_asn[, 2]
+    asn[n2_asn[, 1], 'n2'] <- n2_asn[, 2]
+
+    # head(asn)
+
+    # table(asn[, 'n1'], asn[, 'n2'])
+
+    syngraph <- asn[asn[, 'n1'] != 'unasn' & asn[, 'n2'] != 'unasn', ]
+    syngraph[, 'ALG'] <- paste(syngraph[, 'n1'], syngraph[, 'n2'], sep = '_')
+    replicate_asn[[replicate]] <- syngraph[, c(1, 4)]
+
+    # syngraph[, 'ALG'] <- NA
+
+    # # # sorted table shows 5 corresponding ALGs + several genes that moved around, those we can ignore
+    # table_of_groups <- sort(table(paste(syngraph[, 'n1'], syngraph[, 'n2'])), T) # 4 LGs, not 5
+    # # print(table_of_groups)
+
+    # if ((table_of_groups / sum(table_of_groups))[5] < 0.05 | (table_of_groups / sum(table_of_groups))[6] > 0.01){
+    #     print("WARNING (too few, or too many chromosomes)")
+    #     print(table_of_groups)
+    # } else {
+    #     dominant_alg_pairs <- strsplit(names(table_of_groups)[1:5], ' ')
+
+    #     alg_groups <- list()
+    #     for (ALG in 1:5){
+    #         n1_name <- dominant_alg_pairs[[ALG]][1]
+    #         n2_name <- dominant_alg_pairs[[ALG]][2]
+    #         alg_rows <- which(syngraph[, 'n1'] == n1_name & syngraph[, 'n2'] == n2_name)
+
+    #         alg_groups[[ALG]] <- syngraph[alg_rows, 'busco']
+    #     }
+
+    #     for (ALG in 1:5){
+    #         alg_label <- names(sort(table(ALGs_initial[ALGs_initial[, 'busco'] %in% alg_groups[[ALG]], 'ALG']), T)[1])
+            
+    #         syngraph[alg_groups[[ALG]], 'ALG'] <- alg_label
+    #         # print(paste(names(table_of_groups)[ALG], "assigned as", alg_label, "with", length(alg_groups[[ALG]]), "marker genes"))
+    #     }
+
+    #     write.table(syngraph[, c(1, 4)], file = paste0('data/syngraph/bootstrap/n1n2_nodes/bootstrap', replicate, '_overview.tsv'))
+    # }
+}
+
+all_buscos <- unique(unlist(sapply(replicate_asn, rownames)))
+
+alg_matrix <- matrix(0, nrow = length(all_buscos), ncol = length(replicates))
+row.names(alg_matrix) <- all_buscos
+
+for ( i in 1:length(replicates)){
+    print(replicates[i])
+    alg_matrix[replicate_asn[[replicates[i]]][, 'busco'], i] <- replicate_asn[[replicates[i]]][, 'ALG']
+}
+
+busco_similarity_matrix <- matrix(0, nrow = length(all_buscos), ncol = length(all_buscos))
+number_of_buscos <- length(all_buscos)
+for (b1i in 1:length(all_buscos)){
+    print(b1i)
+    b1 <- all_buscos[b1i]
+    colocalised_buscos <- sapply(1:number_of_buscos, function(x){ sum(alg_matrix[b1, ] == alg_matrix[all_buscos[x], ] & alg_matrix[b1, ] != 0) } )
+    busco_similarity_matrix[b1i, ] <- colocalised_buscos # makes it a distance
+}
+
+busco_similarity <- as.data.frame(busco_similarity_matrix)
+colnames(busco_similarity) <- all_buscos
+write.table(busco_similarity, 'busco_bootstrap_coocurence.tsv', col.names = T, row.names = F)
+# busco_similarity <- read.table('tables/busco_bootstrap_coocurence_wo0.tsv')
+# busco_similarity_matrix <- as.matrix(busco_similarity)
+
+# , annotation_col = all_buscos
+row.names(busco_similarity_matrix) <- all_buscos
+pdf('busco_pheatmap_annot2.pdf', width = 600, height = 600)
+    pheatmap(busco_similarity_matrix)
+dev.off()
+
+
+# plot test
+# busco_similarity_matrix_test <- matrix(runif(16, 0, 1), nrow = 4000, ncol = 4000)
+# row.names(busco_similarity_matrix_test) <- paste0('gene', 1:4000)
+
+# pdf('test.pdf', width = 500, height = 500)
+#     pheatmap(busco_similarity_matrix_test)
+# dev.off()
+
+bootstrap <- read.table('tables/busco_bootstrap_coocurence.tsv', header = T)
+all_buscos <- sapply(strsplit(colnames(bootstrap), 'X'), function(x){ x[2]})
+colnames(bootstrap) <- all_buscos
+
+hist(bootstrap[, '162912at7147'], breaks = 10, main = '162912at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
+hist(bootstrap[, '164810at7147'], breaks = 10, main = '164810at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
+hist(bootstrap[, '60829at7147'], breaks = 10, main = '60829at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
+hist(bootstrap[, '75965at7147'], breaks = 10, main = '75965at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
+hist(bootstrap[, '61998at7147'], breaks = 10, main = '61998at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
+hist(bootstrap[, '173520at7147'], breaks = 10, main = '173520at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
+hist(bootstrap[, '245796at7147'], breaks = 10, main = '245796at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
+# all these look solid!
+
+
+
+BUSCOs <- 5067 #4526
+bootstrap_p <- function(n){ (1 - (1 / n))^n }
+coocurence_p <- (1 - bootstrap_p(BUSCOs))^2
+qbinom(1e-6, 1000, coocurence_p)
+
+hist(unlist(alg1), breaks = 300, col = 'red')
+hist(rbinom(length(alg1)^2, 1000, coocurence_p), add = T, breaks = 150)
+
+assigned_to_an_alg_per_busco <- diag(as.matrix(bootstrap))
+assigned_to_an_alg_per_busco <- c(rep(0, length = BUSCOs - length(assigned_to_an_alg_per_busco)), assigned_to_an_alg_per_busco)
+
+pdf('figures/bootstrap/BUSCOs_assigned_in_an_ALG.pdf')
+    hist(assigned_to_an_alg_per_busco, breaks = 60, main = 'Frequency of BUSCOs assigned in an ALG', ylab = 'BUSCOs', xlab = 'Bootstrap replicate ALG asignment')
+    lines(c((1 - bootstrap_p(BUSCOs)) * 1000, (1 - bootstrap_p(BUSCOs)) * 1000), c(0, 1000), lty = 3, col = 'orange', lwd = 3)
+    legend('topleft', lty = 3, col = 'orange', lwd = 3, 'sampling expecation if assigned every time', bty = 'n')
+dev.off()
+
+frequenly_unconverging <- assigned_to_an_alg_per_busco < 328
+
+reminding_ALGs <- bootstrap[!frequenly_unconverging, !frequenly_unconverging]
+ALGs <- list()
+i <- 1
+while(nrow(reminding_ALGs) > 0){
+    alg_subset <- reminding_ALGs[, 1] > 327
+    if(sum(alg_subset) == 1){
+        break
+    }
+    ALGs[[i]] <- reminding_ALGs[alg_subset, alg_subset]
+    print(paste("ALG:", i, "of", nrow(ALGs[[i]]), "markers"))
+    print(paste("Range of co-occurances within of the group:", min(unlist(ALGs[[i]])), max(unlist(ALGs[[i]]))))
+    print(paste("Maximal co-occurance outside of the group:", max(unlist(reminding_ALGs[alg_subset, !alg_subset]))))
+
+    reminding_ALGs <- reminding_ALGs[!alg_subset, !alg_subset]
+    i <- i + 1
+}
+
+hist(bootstrap[, '261225at7147'])
+# alwyas with the same group of genes, but less often
+
+bootstrap[bootstrap[, '15074at7147'] > 1, bootstrap[, '15074at7147'] > 1]
+# strange, this one is never with any other gene?! how does that work? Ha, that will be a unique gene that is in one LG in culicomprpha and a different LG in the other branch
+
+hist(unlist(alg2), breaks = 300, col = 'red')
+sapply(ALGs, length)
+# 493  709  840    2   16 1054  644   14   12   15   14    3
+genes_in_ALGs <- lapply(ALGs, colnames)
+instable_asn_buscos <- unlist(genes_in_ALGs[c(4, 5, 8:12)])
+bigALGs <- genes_in_ALGs[c(1:3, 6:7)]
+
+reminding_ALGs[, 1]
+
+bigALGs_distance <- ALGs[c(1:3, 6:7)]
+for (i in 1:5){
+    diag(bigALGs_distance[[i]]) <- NA
+    bigALGs_distance[[i]][upper.tri(bigALGs_distance[[i]])] <- NA
+    print(range(bigALGs_distance[[i]], na.rm = T))
+}
+
+
+original_algs <- read.table('tables/ALGs_syngraph_diptera.tsv')
+row.names(original_algs) <- original_algs[, 1]
+
+instable_asn_buscos[instable_asn_buscos %in% original_algs[, 1]]
+original_algs[c("181571at7147", "19395at7147"), ]
+# these three get removed from alg3
+
+ALG_labels <- sapply(1:5, function(x){table(original_algs[bigALGs[[x]], 2])})
+
+names(bigALGs) <- names(ALG_labels)
+
+bootstrap_ALGs <- do.call("rbind", lapply(1:5, function(x){ data.frame(busco = bigALGs[[x]], names(bigALGs)[x]) } ))
+
+row.names(bootstrap_ALGs) <- bootstrap_ALGs[, 1]
+
+ALG6_core_conflicts <- row.names(bootstrap_ALGs) %in% c('162912at7147', '164810at7147', '60829at7147', '75965at7147', '61998at7147', '173520at7147', '245796at7147') 
+
+bootstrap_ALGs_cleaned <- bootstrap_ALGs[!ALG6_core_conflicts, ]
+colnames(bootstrap_ALGs_cleaned) <- c('busco', 'alg')
+
+ALG6_syngraph <- read.table('data/syngraph/alg6/nodes/n1_asgn.tsv')
+
+ALG6_syngraph[, 1] %in% bootstrap_ALGs_cleaned[, 1]
+
+core_ALG6_conflicts <- ALG6_syngraph[, 1] %in% c('162912at7147', '164810at7147', '60829at7147', '75965at7147', '61998at7147', '173520at7147', '245796at7147')
+
+final_ALGs <- rbind(bootstrap_ALGs_cleaned, data.frame(busco = ALG6_syngraph[!core_ALG6_conflicts, 1], alg = 'd6'))
+table(final_ALGs[, 2])
+
+write.table(final_ALGs[order(final_ALGs[, 2]), ], file = 'tables/ALGs_diptera_bootstrapping.tsv', col.names = F, quote = F, row.names = F)
+
+# 
+library(RColorBrewer)
+cols <- colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(32)
+
+pdf('figures/bootstrap/legend.pdf')
+plot(NULL, xlim = c(0, 1), ylim = c(0, 1), bty = 'n', axes = F, xlab = '', ylab = '')
+for(i in 1:32){ 
+    rect(0, 0 + (i - 1) * 1/32, 0.4, i * 1/32, col = cols[i], border = NA)
+}
+text(0.5, c(0, 200, 400, 600) / 687, labels = c(0, 200, 400, 600), cex = 2)
+rect(0, 0 + 364 / 687, 0.4, 436 / 687, col = NA, lwd = 2)
+ 
+dev.off()
+
+```
+
+
+   2. generate per-replicate ALG assignment (using n1 and n2 overlap);
+
+Generate boostrapping heatmap - how stable is co-occurance of markers.
+
+```
+convert           \
+   -verbose       \
+   -density 30   \
+   -trim          \
+    busco_pheatmap.pdf      \
+   -quality 20   \
+   -flatten       \
+   -sharpen 0x1.0 \
+    busco_heatmap2.png
+
+magick busco_pheatmap_annot2.pdf busco_pheatmap_annot2.png
+
+busco_pheatmap_annot2.pdf
+
+convert -verbose 1.pdf -resize 100% -quality 100 -flatten -sharpen 0x1.0 page-%03d.png
+```
+
+```R
+BUSCOs <- 5067 #4526
+bootstrap_p <- function(n){ (1 - (1 / n))^n }
+coocurence_p <- (1 - bootstrap_p(BUSCOs))^2
+
+hist(rbinom(3000, 1000, coocurence_p))
+
+qbinom(c(1e-6, 1 - 1e-6), 1000, coocurence_p)
+# 364 436
+```
