@@ -4,3 +4,5 @@ figures
 writing
 tables
 Rplots.pdf
+*.pdf
+*.png

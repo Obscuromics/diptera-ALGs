@@ -802,7 +802,7 @@ for(i in 1:32){
     rect(0, 0 + (i - 1) * 1/32, 0.4, i * 1/32, col = cols[i], border = NA)
 }
 text(0.5, c(0, 200, 400, 600) / 687, labels = c(0, 200, 400, 600), cex = 2)
-rect(0, 0 + 364 / 687, 0.4, 436 / 687, col = NA, lwd = 2)
+rect(0, 0 + 327 / 687, 0.4, 474 / 687, col = NA, lwd = 2)
  
 dev.off()
 
