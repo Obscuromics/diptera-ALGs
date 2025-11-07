@@ -40,6 +40,12 @@ Static
 Rscript scripts/plot_tree_with_ALGs_at_nodes.R # generates 'figures/syngraph_tree_of_changes.pdf'
 ```
 
+Suppmenetary figure showing % of ALGs together on chromosomes of contemporary species.
+
+```bash
+Rscript scripts/20251106_stability.R
+```
+
 #### Figure 3
 
 Sex chromosome panel
