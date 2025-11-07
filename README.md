@@ -43,7 +43,9 @@ Rscript scripts/plot_tree_with_ALGs_at_nodes.R # generates 'figures/syngraph_tre
 Suppmenetary figure showing % of ALGs together on chromosomes of contemporary species.
 
 ```bash
-Rscript scripts/20251106_stability.R
+Rscript scripts/20251106_stability.R -a tables/ALGs_syngraph_schizophora_syrphidae.tsv -o figures/ALG_stability_histograms_ds
+Rscript scripts/20251106_stability.R -a tables/ALGs_syngraph_brachycera.tsv -o figures/ALG_stability_histograms_db
+Rscript scripts/20251106_stability.R -a tables/ALGs_syngraph_diptera.tsv -o figures/ALG_stability_histograms_d
 ```
 
 #### Figure 3
