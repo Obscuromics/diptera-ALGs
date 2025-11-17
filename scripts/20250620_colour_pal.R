@@ -6,7 +6,11 @@ pal <- c("d1" = "#169e73ff", "d2" = "#e59d38ff", "d3" = "#1573afff",
          "db4a" = "#f0e354ff", "db4b" = "#e2d119ff",
          "db5" =  "#60b5e1ff", "db6" = "black",
          "ds1" = "#008d17ff", "ds2" = "#60b5e1ff", "ds3" = "#988900ff",
-         "ds4" = "#faed00ff", "ds5" = "#88ca91ff", "ds6" = "black")
+         "ds4" = "#faed00ff", "ds5" = "#88ca91ff", "ds6" = "black",
+         "dst1a" = "#00b386ff", "dst1b" = "#01442aff",
+         "dst2" = "#60b5e1ff", "dst3" = "#ffdd00ff",
+         "dst5" = "#f74a00ff", "dst6" = "black")
+
 
 # NC_004354.4 - X - A
 # NT_033779.5 - 2L - B

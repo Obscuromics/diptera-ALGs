@@ -15,9 +15,9 @@ args <- parser$parse_args()
 # args$n <- 'n21'
 # args$lgn <- 'db'
 
-args$o <- 'tables/ALG_syngraph.m165.ALGs_schizophora_syrphidae.tsv'
-args$n <- 'n133'
-args$lgn <- 'ds'
+# args$o <- 'tables/ALG_syngraph.m165.ALGs_schizophora_syrphidae.tsv'
+# args$n <- 'n133'
+# args$lgn <- 'ds'
 
 # d - diptra; n1n2
 # db - brachycera; n21 (should be n13, but I want all 4 splits)
