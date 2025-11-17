@@ -30,7 +30,8 @@ buscos <- bind_rows(lapply(busco_files_list, read.table))
 colnames(buscos) <- c("marker", "chromosome", "start", "end")
 
 # read BUSCO to ALG file
-n3 <- read.table("data/diptera.no_plecia.mindist.m165_n1_n2.tsv", header = TRUE, sep = "\t", col.names = c("marker", "ALG"))
+# n3 <- read.table("data/diptera.no_plecia.mindist.m165_n1_n2.tsv", header = TRUE, sep = "\t", col.names = c("marker", "ALG"))
+n3 <- read.table("tables/ALGs_syngraph_diptera.tsv", header = F, col.names = c("marker", "ALG"))
 
 ################################################################################
 # merge everything with the main table

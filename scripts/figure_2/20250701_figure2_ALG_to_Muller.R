@@ -41,7 +41,7 @@ nodes_to_plot <- c(
   "n59"
 )
 
-busco_files <- c("diptera.no_plecia.mindist.m165_n1_n2.tsv",
+busco_files <- c("tables/ALGs_syngraph_diptera.tsv",
                  paste0(nodes_to_plot, "_asgn.tsv"))
 
 chrom_files <- c("diptera.no_plecia.mindist.m165_n1_n2_chrominfo.tsv",

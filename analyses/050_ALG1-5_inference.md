@@ -516,8 +516,8 @@ wo_prev_asn_ALG6_syngraph <- ALG6_syngraph[!(ALG6_syngraph[, 1] %in% wo_old_ALG6
 ALGs_syngraph <- rbind(wo_old_previous_ALG6, data.frame(V1 = c(ALG6_syngraph[, 1]), V2= 'd6'))
 ALGs_syngraph_large_dominant <- rbind(wo_old_ALG6, data.frame(V1 = c(wo_prev_asn_ALG6_syngraph[, 1]), V2= 'd6'))
 
-write.table(ALGs_syngraph, file = 'tables/ALGs_syngraph_diptera_syngraph_ALG6.tsv', col.names = F, quote = F, row.names = F)
-write.table(ALGs_syngraph_large_dominant, file = 'tables/ALGs_syngraph_diptera_syngraph_ALG6_large_dominant.tsv', col.names = F, quote = F, row.names = F)
+# write.table(ALGs_syngraph, file = 'tables/ALGs_syngraph_diptera_syngraph_ALG6.tsv', col.names = F, quote = F, row.names = F)
+# write.table(ALGs_syngraph_large_dominant, file = 'tables/ALGs_syngraph_diptera_syngraph_ALG6_large_dominant.tsv', col.names = F, quote = F, row.names = F)
 ```
 
 These 7 genes have conflicting definitions between ALG6 and ALG1-5 runs.
@@ -569,8 +569,16 @@ while read file; do
     replicate=$(echo $file | cut -f 2 -d '.')
     echo $replicate; 
     # node
+    # for diptera ALGs
     awk -v node="n1" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n1.tsv
     awk -v node="n2" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n2.tsv
+    # for brachycera ALGs (db)
+    awk -v node="n21" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n21.tsv
+    # for schizophora ALGs (ds)
+    awk -v node="n133" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n133.tsv
+    
+-n  -lgn 
+
 done < replicates
 ```
 
