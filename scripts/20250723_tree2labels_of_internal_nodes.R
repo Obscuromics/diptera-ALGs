@@ -16,7 +16,7 @@ parser$add_argument("-t", "--tree-file",
 args <- parser$parse_args()
 
 tree <- read.tree(args$t)
-tree <- read.tree("data/syngraph/diptera.no_chiro.syngraph_infer.min_dist.m165.newick.txt")
+# tree <- read.tree("data/syngraph/diptera.no_chiro.syngraph_infer.min_dist.m165.newick.txt")
 # tree <- read.tree("data/syngraph/diptera.juliaset.newick")
 
 tips_nodes <- c(tree$tip.label, tree$node.label)
