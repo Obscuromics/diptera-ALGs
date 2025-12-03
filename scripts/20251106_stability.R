@@ -1,6 +1,6 @@
 suppressPackageStartupMessages(library('gsheet'))
 suppressPackageStartupMessages(library('argparse'))
-suppressPackageStartupMessages(library(ape))
+suppressPackageStartupMessages(library('ape'))
 
 source('scripts/20250620_colour_pal.R')
 
@@ -55,7 +55,7 @@ if (length(ALGs) == 6){
     grid_type <- c(3, 4)
 }
 cex = 1.4
-taxonomy_colors <- c("Nematocera" = "#bb3fa0ff", "Brachycera" = "#069c24ff", "Schizophora" = "#67d7dbff")
+taxonomy_colors <- c("Nematocera" = "#67d7dbff", "Brachycera" = "#069c24ff", "Schizophora" = "#bb3fa0ff")
 colnames(all_genome_data)
 
 nematocera_species <- all_genome_data[all_genome_data[, 'suborder'] == "Nematocera", 'species']
@@ -74,7 +74,7 @@ all_species_matrix <- all_species_matrix[, 1:340] # removing Panorpa
 nematocera_species_matrix <- all_species_matrix[, nematocera_species]
 species_list <- list(nematocera_species, brachycera_species, schizophora_species)
 
-pdf(paste0(args$o, '_all.pdf'))
+pdf(paste0(args$o, '_all.pdf'), width = 12, height = 8)
 # pdf('figures/ALG_stability_histograms_all_species.pdf')
     par(mfrow = grid_type, mar = c(3,3,2,1))
 
@@ -104,7 +104,7 @@ bins <- 40
 ax <- pretty(xlim, n = bins) # Make a neat vector for the breakpoints
 # histograms[[3]]$counts <- histograms[[3]]$counts
 
-pdf(paste0(args$o, '_stacked_plot.pdf'))
+pdf(paste0(args$o, '_stacked_plot.pdf'), width = 12, height = 8)
 par(mfrow = grid_type, mar = c(3,3,2,1))
 
     for (i in 1:nrow(all_species_matrix)){
@@ -139,24 +139,24 @@ pdf(paste0(args$o, '_nematocera.pdf'))
 
 dev.off()
 
-pdf(paste0(args$o, '_brachycera.pdf'))
+pdf(paste0(args$o, '_brachycera.pdf'), width = 12, height = 8)
 # pdf('figures/ALG_stability_histograms_Nematocera.pdf')
     par(mfrow = grid_type, mar = c(3,3,2,1))
 
     for (i in 1:nrow(all_species_matrix)){
-        hist(all_species_matrix[i, brachycera_species], breaks = 40, main = NA, col = pal[ALGs[i]], xlim = c(0,1), border = NA, ylab = NA, xlab = NA, cex.axis = cex)
+        hist(all_species_matrix[i, brachycera_species], breaks = 20, main = NA, col = pal[ALGs[i]], xlim = c(0,1), border = NA, ylab = NA, xlab = NA, cex.axis = cex)
         legend('topleft', ALGs[i], bty = 'n', cex = cex, text.font = 2)
     }
 
 dev.off()
 
 
-pdf(paste0(args$o, '_schizophora.pdf'))
+pdf(paste0(args$o, '_schizophora.pdf'), width = 12, height = 8)
 # pdf('figures/ALG_stability_histograms_Nematocera.pdf')
     par(mfrow = grid_type, mar = c(3,3,2,1))
 
     for (i in 1:nrow(all_species_matrix)){
-        hist(all_species_matrix[i, schizophora_species], breaks = 20, main = NA, col = pal[ALGs[i]], xlim = c(0,1), border = NA, ylab = NA, xlab = NA, cex.axis = cex)
+        hist(all_species_matrix[i, schizophora_species], breaks = 10, main = NA, col = pal[ALGs[i]], xlim = c(0,1), border = NA, ylab = NA, xlab = NA, cex.axis = cex)
         legend('topleft', ALGs[i], bty = 'n', cex = cex, text.font = 2)
     }
 
