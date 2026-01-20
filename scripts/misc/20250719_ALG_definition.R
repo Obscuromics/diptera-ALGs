@@ -22,8 +22,10 @@ args <- parser$parse_args()
 # d - diptra; n1n2
 # db - brachycera; n21 (should be n13, but I want all 4 splits)
 # ds - schizophora and surphidae; n133
-# dm - culicidae (m for mosquitos); n5
-# dc - chironomidae -> impossible with the current run;
+# dc - culicomorpha; n5
+# dch - chironomidae -> impossible with the current run;
+
+# Rscript scripts/20250719_ALG_definition.R -o tables/ALGs_syngraph_Culicomorpha -n n2 -lgn dc
 
 # read bibio BUSCOs;
 # read old assignments
