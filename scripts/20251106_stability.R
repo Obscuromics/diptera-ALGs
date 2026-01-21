@@ -1,9 +1,10 @@
 suppressPackageStartupMessages(library('gsheet'))
 suppressPackageStartupMessages(library('argparse'))
 suppressPackageStartupMessages(library('ape'))
+suppressPackageStartupMessages(library('tidyverse'))
+suppressPackageStartupMessages(library("patchwork"))
 
 source('scripts/20250620_colour_pal.R')
-
 
 parser <- ArgumentParser()
 parser$add_argument("-o", "--output",  
@@ -12,8 +13,6 @@ parser$add_argument("-a", "--alg-set",
     help="File with BUSCO to ALG assignments", default = "tables/ALGs_syngraph_diptera.tsv")
 
 args <- parser$parse_args()
-# args$o <- "figures/ALG_stability_histograms"
-# args$a <- "tables/ALGs_syngraph_diptera.tsv"
 
 all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM", format='csv'),
                             stringsAsFactors = F, header = T, check.names = F)
@@ -22,16 +21,11 @@ all_genome_data <- all_genome_data[all_genome_data[, 'TO ADD'] %in% c('KEEP'), ]
 species2suborder <- all_genome_data[, c('species', 'suborder')]
 row.names(species2suborder) <- species2suborder[, 'species']
 
-busco_asn_file <- args$a #'tables/ALGs_syngraph_diptera.tsv'
-# read
+busco_asn_file <- args$a
 
 ALG_data <- read.table(busco_asn_file, col.names = c('busco', 'ALG'))
 ALG_sizes <- table(ALG_data[, 'ALG'])
 row.names(ALG_data) <- ALG_data[, 'busco']
-
-# make matrix of all BUSCOs
-
-# busco_files <- dir('data/busco_tables/')
 
 process_species_data <- function(species_name){
     busco_on_chr <- read.table(paste0('data/busco_tables/', species_name, '.syngraph.buscos.tsv'), col.names = c('busco', 'chr', 'f', 't'))[, c(1,2)]
@@ -44,11 +38,6 @@ process_species_data <- function(species_name){
 all_species_matrix <- sapply(species2suborder[, 1], process_species_data)
 ALGs <- row.names(all_species_matrix)
 
-# 'c(bottom, left, top, right)'
-#           which gives the number of lines of margin to be specified on
-#           the four sides of the plot.  The default is 'c(5, 4, 4, 2) +
-#           0.1'.
-
 if (length(ALGs) == 6){
     grid_type <- c(2, 3)
 } else {
@@ -56,124 +45,129 @@ if (length(ALGs) == 6){
 }
 cex = 1.4
 taxonomy_colors <- c("Nematocera" = "#67d7dbff", "Brachycera" = "#069c24ff", "Schizophora" = "#bb3fa0ff")
-colnames(all_genome_data)
 
 nematocera_species <- all_genome_data[all_genome_data[, 'suborder'] == "Nematocera", 'species']
 tree <- read.tree("data/syngraph/diptera.no_plecia.mindist.m165.newick.txt")
-# 'n133'
-# get all descendants of n133
 schizophora_species <- extract.clade(tree, node = "n133")$tip.label
 
 brachycera_species <- all_genome_data[all_genome_data[, 'suborder'] == "Brachycera", 'species']
 brachycera_species <- brachycera_species[!brachycera_species %in% schizophora_species]
 
-# length(nematocera_species) + length(schizophora_species) + length(brachycera_species)
-# 340 
-all_species_matrix <- all_species_matrix[, 1:340] # removing Panorpa
+all_species_matrix <- all_species_matrix[, 1:340] #removing Panorpa
 
 nematocera_species_matrix <- all_species_matrix[, nematocera_species]
 species_list <- list(nematocera_species, brachycera_species, schizophora_species)
 
-pdf(paste0(args$o, '_all.pdf'), width = 12, height = 8)
-# pdf('figures/ALG_stability_histograms_all_species.pdf')
-    par(mfrow = grid_type, mar = c(3,3,2,1))
+stability_heatplot <- function(species_list, colour){
+    n_bins <- 10
+    breaks <- seq(0, 1, length.out = n_bins + 1)
 
-    for (i in 1:nrow(all_species_matrix)){
-        # hist(all_species_matrix[i, ], breaks = 40, main = NA, col = pal[ALGs[i]], xlim = c(0,1), border = NA, ylab = NA, xlab = NA, cex.axis = cex)
-        # fixed_bin_histogram(all_species_matrix[i, ], breaks = 40, main = NA, xlim = c(0,1), border = NA, ylab = NA, xlab = NA, cex.axis = cex)
-        plot(density(all_species_matrix[i, schizophora_species],na.rm=T), col = 'black', lwd = 4, lty = 1, type = 'l', main = '', xlab = NA, ylab = NA, xlim = c(0,1))
-        lines(density(all_species_matrix[i, schizophora_species],na.rm=T), col = taxonomy_colors["Schizophora"], lwd = 3, lty = 1)
-        
-        lines(density(all_species_matrix[i, nematocera_species],na.rm=T), col = 'black', lwd = 4, lty = 1)
-        lines(density(all_species_matrix[i, nematocera_species],na.rm=T), col = taxonomy_colors["Nematocera"], lwd = 3, lty = 1)
+    heat_df <- map_dfr(1:nrow(all_species_matrix), function(i) {
+      x <- all_species_matrix[i, species_list]
+      x <- x[is.finite(x) & x >= 0 & x <= 1]
+      h <- hist(
+        x,
+        breaks = breaks,
+        plot = FALSE
+      )
+      
+      tibble(
+        ALG = ALGs[i],
+        bin = (breaks[-1] + breaks[-length(breaks)]) / 2,
+        density = h$density / max(h$density)
+      )
+    })
 
-        lines(density(all_species_matrix[i, brachycera_species],na.rm=T), col = 'black', lwd = 4, lty = 1)
-        lines(density(all_species_matrix[i, brachycera_species],na.rm=T), col = taxonomy_colors["Brachycera"], lwd = 3, lty = 1)
-        
+    ggplot(heat_df, aes(x = bin, y = ALG, fill = density)) +
+      geom_tile() +
+      scale_fill_gradientn(
+      colours = RColorBrewer::brewer.pal(9, colour),
+      limits = c(0, 1),
+      name = "Density"
+      )+
+      scale_x_continuous(limits = c(0, 1)) +
+      labs(x = "Stability", y = NULL) +
+      theme_minimal(base_size = 12) +
+      theme(
+        axis.text.y = element_text(face = "bold"),
+        panel.grid = element_blank()
+      )
+}
 
-        legend('topleft', paste('ALG', i), bty = 'n', cex = cex, text.font = 2, fill = pal[ALGs[i]])
-        if (i == 3){
-            legend('topright', legend = c('Nematocera', 'Brachycera', 'Schizophora'), col = taxonomy_colors, lwd = 2, bty = 'n', cex = cex, lty = 1)
-        }
+compact_stability_heatplot <- function(species_list, colour){
+  n_bins <- 10
+  breaks <- seq(0, 1, length.out = n_bins + 1)
+  bin_centers <- (breaks[-1] + breaks[-length(breaks)]) / 2
+
+  heat_df <- map_dfr(seq_len(nrow(all_species_matrix)), function(i) {
+    x <- all_species_matrix[i, species_list]
+    x <- x[is.finite(x) & x >= 0 & x <= 1]
+
+    if (length(x) == 0) {
+      return(tibble(
+        ALG = ALGs[i],
+        bin = bin_centers,
+        density = 0
+      ))
     }
 
-dev.off()
+    h <- hist(x, breaks = breaks, plot = FALSE)
 
-xlim <- c(0,1)
-bins <- 40
-ax <- pretty(xlim, n = bins) # Make a neat vector for the breakpoints
-# histograms[[3]]$counts <- histograms[[3]]$counts
+    tibble(
+      ALG = ALGs[i],
+      bin = bin_centers,
+      density = h$density / max(h$density)
+    )
+  })
 
-pdf(paste0(args$o, '_stacked_plot.pdf'), width = 12, height = 8)
-par(mfrow = grid_type, mar = c(3,3,2,1))
-
-    for (i in 1:nrow(all_species_matrix)){
-
-        histograms <- lapply(1:3, function(x){ hist(all_species_matrix[i, species_list[[x]]], breaks = ax, plot = F) })
-
-    # plot stacked histogram
-        histograms[[1]]$counts <- histograms[[1]]$counts + histograms[[2]]$counts + histograms[[3]]$counts
-        histograms[[2]]$counts <- histograms[[2]]$counts + histograms[[3]]$counts
-
-        for (clad in 1:3){
-            add <- ifelse(clad == 1, F, T)
-            plot(histograms[[clad]], col = taxonomy_colors[clad], add = add, main = '', xlab = '', ylab = '', border = F)
-        }
-
-        # 
-        legend('topleft', paste('ALG', i), bty = 'n', cex = cex, text.font = 2, fill = pal[ALGs[i]])
-        if (i == 3){
-            legend('topright', legend = c('Nematocera', 'Brachycera', 'Schizophora'), fill = taxonomy_colors, bty = 'n', cex = cex) # , lwd = 2, lty = 1
-        }
-    }
-dev.off()
-
-pdf(paste0(args$o, '_nematocera.pdf'))
-# pdf('figures/ALG_stability_histograms_Nematocera.pdf')
-    par(mfrow = grid_type, mar = c(3,3,2,1))
-
-    for (i in 1:nrow(all_species_matrix)){
-        hist(all_species_matrix[i, nematocera_species], breaks = 20, main = NA, col = pal[ALGs[i]], xlim = c(0,1), border = NA, ylab = NA, xlab = NA, cex.axis = cex)
-        legend('topleft', ALGs[i], bty = 'n', cex = cex, text.font = 2)
-    }
-
-dev.off()
-
-pdf(paste0(args$o, '_brachycera.pdf'), width = 12, height = 8)
-# pdf('figures/ALG_stability_histograms_Nematocera.pdf')
-    par(mfrow = grid_type, mar = c(3,3,2,1))
-
-    for (i in 1:nrow(all_species_matrix)){
-        hist(all_species_matrix[i, brachycera_species], breaks = 20, main = NA, col = pal[ALGs[i]], xlim = c(0,1), border = NA, ylab = NA, xlab = NA, cex.axis = cex)
-        legend('topleft', ALGs[i], bty = 'n', cex = cex, text.font = 2)
-    }
-
-dev.off()
+  heat_df <- heat_df %>%
+  mutate(
+    ALG_num = as.numeric(factor(ALG, levels = unique(ALGs)))
+  )
 
 
-pdf(paste0(args$o, '_schizophora.pdf'), width = 12, height = 8)
-# pdf('figures/ALG_stability_histograms_Nematocera.pdf')
-    par(mfrow = grid_type, mar = c(3,3,2,1))
+  ggplot(heat_df, aes(x = bin, y = ALG, fill = density)) +
+    geom_tile(height = 1) +   # ↓ tighter rows
+    scale_fill_gradientn(
+      colours = RColorBrewer::brewer.pal(9, colour),
+      limits = c(0, 1),
+      name = "Density"
+    ) +
+    scale_x_continuous(
+      limits = c(0, 1),
+      expand = c(0, 0)
+    ) +
+    scale_y_discrete(expand = c(0, 0)) +
+    labs(x = "Stability", y = NULL) +
+    theme_minimal(base_size = 12) +
+    theme(
+      axis.text.y = element_text(face = "bold"),
+      panel.grid = element_blank(),
+      panel.spacing = unit(0, "lines")
+    )
+}
 
-    for (i in 1:nrow(all_species_matrix)){
-        hist(all_species_matrix[i, schizophora_species], breaks = 10, main = NA, col = pal[ALGs[i]], xlim = c(0,1), border = NA, ylab = NA, xlab = NA, cex.axis = cex)
-        legend('topleft', ALGs[i], bty = 'n', cex = cex, text.font = 2)
-    }
 
-dev.off()
+p1 <- compact_stability_heatplot(nematocera_species, "Blues")+
+        theme(axis.title.x = element_blank(),
+              axis.text.x = element_blank(),
+              axis.ticks.x = element_blank())+
+        ggtitle("Nematocera")
+p2 <- compact_stability_heatplot(brachycera_species, "Greens")+
+        theme(axis.title.x = element_blank(),
+              axis.text.x = element_blank(),
+              axis.ticks.x = element_blank())+
+        ggtitle("Brachycera")
+p3 <- compact_stability_heatplot(schizophora_species, "Purples")+
+      ggtitle("Schizophora")
 
-# xlab = paste0('Highest proportion of the ALG ', i, ' on a single chromosome'), 
+# make a stack with each of the 3 groups coloured by the fig 2 colouring
+# repeat for alpha, beta, and gamma algs
+# refine
 
-# busco_per_chr_list <- split(busco_on_chr[, 1], busco_on_chr[, 'chr'])
-# ALG_data[busco_per_chr_list[[1]], 'ALG']
+plt_all <- (p1 | p2 | p3) +
+  plot_layout(nrow = 3, heights = c(0.8, 0.8, 0.8)) &
+  theme(legend.position = "none")
 
-
-# length(busco_per_chr_list)
-
-
-
-# what is the set of genomes we want do analyse here?
-
-# read the genomes one by one
-#        mark coocurance of genes onto matrix
+ggsave("compact_alpha_heatmap.pdf", plot=plt_all, dpi=600, width = 7, height = 15)
 
