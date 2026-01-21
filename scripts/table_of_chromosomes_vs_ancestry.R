@@ -14,9 +14,10 @@ source('scripts/20250620_colour_pal.R')
 
 # "Atylotus_latistriatus.syngraph.buscos.tsv"
 species_file <- paste0('data/busco_tables/',  args$s, '.syngraph.buscos.tsv')
-species_file_y <- paste0('data/busco_tables/',  args$s, '.syngraph.y.buscos.tsv')
+#species_file_y <- paste0('data/busco_tables/',  args$s, '.syngraph.y.buscos.tsv')
 
-buscos <- rbind(read.table(species_file, sep = '\t'), read.table(species_file_y, sep = '\t'))
+buscos <- read.table(species_file, sep = '\t')
+#buscos <- rbind(read.table(species_file, sep = '\t'), read.table(species_file_y, sep = '\t'))
 # buscos <- read.table(species_file, sep = '\t')
 ALGs <- read.table(args$a)
 
