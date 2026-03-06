@@ -33,20 +33,17 @@ fig, axes = plt.subplot_mosaic(
     [["hist", "hist", "."],
      ["scat", "scat", "cbar"]],
     figsize=[8, 12],
-    width_ratios=[1, 1, 0.08],  # tune the last value to match colorbar width
-    gridspec_kw={'hspace': 0.3}
+    width_ratios=[1, 1, 0.08],  
+    gridspec_kw={'hspace': 0.3},
 )
 
 ax0 = axes["hist"]
 ax1 = axes["scat"]
 cax = axes["cbar"]
 
-
 ax0.set_ylabel('Count')
-ax0.set_xlabel('Chromosome length (b)')
-
+ax0.set_xticklabels(['0','0', '100', '200', '300', '400', '500'])
 ax0.legend()
-
 size_bins = np.arange(0, df['chromsome_size_b'].max(), 20_000_000)
 ax0.hist(df[df['alg6']==0]['chromsome_size_b'], color="#D3D3D3", bins=size_bins, alpha=0.5, label='ALGs 1-5')
 ax0.hist(df[df['alg6']==1]['chromsome_size_b'], color="#000000", bins=size_bins, alpha=0.5, label='ALG 6')
@@ -59,21 +56,25 @@ sns.scatterplot(data=data,
             y='busco_odb12_complete_count',
             ax = ax1,
             hue = 'd6_prop',
-            palette='gray_r',
+            palette='viridis_r',
             s=50,
-            edgecolor='black',
 )
 
 ax1.set_xlabel('Chromosome size (Mb)')
-ax1.set_ylabel('number of BUSCO genes')
+ax1.set_ylabel('Number of BUSCOs')
 
 ax1.set_xticklabels(['0','0', '100', '200', '300', '400', '500'])
 
 ax1.get_legend().remove()
     
-scalarmappaple = cm.ScalarMappable(cmap=cm.gray_r)
+scalarmappaple = cm.ScalarMappable(cmap=cm.viridis_r)
 plt.colorbar(scalarmappaple, cax=cax, label='Proportion of BUSCOs on\n chromosome assigned to ALG6')
 
+xmin = -20
+xmax = df['chromsome_size_b'].max()
+
+ax0.set_xlim(xmin, xmax+20)
+ax1.set_xlim(xmin, xmax+20)
 
 plt.savefig('buscoVsize.png',dpi=200, bbox_inches='tight')
 plt.savefig('buscoVsize.svg',dpi=200, bbox_inches='tight')
