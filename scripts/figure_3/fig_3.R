@@ -13,14 +13,14 @@ require('reshape2')
 source('scripts/20250620_colour_pal.R')
 
 #load data
-tree <- read.tree("../diptera_family_tree/diptera.supermatrix.phy.treefile") #tree
+tree <- read.tree("data/diptera.supermatrix.phy.treefile") #tree
 all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM/edit?usp=sharing", format='csv'),
                             stringsAsFactors = F, header = T, check.names = F)
 genome_data <- all_genome_data[all_genome_data[, 'TO ADD'] == 'KEEP', ]
 chromosome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM/edit?gid=1940964825#gid=1940964825", format='csv'),
                             stringsAsFactors = F, header = T, check.names = F)
 
-dir <- './data/busco_tables' # busco table dir
+dir <- 'data/busco_tables' # busco table dir
 ALGs <- read.table('tables/ALGs_syngraph_diptera.tsv') # ALG definitions
 row.names(ALGs) <- ALGs[, 1]
 files <- list.files(path=dir, pattern="syngraph.buscos.tsv", full.names=TRUE, recursive=FALSE)

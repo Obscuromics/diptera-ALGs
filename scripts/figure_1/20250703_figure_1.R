@@ -70,7 +70,7 @@ outersect <- function(x, y) {
 }
 
 #tree <- read.tree("data/diptera.supermatrix.phy.treefile")
-tree <- read.tree("../diptera_family_tree/diptera.supermatrix.phy.treefile")
+tree <- read.tree("data/diptera.supermatrix.phy.treefile")
 
 all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM/edit?usp=sharing", format='csv'),
                             stringsAsFactors = F, header = T, check.names = F)

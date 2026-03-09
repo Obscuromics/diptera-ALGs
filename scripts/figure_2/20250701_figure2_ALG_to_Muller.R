@@ -4,9 +4,18 @@
 library(dplyr)
 library(ggplot2)
 library(gridExtra)
+library(devtools)
 ################################################################################
 root <- getwd()
 ################################################################################
+
+## To do
+
+## Match nodes between main inference and alg6 inference (DONE)
+## Decompose alg6 reconstruction tables to get node tables
+## Create new assgn files that contain alg6 markers and give them a chr name
+## Also add this chr name to chr info files
+
 # read busco files
 read_buscos_2 <- function(file_name, prefix, buscos_to_alg){
   chr_label <- paste0('chr', prefix)
@@ -31,37 +40,43 @@ read_buscos_2 <- function(file_name, prefix, buscos_to_alg){
   return(df_out)
 }
 
-################################################################################
-# these are the 5 internal nodes, where rearrangement events from ALGs
-# to Muller elements happen
-nodes_to_plot <- c(
-  "n13", 
-  "n21", 
-  "n36", 
-  "n59"
-)
-
-busco_files <- c("tables/ALGs_syngraph_diptera.tsv",
-                 paste0(nodes_to_plot, "_asgn.tsv"))
-
-chrom_files <- c("diptera.no_plecia.mindist.m165_n1_n2_chrominfo.tsv",
-                 paste0(nodes_to_plot, "_chrominf.tsv"))
-################################################################################
-directory <- file.path(root, "data/ALG_to_Muller")
 pal <- c("d1" = "#169e73ff", "d2" = "#e59d38ff", "d3" = "#1573afff",
          "d4" = "#f0e354ff", "d5" = "#60b5e1ff", "d6" = "black", "100" = "white")
-################################################################################
+
+# these are the internal nodes, where rearrangement events from ALGs 
+# to Muller elements happen
+# ALG6 reconstruction corresponding nodes in comments
+nodes_to_plot <- c(
+  "n13", #n5
+  "n21", #n9
+  "n36", 
+  "n59"  #n18
+)
+
+## This is the ALGs + node assignment files in the drive
+## Make sure ALG file is actually a tsv - one version wasnt
+busco_list <- c("tables/ALGs_syngraph_diptera.tsv", 
+  paste0("data/",nodes_to_plot, "_asgn.tsv"))
+
+## These are tables for the synteny plotter chrom order that look like
+#chr order invert  annot
+#n59_1 1 F 1
+#n59_2 2 F 2
+#n59_3 3 F 3
+#n59_4 4 F 4
+# for the relevant nodes
+chrom_list <- c("data/synteny_plot_tables/n1_n2_chrominf.tsv",
+                 paste0("data/synteny_plot_tables/",nodes_to_plot, "_chrominf.tsv"))
+
+# This is also in the syngraph drive dir, its unclear to me how this differs from the ALG assignment file
 # read ALGs
 buscos_to_alg <- read.table(
-  file.path(directory, "diptera.no_plecia.mindist.m165_n1_n2.tsv"), 
+  file.path("data/syngraph/diptera.no_plecia.mindist.m165_n1_n2.tsv"), 
   header = F, col.names = c('busco', 'ALG'))
 
 # add color code
 col <- data.frame("ALG" = names(pal), "colour" = pal)
 busco2colour <- left_join(buscos_to_alg, col, by = "ALG")
-################################################################################
-busco_list <- file.path(directory, busco_files)
-chrom_list <- file.path(directory, chrom_files)
 minimum_buscos = 1
 
 # load synteny_plotter functions

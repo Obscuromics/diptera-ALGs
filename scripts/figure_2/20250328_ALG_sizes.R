@@ -2,7 +2,7 @@
 
 library(ggplot2)
 
-ALG_data <- read.table('data/diptera.no_plecia.mindist.m165_n1_n2.tsv', col.names = c("busco", "chrQ"))
+ALG_data <- read.table('data/syngraph/diptera.no_plecia.mindist.m165_n1_n2.tsv', col.names = c("busco", "chrQ"))
 
 head(ALG_data)
 
