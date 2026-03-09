@@ -8,7 +8,7 @@ import matplotlib.gridspec as gridspec
 palette = ["#169e73ff", "#e59d38ff", "#1573afff", "#f0e354ff","#60b5e1ff","#000000","#808080"]
 alt_palette = ["#D3D3D3", "#D3D3D3", "#D3D3D3", "#D3D3D3","#D3D3D3","#000000","#D3D3D3"]
 
-df = pd.read_csv('chromosomes_vs_ALGs.tsv', sep='\t')
+df = pd.read_csv('data/chromosomes_vs_ALGs.tsv', sep='\t')
 
 df=df[df['species']!='Panorpa_germanica']
 
@@ -76,5 +76,5 @@ xmax = df['chromsome_size_b'].max()
 ax0.set_xlim(xmin, xmax+20)
 ax1.set_xlim(xmin, xmax+20)
 
-plt.savefig('buscoVsize.png',dpi=200, bbox_inches='tight')
-plt.savefig('buscoVsize.svg',dpi=200, bbox_inches='tight')
+plt.savefig('figures/buscoVsize.png',dpi=200, bbox_inches='tight')
+plt.savefig('figures/buscoVsize.svg',dpi=200, bbox_inches='tight')

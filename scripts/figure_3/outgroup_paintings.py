@@ -9,10 +9,10 @@ palette = {'d1':"#169e73ff", 'd2':"#e59d38ff", 'd3':"#1573afff",
 palette_list = ["#169e73ff", "#e59d38ff", "#1573afff", "#f0e354ff", "#60b5e1ff", "black"]
 
 busco_files = [
-    ('Panorpa_germanica','OY783203.1','Panorpa_germanica.syngraph.buscos.tsv'), 
-    ('Ctenocephalides_felis','NW_020538040.1','Ctenocephalides_felis.syngraph.buscos.tsv')
+    ('Panorpa_germanica','OY783203.1','data/busco_tables/Panorpa_germanica.syngraph.buscos.tsv'), 
+    ('Ctenocephalides_felis','NW_020538040.1','data/busco_tables/Ctenocephalides_felis.syngraph.buscos.tsv')
 ]
-alg_file = 'ALGs_syngraph_diptera.tsv'
+alg_file = 'tables/ALGs_syngraph_diptera.tsv'
 alg_df = pd.read_csv(alg_file, sep=' ', header=None)
 
 busco_dfs = {}
@@ -109,5 +109,5 @@ fig.text(0.5, 0, '% of ALG', ha='center')
 plt.tight_layout()
 
 
-plt.savefig('outgroups.png')
-plt.savefig('outgroups.svg')
+plt.savefig('figures/outgroups.png')
+plt.savefig('figures/outgroups.svg')
