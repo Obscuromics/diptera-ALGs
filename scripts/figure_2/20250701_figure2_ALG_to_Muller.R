@@ -56,7 +56,7 @@ nodes_to_plot <- c(
 ## This is the ALGs + node assignment files in the drive
 ## Make sure ALG file is actually a tsv - one version wasnt
 busco_list <- c("tables/ALGs_syngraph_diptera.tsv", 
-  paste0("data/",nodes_to_plot, "_asgn.tsv"))
+  paste0("data/synteny_plot_tables/",nodes_to_plot, "_asgn.tsv"))
 
 ## These are tables for the synteny plotter chrom order that look like
 #chr order invert  annot
