@@ -34,6 +34,8 @@ Rscript scripts/ALG_painter_ME_building_blocks.R -a tables/ALGs_syngraph_diptera
 Rscript scripts/table_of_chromosomes_vs_ancestry.R -s Machimus_atricapillus -a tables/ALGs_syngraph_diptera.tsv
 ```
 
+TODO: Julia needs to add centromere plotting scripts and learn how to ust git
+
 Static
 
 ```bash
