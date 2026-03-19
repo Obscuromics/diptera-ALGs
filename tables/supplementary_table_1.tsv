@@ -1,0 +1,365 @@
+taxon_id	suborder	superfamily	family	TO ADD	subfamily	species	excluded_from_ALG_inference	exclusion_reason	accession	assembly	source	DOI	X_chrom_NCBI_1	X_chrom_NCBI_2	n_chromosomes_in_fasta	genome_size
+225063	Nematocera	Sciaroidea	Cecidomyiidae	KEEP	Cecidomyiinae	Obolodiplosis_robiniae	yes	excessive_rearrangements	GCA_028476595.1	CAF_Oro_1.0	Academy of forestry chinese	10.1038/s41597-024-04037-x	NA		4	144059428
+7229	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_miranda	no	NA	GCF_003369915.1	D.miranda_PacBio2.1	Bachtrog Lab, UC Berkeley	10.1371/journal.pbio.2006348	NC_046673.1	NC_046674.1	6	141827569
+7200	Nematocera	Psychodoidea	Psychodidae	KEEP	Phlebotominae	Lutzomyia_longipalpis	no	NA	GCF_024334085.1	ASM2433408v1	Baylor College of Medicine	10.1038/s41597-024-03628-y	NA		4	130045071
+29031	Nematocera	Psychodoidea	Psychodidae	KEEP	Phlebotominae	Phlebotomus_papatasi	no	NA	GCF_024763615.1	Ppap_2.1	Baylor College of Medicine	10.1038/s41597-024-03628-y	NA		5	1765737226
+38358	Nematocera	Sciaroidea	Sciaridae	EXCLUDE	Megalosphyinae	Bradysia_coprophila	yes	permission	GCF_014529535.1	BU_Bcop_v1	Brown University	10.1186/s12864-021-07926-2	NC_050737.1		NA	425160835
+38358	Nematocera	Sciaroidea	Sciaridae	KEEP	Megalosphyinae	Bradysia_coprophila	no	NA	GCA_014529535.2	BU_Bcop_v2	Brown University	10.1101/2022.11.03.515061	CM025456.1		4	422623350
+27457	Brachycera	Tephritoidea	Tephritidae	KEEP	Dacinae	Bactrocera_dorsalis	no	NA	GCF_023373825.1	ASM2337382v1	CAS Center for Excellence in Molecular Plant Sciences	10.1038/s42003-021-02966-6	NA		6	1023655910
+7386	Brachycera	Oestroidea	Sarcophagidae	KEEP	Sarcophaginae	Sarcophaga_peregrina	no	NA	GCA_014635995.1	ASM1463599v1	Central South University	10.1111/1755-0998.13246	NA		6	765665400
+47773	Brachycera	Tephritoidea	Tephritidae	KEEP	Dacinae	Bactrocera_correcta	no	NA	GCA_027475135.1	ASM2747513v1	China Agricultural University	10.1016/j.ygeno.2023.110736	NA		6	1213839451
+95463	Brachycera	Muscoidea	Scathophagidae	KEEP	Scathophaginae	Scathophaga_stercoraria	no	NA	GCA_040938175.1	ASM4093817v1	China Agricultural University	10.1016/j.ijbiomac.2024.136424	NA		6	1116594036
+2004850	Brachycera	Tephritoidea	Tephritidae	KEEP	Dacinae	Neoceratitis_asiatica	no	NA	GCA_030068015.2	ASM3006801v2	China Agricultural University	10.1038/s41597-023-02601-5	NA		7	1307091614
+137263	Brachycera	Tephritoidea	Tephritidae	KEEP	Dacinae	Zeugodacus_tau	no	NA	GCA_031772095.1	ASM3177209v1	Chinese Academy of Agricultural S	10.1038/s41597-023-02765-0	NA		6	824132607
+40366	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_americana	no	NA	GCA_030788265.1	Dame_AGI_RSII-ME	Cornell University	10.1093/gbe/evad238	CM061088.1		6	884877136
+59916	Brachycera	Tephritoidea	Tephritidae	EXCLUDE	Dacinae	Bactrocera_tryoni	yes	permission	GCF_016617805.1	CSIRO_BtryS06_freeze2	CSIRO		NA		5	173357492
+98809	Brachycera	Tephritoidea	Tephritidae	EXCLUDE	Dacinae	Bactrocera_neohumeralis	yes	permission	GCF_024586455.1	APGP_CSIRO_Bneo_wtdbg2-racon	CSIRO		NA		5	583636899
+469753	Nematocera	Chironomoidea	Ceratopogonidae	KEEP	Ceratopogoninae	Culicoides_brevitarsis	no	NA	GCF_036172545.1	AGI_CSIRO_Cbre_v1	CSIRO	Kindly allowed by Asif Ahmed	NA		3	42505931
+508665	Nematocera	Culicoidea	Culicidae	KEEP	Culicinae	Aedes_notoscriptus	no	NA	GCA_040801935.1	CSIRO_AGI_Anoto_v1	CSIRO	10.1038/s41437-022-00584-4	NA		3	43441374
+343691	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Hermetiinae	Hermetia_illucens	no	NA	GCF_905115235.1	iHerIll2.2.curated.20191125	EBI	10.1093/g3journal/jkab085	NA		7	448980288
+178769	Brachycera	Tephritoidea	Tephritidae	EXCLUDE	Tephritinae	Eurosta_solidaginis	yes	permission	GCA_040869045.1	ASM4086904v1	George Washington University		CM081796.1		6	191216892
+30064	Brachycera	Muscoidea	Anthomyiidae	KEEP	Anthomyiinae	Delia_radicum	no	NA	GCA_021234595.1	iDiv_DRa_1.0	German Centre for Integrative Bio	10.1111/1755-0998.13594	NA		6	117538306
+95972	Nematocera	Sciaroidea	Cecidomyiidae	KEEP	Cecidomyiinae	Aphidoletes_aphidimyza	yes	excessive_rearrangements	GCA_030463065.1	ASM3046306v1	Guizhou University	10.1038/s41597-024-03614-4	NA		4	190447417
+611654	Nematocera	Chironomoidea	Chironomidae	KEEP	Orthocladiinae	Smittia_aterrima	yes	excessive_rearrangements	GCA_033063855.1	ASM3306385v1	Huanggang Normal University	10.1038/s41597-024-03010-y	NA		3	179766000
+2925353	Nematocera	Chironomoidea	Chironomidae	KEEP	Orthocladiinae	Smittia_sp	yes	excessive_rearrangements	GCA_033064975.1	ASM3306497v1	Huanggang Normal University	10.1038/s41597-024-03010-y	NA		3	184937063
+1046848	Brachycera	Carnoidea	Chloropidae	KEEP	Chloropinae	Chlorops_oryzae	no	NA	GCA_020466095.1	Cory_1.0	Hunan Agricultural University	10.1038/s42003-022-03850-7	NA		4	78453853
+7227	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_melanogaster	no	NA	GCF_000001215.4	Release 6 plus ISO1 MT	Lawrence Berkeley National Laboratory	10.1101/gr.185579.114	NC_004354.4		7	71558805
+30019	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_busckii	no	NA	GCF_011750605.1	ASM1175060v1	Max Planck Institute of Immuno	10.1101/gad.328971.119	CM022249.1		6	81127745
+319348	Nematocera	Chironomoidea	Chironomidae	KEEP	Chironominae	Polypedilum_vanderplanki	yes	excessive_rearrangements	GCA_018290095.1	Pv_5.2	National Agriculture and Food	10.1038/ncomms5784	NA		4	610179519
+103775	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_gunungcola	yes	missing_chromosomes	GCF_025200985.1	Dgunungcola_SK_2	National Central University	10.1093/gbe/evad048	NA		1	417420433
+30013	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_madeirensis	no	NA	GCA_040893045.1	Dmadeirensis_assembly01	Neuro-ICT Laboratory, Advanced	10.1093/g3journal/jkae167	NA		6	195649900
+7167	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_albimanus	no	NA	GCF_013758885.1	VT_AalbS3_pri_1.0	None	10.1534/g3.120.401654	NC_050155.1		3	155799689
+7176	Nematocera	Culicoidea	Culicidae	KEEP	Culicinae	Culex_quinquefasciatus	no	NA	GCF_015732765.1	VPISU_Cqui_1.0_pri_paternal	None	10.1186/s12915-024-01825-0	NA		3	125586665
+7375	Brachycera	Oestroidea	Calliphoridae	KEEP	Luciliinae	Lucilia_cuprina	no	NA	GCF_022045245.1	ASM2204524v1	North Carolina State University	Kindly allowed by Maxwell Scott	NC_060949.1		6	134006711
+7243	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_teissieri	no	NA	GCF_016746235.2	Prin_Dtei_1.1	Princeton University, Reilly,P.F. and Andolfatto,P.	Kindly allowed by Peter Andolfatto	NC_053034.1		6	189997495
+7240	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_simulans	no	NA	GCF_016746395.2	Prin_Dsim_3.1	Princeton University, Reilly,P.F. and Andolfatto,P.	Kindly allowed by Peter Andolfatto	NC_052525.2		6	211049431
+7245	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_yakuba	no	NA	GCF_016746365.2	Prin_Dyak_Tai18E2_2.1	Princeton University, Reilly,P.F. and Andolfatto,P.	Kindly allowed by Peter Andolfatto	NC_052526.2		6	127162518
+129105	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_santomea	no	NA	GCF_016746245.2	Prin_Dsan_1.1	Princeton University, Reilly,P.F. and Andolfatto,P.	Kindly allowed by Peter Andolfatto	NC_053021.2		6	120905797
+190385	Nematocera	Culicoidea	Culicidae	EXCLUDE	Culicinae	Uranotaenia_lowii	yes	permission	GCF_029784155.1	ASM2978415v1	Rockefeller University, Leslie Vosshall Lab		NA		3	129277049
+174621	Nematocera	Culicoidea	Culicidae	EXCLUDE	Culicinae	Wyeomyia_smithii	yes	permission	GCF_029784165.1	ASM2978416v1	Rockefeller University, Leslie Vosshall Lab		NA		3	125948373
+2498891	Nematocera	Culicoidea	Culicidae	EXCLUDE	Culicinae	Topomyia_yanbarensis	yes	permission	GCF_030247195.1	ASM3024719v1	Rockefeller University, Leslie Vosshall Lab 		NA		3	137547960
+7160	Nematocera	Culicoidea	Culicidae	EXCLUDE	Culicinae	Aedes_albopictus	yes	permission	GCF_035046485.1	AalbF5	Rockefeller University, Leslie Vosshall Lab 		NA		3	127254908
+325434	Nematocera	Culicoidea	Culicidae	EXCLUDE	Culicinae	Malaya_genurostris	yes	permission	GCF_030247185.1	Malgen_1.1	Rockefeller University, Leslie Vosshall Lab 		NA		3	136883657
+329112	Nematocera	Culicoidea	Culicidae	EXCLUDE	Toxorhynchitinae	Toxorhynchites_rutilus	yes	permission	GCF_029784135.1	ASM2978413v1	Rockefeller University, Leslie Vosshall Lab 		NA		3	129282147
+7159	Nematocera	Culicoidea	Culicidae	KEEP	Culicinae	Aedes_aegypti	no	NA	GCF_002204515.2	AaegL5.0	Rockefeller University, Matthews,B.J.	10.1038/s41586-018-0692-z	NC_035107.1		3	110837441
+28584	Brachycera	Ephydroidea	Drosophilidae	EXCLUDE	Drosophilinae	Drosophila_suzukii	yes	permission	GCF_037355615.1	Dsuz_RU_1.0	Rockefeller University, Zhao,L.		NC_089024.1		6	264848469
+125945	Brachycera	Ephydroidea	Drosophilidae	EXCLUDE	Drosophilinae	Drosophila_biarmipes	yes	permission	GCF_025231255.1	RU_DBia_V1.1	Rockefeller University, Zhao,L.		NC_066611.1		6	172325972
+1486046	Brachycera	Ephydroidea	Drosophilidae	EXCLUDE	Drosophilinae	Drosophila_subpulchrella	yes	permission	GCF_014743375.2	RU_Dsub_v1.1	Rockefeller University, Zhao,L.		NC_050613.1		6	186403683
+315576	Nematocera	Chironomoidea	Chironomidae	KEEP	Chironominae	Chironomus_riparius	yes	excessive_rearrangements	GCA_917627325.4	PGI_CHIRRI_v4	ROTHAMSTED RESEARCH	10.1101/2024.04.04.588075	NA		4	184481679
+67534	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_triauraria	no	NA	GCA_014170255.2	RU_Dtri_1.1	Rutgers University	10.1371/journal.pgen.1009229	CM024333.1		6	177070084
+7271	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_nebulosa	yes	missing_chromosomes	GCA_024703675.1	RU_Dneb_q3p	Rutgers University	10.1093/g3journal/jkac231	NA		2	1303477638
+42434	Nematocera	Culicoidea	Culicidae	KEEP	Culicinae	Culex_pipiens	no	NA	GCF_016801865.2	TS_CPP_V2	Shandong First Medical University	10.1111/1755-0998.13712	NA		3	156694154
+1768614	Nematocera	Chironomoidea	Chironomidae	KEEP	Chironominae	Chironomus_striatipennis	yes	excessive_rearrangements	GCA_026123125.1	ASM2612312v1	Shanghai Ocean University	10.1016/j.cbd.2024.101248	NA		4	152882553
+124917	Nematocera	Culicoidea	Culicidae	EXCLUDE	Culicinae	Armigeres_subalbatus	yes	permission	GCF_024139115.2	GZ_Asu_2	Southern medical university		NA		3	997245829
+903466	Nematocera	Chironomoidea	Chironomidae	KEEP	Orthocladiinae	Propsilocerus_akamusi	yes	excessive_rearrangements	GCA_018397935.1	ASM1839793v1	Tianjin Normal University	10.1111/1755-0998.13377	NA		4	156296224
+7241	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_subobscura	no	NA	GCF_008121235.1	UCBerk_Dsub_1.0	UC Berkeley	10.1093/gbe/evaa051	NA		6	1276854023
+7248	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_athabasca	yes	missing_chromosomes	GCA_008121215.1	UCBerk_Dath_EB_1.0	UC Berkeley	10.1093/gbe/evaa051	CM017796.1		4	365364221
+7251	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_lowei	no	NA	GCA_008121275.1	UCBerk_Dlow_1.0	UC Berkeley	10.1093/gbe/evaa051	CM017781.1		5	160702377
+95512	Brachycera	Tephritoidea	Tephritidae	KEEP	Trypetinae	Anastrepha_obliqua	no	NA	GCF_027943255.1	idAnaObli1_1.0	United States Department of Agriculture	10.1093/g3journal/jkae024	NA		6	171085089
+28586	Brachycera	Tephritoidea	Tephritidae	KEEP	Trypetinae	Anastrepha_ludens	no	NA	GCF_028408465.1	idAnaLude1.1	United States Department of Agriculture	10.1093/g3journal/jkae239	NC_071503.1		7	196373701
+28588	Brachycera	Tephritoidea	Tephritidae	KEEP	Dacinae	Zeugodacus_cucurbitae	no	NA	GCF_028554725.1	idZeuCucr1.2	United States Department of Agriculture	Kindly allowed by Sheina Sim	NC_071672.1		7	1281870358
+169498	Brachycera	Sciomyzoidea	Coelopidae	KEEP	Coelopinae	Coelopa_frigida	no	NA	GCA_017309665.1	UL_Cfrigida_v1.1	Universite Laval	10.1093/molbev/msab143	NA		6	1534016701
+7218	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_bifasciata	no	NA	GCA_009664405.1	UCBerk_Dbif_1.0	University of California - Berkeley	10.1093/gbe/evaa051	NA		5	179032452
+42062	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_nasuta	no	NA	GCF_023558535.2	ASM2355853v2	University of California Berkeley	10.1093/molbev/msac080	NC_083459.1		5	193077810
+88882	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_kepulauana	no	NA	GCA_023558455.1	ASM2355845v1	University of California Berkeley	10.1093/molbev/msac080	CM042371.1		5	279714746
+89887	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_sulfurigaster	no	NA	GCF_023558435.1	ASM2355843v2	University of California Berkeley	10.1093/molbev/msac080	NC_084885.1		5	591299335
+88884	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_pallidifrons	no	NA	GCA_023558445.1	ASM2355844v1	University of California Berkeley	10.1093/molbev/msac080	CM042351.1		5	867429858
+7291	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_albomicans	no	NA	GCF_009650485.2	ASM965048v2	University of California Berkely	10.1371/journal.pgen.1008502	NC_047627.2		5	574196547
+30069	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_stephensi	no	NA	GCF_013141755.1	UCI_ANSTEP_V1.0	University of California Irvine	10.1038/s41598-022-07462-3	NC_050201.1		3	449647436
+7237	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_pseudoobscura	no	NA	GCF_009870125.1	UCI_Dpse_MV25	University of California Irvine	10.1098/rstb.2021.0206	NC_046683.1		5	285910259
+7260	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_willistoni	yes	missing_chromosomes	GCF_018902025.1	UCI_dwil_1.1	University of California Irvine	10.1111/mec.16941	NA		1	158968188
+7226	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_mauritiana	no	NA	GCF_004382145.1	ASM438214v1	University of California Irvine, Chakraborty,M., Emerson,J.J. and Nirale,N.	10.1101/gr.263442.120	NC_046672.1		6	528836614
+7238	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_sechellia	no	NA	GCF_004382195.2	ASM438219v2	University of California Irvine, Chakraborty,M., Emerson,J.J. and Nirale,N.	10.1101/gr.263442.120	NC_045954.1		6	1072030613
+198719	Brachycera	Ephydroidea	Drosophilidae	EXCLUDE	Drosophilinae	Drosophila_innubila	yes	permission	GCF_004354385.1	UK_Dinn_1.0	University of Kansas		NC_047626.1		NA	1309713134
+198719	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_innubila	no	NA	GCA_004354385.2	ASM435438v2	University of Kansas	10.1093/molbev/msz059	CM015046.2		6	158567246
+7246	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_affinis	yes	missing_chromosomes	GCA_037356375.1	KU_Daffinis_5.1	University of Kansas	Kindly allowed by Robert Unckless	CM074802.1		4	251147828
+139649	Brachycera	Diopsoidea	Diopsidae	EXCLUDE	Diopsinae	Teleopsis_dalmanni	yes	permission	GCF_002237135.1	ASM223713v2	University of Maryland, Baltimore		NC_051848.1		NA	721923177
+7217	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_ananassae	no	NA	GCF_017639315.1	ASM1763931v2	University of Maryland, Baltimore	10.1093/g3journal/jkab083	NC_057931.1	NC_057932.1	6	248824109
+139649	Brachycera	Diopsoidea	Diopsidae	KEEP	Diopsinae	Teleopsis_dalmanni	no	NA	GCA_002237135.5	Teleopsis dalmanni v 3.1	University of Maryland, Baltimore	10.1093/gbe/evad118	CM026972.3		3	784549801
+2763070	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_funestus-like	no	NA	GCA_016170035.1	AlikF1	University of Notre Dame	10.1073/pnas.2018142117	CM028107.1		5	558934793
+412009	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_longipalpis	no	NA	GCA_016170015.1	AlonF1	University of Notre Dame	10.1073/pnas.2018142117	CM028102.1		5	842723630
+62325	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_vaneedeni	no	re-included after locating chromosomes	GCA_016170025.1	Avan.F1	University of Notre Dame	10.1073/pnas.2018142117	CM028117.1		2	1443258482
+162637	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_parensis	yes	inhibited_resolving_node	GCA_016254315.1	AparF1	University of Notre Dame	10.1073/pnas.2018142117	CM028123.1		5	1300054540
+70327	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_rivulorum	yes	inhibited_resolving_node	GCA_018908115.1	ArivF1	University of Notre Dame	10.1073/pnas.2018142117	CM032179.1		3	1378853620
+35572	Nematocera	Sciaroidea	Sciaridae	KEEP	NA	Pseudolycoriella_hygida	yes	inhibited_resolving_node	GCA_029228625.1	FCFRP_Bhyg_1.0	University of Sao Paulo	10.1016/j.isci.2023.106449	CM055406.1		4	1059815714
+7173	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_arabiensis	no	NA	GCF_016920715.1	AaraD3	Virginia Tech	10.1093/gigascience/giab017	NC_053519.1		3	177047456
+30066	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_merus	no	NA	GCF_017562075.2	AmerM5.1	Virginia Tech	10.1038/s41467-022-29599-5	NC_054081.1		5	296145515
+42839	Nematocera	Culicoidea	Culicidae	EXCLUDE	Anophelinae	Anopheles_aquasalis	yes	permission	GCF_943734665.1	idAnoAquaMG_Q_19	WSI		NC_064876.1		NA	699539660
+468752	Brachycera	Asiloidea	Asilidae	KEEP	Leptogastrinae	Leptogaster_cylindrica	no	NA	GCA_963082835.1	idLepCyli1.1	WSI		NA		5	700864807
+7153	Nematocera	Chironomoidea	Chironomidae	KEEP	Chironominae	Chironomus_tentans	yes	excessive_rearrangements	GCA_963573255.1	idChiTent1.1	WSI	10.12688/wellcomeopenres.23907.1	NA		4	685014167
+1262473	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Hirtodrosophila_cameraria	no	NA	GCA_949708635.1	idHirCame2.1	WSI	10.12688/wellcomeopenres.19850.1	NA		4	340025477
+2795671	Brachycera	Oestroidea	Calliphoridae	KEEP	Calliphorinae	Bellardia_pandia	no	NA	GCA_916048285.2	idBelPand1.2	WSI	10.12688/wellcomeopenres.17492.1	OU696534.1		6	653418339
+352855	Brachycera	Hippoboscoidea	Hippoboscidae	KEEP	Ornithomyinae	Ornithomya_fringillina	no	NA	GCA_963978525.1	idOrnFrin1.1	WSI	10.12688/wellcomeopenres.23963.1	OZ021690.1		6	158213142
+198718	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_histrio	no	NA	GCA_958299025.2	idDroHist2.2	WSI		OY282582.1		5	295820183
+452744	Brachycera	Hippoboscoidea	Hippoboscidae	KEEP	Ornithomyinae	Crataerina_pallida	no	NA	GCA_949710015.1	idCraPall2.1	WSI	10.12688/wellcomeopenres.20097.1	NA		6	739693557
+559701	Brachycera	Muscoidea	Anthomyiidae	KEEP	Pegomyinae	Pegoplata_infirma	no	NA	GCA_963921195.1	idPegInfi2.1	WSI	10.12688/wellcomeopenres.22463.1	OY992541.1		7	279505365
+2866287	Brachycera	Muscoidea	Muscidae	KEEP	Muscinae	Polietes_domitor	no	NA	GCA_947397865.1	idPolDomi1.1	WSI	10.12688/wellcomeopenres.20648.1	OX377623.1		6	402515957
+2588525	Brachycera	Muscoidea	Anthomyiidae	KEEP	Anthomyiinae	Leucophora_obtusa	no	NA	GCA_949987735.1	idLeuObtu2.1	WSI	10.12688/wellcomeopenres.19920.1	NA		6	294071612
+468767	Brachycera	Asiloidea	Asilidae	KEEP	Asilinae	Neoitamus_cyanurus	no	NA	GCA_947538895.1	idNeoCyan1.1	WSI	10.12688/wellcomeopenres.22253.2	NA		10	603783692
+7250	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_immigrans	no	NA	GCA_963583835.1	idDroImmi1.1	WSI		OY757144.1		5	981654302
+7283	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_phalerata	no	NA	GCA_951394115.2	idDroPhal2.2	WSI		OX596006.1		7	1445903323
+2882611	Brachycera	Muscoidea	Muscidae	KEEP	Phaoniinae	Phaonia_tiefii	no	NA	GCA_963931995.1	idPhaTief1.1	WSI		NA		5	711309804
+1552766	Nematocera	Trichoceroidea	Anisopodidae	KEEP	Anisopodinae	Sylvicola_cinctus	yes	excessive_rearrangements	GCA_963854165.1	idSylCinc2.1	WSI	10.12688/wellcomeopenres.23762.1	NA		3	625461831
+352856	Brachycera	Hippoboscoidea	Hippoboscidae	KEEP	Ornithomyinae	Ornithomya_chloropus	no	NA	GCA_963971445.1	idOrnChlo1.1	WSI	10.12688/wellcomeopenres.23962.1	OZ020530.1		5	938115006
+1717430	Brachycera	Asiloidea	Asilidae	KEEP	Asilinae	Machimus_rusticus	no	NA	GCA_951509405.1	idMacRust1.1	WSI	10.12688/wellcomeopenres.22800.1	OX608055.1		8	912576047
+596942	Brachycera	Oestroidea	Sarcophagidae	KEEP	Sarcophaginae	Sarcophaga_caerulescens	no	NA	GCA_927399465.1	idSarCaer1.1	WSI	10.12688/wellcomeopenres.18718.1	OV656869.1		7	898847411
+2881975	Brachycera	Muscoidea	Anthomyiidae	KEEP	Anthomyiinae	Eustalomyia_histrio	no	NA	GCA_949748255.1	idEusHist1.1	WSI	10.12688/wellcomeopenres.21264.1	NA		6	1361981308
+559647	Brachycera	Muscoidea	Muscidae	KEEP	Azeliinae	Hydrotaea_cyrtoneurina	no	NA	GCA_958296145.1	idHydCyrt1.1	WSI	10.12688/wellcomeopenres.20638.1	NA		6	858113811
+468725	Brachycera	Asiloidea	Asilidae	KEEP	Asilinae	Dysmachus_trigonus	no	NA	GCA_949715965.1	idDysTrig1.1	WSI	10.12688/wellcomeopenres.22846.1	OX454324.1		7	166283777
+1936067	Brachycera	Asiloidea	Asilidae	KEEP	Asilinae	Eutolmus_rufibarbis	no	NA	GCA_963920795.1	idEutRufi1.1	WSI	10.12688/wellcomeopenres.23162.1	OY987210.1		7	443190207
+189979	Nematocera	Bibionoidea	Bibionidae	KEEP	Bibioninae	Bibio_marci	no	NA	GCA_910594885.2	idBibMarc1.1	WSI		OU343119.1		6	809577406
+1816463	Brachycera	Muscoidea	Muscidae	KEEP	Azeliinae	Hydrotaea_diabolus	no	NA	GCA_963513945.1	idHydDiab1.1	WSI	10.12688/wellcomeopenres.21211.1	NA		7	873782523
+1226583	Brachycera	Sciomyzoidea	Sciomyzidae	KEEP	NA	Dichetophora_obliterata	no	NA	GCA_963920525.1	idDicObli2.1	WSI	10.12688/wellcomeopenres.23993.1	NA		6	547549867
+468783	Brachycera	Asiloidea	Asilidae	KEEP	Asilinae	Philonicus_albiceps	no	NA	GCA_963969385.1	idPhiAlbi1.1	WSI		NA		6	392766389
+2741128	Brachycera	Asiloidea	Bombyliidae	KEEP	Bombyliinae	Bombylius_discolor	no	NA	GCA_939192795.1	idBomDisc1.1	WSI	10.12688/wellcomeopenres.18614.1	OW584243.1		6	1060759287
+2884231	Brachycera	Asiloidea	Asilidae	KEEP	Asilinae	Tolmerus_cingulatus	no	NA	GCA_959613345.1	idTolCing1.1	WSI	10.12688/wellcomeopenres.23416.1	OY390712.1		6	580251792
+559660	Brachycera	Muscoidea	Muscidae	KEEP	Reinwardtiinae	Muscina_levida	no	NA	GCA_964034835.1	idMusLevi1.1	WSI	10.12688/wellcomeopenres.23044.1	NA		5	337244240
+1606788	Brachycera	Oestroidea	Rhinophoridae	KEEP	NA	Melanophora_roralis	no	NA	GCA_963583895.1	idMelRora1.1	WSI	10.12688/wellcomeopenres.23295.1	OY757192.1		6	1268449752
+468750	Brachycera	Asiloidea	Asilidae	KEEP	Brachyrhopalinae	Leptarthrus_brevirostris	no	NA	GCA_964036015.1	idLepBrev1.hap1.1	WSI		NA		6	548193596
+1118052	Brachycera	Muscoidea	Scathophagidae	KEEP	Scathophaginae	Cordilura_impudica	no	NA	GCA_963682025.1	idCorImpu1.1	WSI		NA		6	261664681
+468723	Brachycera	Asiloidea	Asilidae	KEEP	Dioctriinae	Dioctria_rufipes	no	NA	GCA_963924295.1	idDioRufi1.1	WSI	10.12688/wellcomeopenres.23072.1	NA		6	694817309
+1717392	Brachycera	Asiloidea	Asilidae	KEEP	Dioctriinae	Dioctria_linearis	no	NA	GCA_963930735.1	idDioLine1.1	WSI	10.12688/wellcomeopenres.22880.1	NA		5	1041898747
+35570	Brachycera	Muscoidea	Muscidae	KEEP	Muscinae	Stomoxys_calcitrans	no	NA	GCF_963082655.1	idStoCalc2.1	WSI		NA		5	438191337
+292387	Brachycera	Sciomyzoidea	Sepsidae	KEEP	NA	Nemopoda_nitidula	no	NA	GCA_964194425.1	idNemNiti2.1	WSI	10.12688/wellcomeopenres.23664.1	NA		6	783474979
+52734	Nematocera	Bibionoidea	Bibionidae	KEEP	Bibioninae	Dilophus_febrilis	no	NA	GCA_958336335.1	idDilFebr1.1	WSI	10.12688/wellcomeopenres.23465.1	OY284473.1		6	339537549
+236851	Brachycera	Oestroidea	Sarcophagidae	KEEP	Sarcophaginae	Sarcophaga_variegata	no	NA	GCA_932273835.1	idSarVari1.1	WSI	10.12688/wellcomeopenres.19483.1	OW026363.1		7	765865541
+27454	Brachycera	Oestroidea	Calliphoridae	KEEP	Calliphorinae	Calliphora_vomitoria	no	NA	GCA_942486065.2	idCalVomi1.2	WSI	10.12688/wellcomeopenres.18891.1	OW818034.2		6	333134301
+236850	Brachycera	Oestroidea	Sarcophagidae	KEEP	Sarcophaginae	Sarcophaga_subvicina	no	NA	GCA_936449025.2	idSarSubv1.2	WSI	10.12688/wellcomeopenres.18717.2	OW388085.2		6	802603214
+576317	Brachycera	Opomyzoidea	Clusiidae	KEEP	NA	Clusia_tigrina	no	NA	GCA_920105625.2	idCluTigr1.2	WSI		OV050032.1		5	985781301
+240869	Brachycera	Asiloidea	Bombyliidae	KEEP	Bombyliinae	Bombylius_major	no	NA	GCA_932526495.1	idBomMajo1.1	WSI	10.12688/wellcomeopenres.19804.1	OW052046.1		7	310664204
+569040	Brachycera	Oestroidea	Tachinidae	KEEP	Exoristinae	Epicampocera_succincta	no	NA	GCA_932526305.1	idEpiSucc1.1	WSI	10.12688/wellcomeopenres.19586.1	OW052039.1		7	978168602
+569046	Brachycera	Oestroidea	Tachinidae	KEEP	Phasiinae	Gymnosoma_rotundatum	no	NA	GCA_916610165.2	idGymRotn1.2	WSI	10.12688/wellcomeopenres.17782.1	OU744341.1		6	508547898
+2753613	Brachycera	Asiloidea	Bombyliidae	KEEP	Anthracinae	Villa_cingulata	no	NA	GCA_951394055.1	idVilCing2.1	WSI	10.12688/wellcomeopenres.20123.1	OX596017.1		10	310779441
+2725500	Brachycera	Asiloidea	Bombyliidae	KEEP	Anthracinae	Anthrax_anthrax	no	NA	GCA_963971155.1	idAntAnth1.1	WSI		OZ020121.1		9	653086008
+2794001	Brachycera	Asiloidea	Asilidae	KEEP	Asilinae	Machimus_atricapillus	no	NA	GCA_933228815.1	idMacAtri3.1	WSI	10.12688/wellcomeopenres.19080.1	OW121785.1		6	833600904
+377571	Brachycera	Empidoidea	Dolichopodidae	KEEP	Sciapodinae	Sciapus_platypterus	no	NA	GCA_964204755.1	idSciPlat2.1	WSI		NA		6	480832077
+1643974	Brachycera	Muscoidea	Muscidae	KEEP	Muscinae	Eudasyphora_cyanicolor	no	NA	GCA_963930755.1	idEudCyai1.1	WSI	10.12688/wellcomeopenres.23675.1	NA		5	317771013
+226135	Brachycera	Oestroidea	Sarcophagidae	KEEP	Sarcophaginae	Sarcophaga_carnaria	no	NA	GCA_958299815.1	idSarCarn1.1	WSI	10.12688/wellcomeopenres.22921.1	OY283154.1		6	811934768
+2021473	Brachycera	Oestroidea	Sarcophagidae	KEEP	Miltogramminae	Metopia_argyrocephala	no	NA	GCA_963576795.1	idMetArgy1.1	WSI	10.12688/wellcomeopenres.22622.1	NA		5	159536537
+369887	Brachycera	Empidoidea	Dolichopodidae	KEEP	Dolichopodinae	Poecilobothrus_nobilitatus	no	NA	GCA_947095535.1	idPoeNobi2.1	WSI	10.12688/wellcomeopenres.20947.1	OX352775.1		5	783956896
+377538	Brachycera	Empidoidea	Dolichopodidae	KEEP	Diaphorinae	Argyra_leucocephala	no	NA	GCA_963942445.1	idArgLeuc1.1	WSI		NA		6	561178039
+1266491	Brachycera	Oestroidea	Polleniidae	KEEP	NA	Pollenia_labialis	no	NA	GCA_949318255.1	idPolLabi1.1	WSI	10.12688/wellcomeopenres.21079.1	OX439144.1		6	791084993
+1266490	Brachycera	Oestroidea	Polleniidae	KEEP	NA	Pollenia_angustigena	no	NA	GCA_930367215.1	idPolAngu1.1	WSI	10.12688/wellcomeopenres.19576.1	OV884061.1		6	833535308
+327083	Brachycera	Empidoidea	Dolichopodidae	KEEP	Dolichopodinae	Dolichopus_griseipennis	no	NA	GCA_963082915.1	idDolGris1.1	WSI	10.12688/wellcomeopenres.23382.1	OY720446.1		6	861212214
+42028	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_limbata	no	NA	GCA_963924055.1	idDroLimb2.1	WSI	10.12688/wellcomeopenres.22584.1	OZ001351.1		6	417754529
+2998547	Brachycera	Empidoidea	Dolichopodidae	KEEP	Hydrophorinae	Scellus_notatus	no	NA	GCA_964204855.1	idSceNota2.1	WSI	10.12688/wellcomeopenres.23764.1	NA		5	434922388
+2998528	Brachycera	Empidoidea	Dolichopodidae	KEEP	Dolichopodinae	Dolichopus_virgultorum	no	NA	GCA_965140195.1	idDolVirg1.hap1.1	WSI		OZ222696.1 OZ222697.1		7	413887601
+2719080	Nematocera	Tipuloidea	Tipulidae	KEEP	Tipulinae	Nephrotoma_flavescens	no	NA	GCA_932526605.1	idNepFlae1.1	WSI	10.12688/wellcomeopenres.19203.1	OW052223.1		4	589942894
+2881606	Brachycera	Oestroidea	Calliphoridae	KEEP	Calliphorinae	Bellardia_bayeri	no	NA	GCA_950370525.1	idBelBaye1.1	WSI	10.12688/wellcomeopenres.22911.1	OX493269.1		7	226538734
+1096077	Brachycera	Sciomyzoidea	Sciomyzidae	KEEP	NA	Pherbina_coryleti	no	NA	GCA_943735915.1	idPheCory1.1	WSI	10.12688/wellcomeopenres.18790.1	OX030953.1		6	279123062
+240896	Brachycera	Empidoidea	Dolichopodidae	KEEP	Neurigoninae	Neurigona_quadrifasciata	no	NA	GCA_964251855.1	idNeuQuad1.1	WSI		Na		6	389323393
+1692350	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Chymomyza_fuscimana	no	NA	GCA_949987675.1	idChyFusc2.1	WSI	10.12688/wellcomeopenres.20122.1	OX465090.1		5	258485135
+1262321	Brachycera	Oestroidea	Rhinophoridae	KEEP	NA	Phyto_melanocephala	no	NA	GCA_941918925.1	idPhyMeln1.1	WSI	10.12688/wellcomeopenres.19563.1	OW799238.1		6	417445226
+1230148	Brachycera	Sphaeroceroidea	Heleomyzidae	KEEP	Heleomyzinae	Suillia_variegata	no	NA	GCA_949127995.1	idSuiVari3.1	WSI	10.12688/wellcomeopenres.19630.1	OX421847.1		7	272992048
+7373	Brachycera	Oestroidea	Calliphoridae	KEEP	Calliphorinae	Calliphora_vicina	no	NA	GCF_958450345.1	idCalVici1.1	WSI		NC_088785.1		6	500486939
+1720740	Brachycera	Oestroidea	Polleniidae	KEEP	NA	Pollenia_griseotomentosa	no	NA	GCA_963931875.1	idPolGris2.1	WSI	10.12688/wellcomeopenres.23625.1	OZ007565.1		6	210254213
+34676	Brachycera	Oestroidea	Calliphoridae	KEEP	Chrysomyinae	Protophormia_terraenovae	no	NA	GCA_951394005.1	idProTerr1.1	WSI	10.12688/wellcomeopenres.21578.1	OX596078.1		7	249243465
+2484550	Brachycera	Empidoidea	Empididae	KEEP	Empidinae	Empis_stercorea	no	NA	GCA_949752835.1	idEmpSter1.1	WSI	10.12688/wellcomeopenres.22820.1	OX457090.1		7	674745758
+472889	Brachycera	Tephritoidea	Tephritidae	KEEP	Trypetinae	Philophylla_caesio	no	NA	GCA_963971545.1	idPhiCaes1.1	WSI		OZ020605.1		6	260630297
+2867252	Brachycera	Sphaeroceroidea	Heleomyzidae	KEEP	Heteromyzinae	Heteromyza_rotundicornis	no	NA	GCA_951394025.1	idHetRotu1.1	WSI	10.12688/wellcomeopenres.22872.1	OX596014.1		6	657069419
+2795681	Brachycera	Tephritoidea	Tephritidae	KEEP	Tephritinae	Merzomyia_westermanni	no	NA	GCA_949987695.1	idMerWest1.1	WSI	10.12688/wellcomeopenres.22873.1	NA		6	195419103
+1262239	Brachycera	Empidoidea	Hybotidae	KEEP	Hybotinae	Hybos_culiciformis	no	NA	GCA_964007475.1	idHybCuli1.1	WSI		OZ023276.1		5	435017680
+1226616	Brachycera	Sciomyzoidea	Sciomyzidae	KEEP	NA	Coremacera_marginata	no	NA	GCA_914767935.1	idCorMarg1.1	WSI	10.12688/wellcomeopenres.17482.1	OU612048.1		6	455873098
+670595	Brachycera	Oestroidea	Polleniidae	KEEP	NA	Pollenia_amentaria	no	NA	GCA_943735925.1	idPolAmen1.1	WSI	10.12688/wellcomeopenres.19740.1	OX031011.1		6	679253950
+169445	Brachycera	Sciomyzoidea	Dryomyzidae	KEEP	NA	Dryomyza_anilis	no	NA	GCA_951804985.1	idDryAnil2.1	WSI	10.12688/wellcomeopenres.22884.1	OX638135.1		7	670170685
+503482	Brachycera	Tephritoidea	Tephritidae	KEEP	Tephritinae	Urophora_cardui	no	NA	GCA_960531455.1	idUroCard1.1	WSI	10.12688/wellcomeopenres.22919.1	NA		6	170678462
+2725530	Brachycera	Tephritoidea	Pallopteridae	KEEP	NA	Toxonevra_muliebris	no	NA	GCA_963691655.1	idToxMuli2.1	WSI	10.12688/wellcomeopenres.23670.1	OY829330.1		6	193025691
+1219171	Brachycera	Conopoidea	Conopidae	KEEP	Myopinae	Thecophora_atra	no	NA	GCA_937620795.1	idTheAtra2.1	WSI	10.12688/wellcomeopenres.19902.1	OW569398.1		5	1607510651
+320963	Brachycera	Sciomyzoidea	Sciomyzidae	KEEP	NA	Tetanocera_ferruginea	no	NA	GCA_958299015.1	idTetFerr1.1	WSI	10.12688/wellcomeopenres.20366.1	OY282645.1		7	427236001
+103414	Brachycera	Tephritoidea	Tephritidae	KEEP	Trypetinae	Anomoia_purmunda	no	NA	GCA_951828415.1	idAnoPurm1.1	WSI	10.12688/wellcomeopenres.22849.1	OX639998.1		6	2024823899
+2691756	Brachycera	Tephritoidea	Tephritidae	KEEP	Tephritinae	Campiglossa_producta	no	NA	GCA_964058745.1	idCamProd1.hap1.1	WSI		NA		6	613321903
+226133	Brachycera	Oestroidea	Calliphoridae	KEEP	Chrysomyinae	Protocalliphora_azurea	no	NA	GCA_932274085.1	idProAzur1.1	WSI	10.12688/wellcomeopenres.18872.1	OW026524.1		7	833645425
+2849646	Brachycera	Tephritoidea	Pallopteridae	KEEP	NA	Palloptera_scutellata	no	NA	GCA_958295655.1	idPalScut3.1	WSI	10.12688/wellcomeopenres.20381.1	NA		5	296980291
+594017	Brachycera	Tephritoidea	Tephritidae	KEEP	Tephritinae	Sphenella_marginata	no	NA	GCA_951509765.1	idSphMarg1.1	WSI	10.12688/wellcomeopenres.19841.1	NA		6	781211329
+1219160	Brachycera	Conopoidea	Conopidae	KEEP	Conopinae	Physocephala_rufipes	no	NA	GCA_963966595.1	idPhyRufi1.1	WSI		NA		5	771936106
+178772	Brachycera	Empidoidea	Empididae	KEEP	Empidinae	Empis_livida	no	NA	GCA_963932195.1	idEmpLivi1.1	WSI	10.12688/wellcomeopenres.22866.1	OZ010650.1		6	708572427
+2867109	Brachycera	Empidoidea	Empididae	KEEP	Empidinae	Rhamphomyia_laevipes	no	NA	GCA_963920725.1	idRhaLaev1.1	WSI	10.12688/wellcomeopenres.22845.1	OY987260.1		7	864944292
+3037405	Brachycera	Tephritoidea	Ulidiidae	KEEP	Otitinae	Melieria_picta	no	NA	GCA_964056695.1	idMelPict1.hap1.1	WSI		OZ057401.1		4	1002404926
+1851132	Brachycera	Nerioidea	Micropezidae	KEEP	Calobatinae	Neria_commutata	no	NA	GCA_963457695.1	idNerComm1.1	WSI		NA		6	592743416
+3037404	Brachycera	Diopsoidea	Megamerinidae	KEEP	NA	Megamerina_dolium	no	NA	GCA_963854835.1	idMegDoli1.1	WSI	10.12688/wellcomeopenres.22703.1	NA		6	540369503
+2823188	Brachycera	Conopoidea	Conopidae	KEEP	Conopinae	Conops_quadrifasciatus	no	NA	GCA_949752815.1	idConQuad1.1	WSI	10.12688/wellcomeopenres.21106.1	OX457082.1		7	690258248
+2829445	Brachycera	Conopoidea	Conopidae	KEEP	Myopinae	Myopa_tessellatipennis	no	NA	GCA_943737955.2	idMyoTess1.2	WSI		NA		4	611222695
+1824995	Brachycera	Lauxanioidea	Lauxaniidae	KEEP	Lauxaniinae	Calliopum_simillimum	no	NA	GCA_951812925.1	idCalSimi1.1	WSI	10.12688/wellcomeopenres.23253.1	OX638373.1		6	792792970
+169500	Brachycera	Sciomyzoidea	Coelopidae	KEEP	Coelopinae	Coelopa_pilipes	no	NA	GCA_947389925.1	idCoePili4.1	WSI	10.12688/wellcomeopenres.21222.1	OX376701.1		7	933366346
+1824988	Brachycera	Lauxanioidea	Lauxaniidae	KEEP	Lauxaniinae	Tricholauxania_praeusta	no	NA	GCA_949775025.1	idTriPrae1.1	WSI	10.12688/wellcomeopenres.23099.1	NA		5	674416912
+1262309	Brachycera	Lauxanioidea	Lauxaniidae	KEEP	Lauxaniinae	Meiosimyza_decipiens	no	NA	GCA_963680825.1	idLycDeci1.1	WSI		OY804262.1		6	1194138480
+1825006	Brachycera	Lauxanioidea	Lauxaniidae	KEEP	Lauxaniinae	Meiosimyza_platycephala	no	NA	GCA_963662105.1	idLycPlat1.1	WSI		NA		5	1350638830
+1824969	Brachycera	Lauxanioidea	Lauxaniidae	KEEP	Lauxaniinae	Minettia_fasciata	no	NA	GCA_965113145.1	idMinFasc2.hap1.1	WSI		Na		6	730946076
+2725545	Brachycera	Lauxanioidea	Lauxaniidae	KEEP	Lauxaniinae	Trigonometopus_frontalis	no	NA	GCA_964659535.1	idTriFrot2.hap1.1	WSI		Na		6	695029866
+1572538	Nematocera	NA	Ptychopteridae	KEEP	Ptychopterinae	Ptychoptera_contaminata	no	NA	GCA_963942525.1	idPtyCont2.1	WSI		OZ012640.1		6	608520619
+1902997	Nematocera	NA	Ptychopteridae	KEEP	Ptychopterinae	Ptychoptera_albimana	no	NA	GCA_961205885.1	idPtyAlbi3.1	WSI	10.12688/wellcomeopenres.23208.1	OY540807.1		7	938580410
+1822558	Brachycera	Tabanoidea	Rhagionidae	KEEP	Rhagioninae	Rhagio_lineola	no	NA	GCA_964211845.1	idRhaLine2.1	WSI	10.12688/wellcomeopenres.23901.1	OZ124302.1		5	727085595
+1822507	Brachycera	Tabanoidea	Rhagionidae	KEEP	Chrysopilinae	Chrysopilus_asiliformis	no	NA	GCA_964034945.1	idChrAsil3.1	WSI		OZ035965.1		5	749566226
+3037408	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Stratiomyinae	Odontomyia_ornata	no	NA	GCA_963969285.1	idOdoOrna1.1	WSI		OZ017743.1		7	506853602
+566305	Brachycera	Syrphoidea	Pipunculidae	KEEP	Nephrocerinae	Nephrocerus_scutellatus	no	NA	GCA_947095585.1	idNepScut1.1	WSI	10.12688/wellcomeopenres.20677.1	OX352766.1		6	1035663289
+931518	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Sarginae	Microchrysa_polita	no	NA	GCA_949715475.1	idMicPoli1.1	WSI	10.12688/wellcomeopenres.23075.1	OX454422.1		8	901326997
+343672	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Sarginae	Chloromyia_formosa	no	NA	GCA_964017055.1	idChlForm1.1	WSI		OZ024819.1		7	596526585
+2867254	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Nemotelinae	Nemotelus_pantherinus	no	NA	GCA_963978885.1	idNemPant2.1	WSI		OZ022267.1		6	707946485
+343700	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Nemotelinae	Nemotelus_nigrinus	no	NA	GCA_947369275.1	idNemNigr1.1	WSI	10.12688/wellcomeopenres.19534.1	OX376376.1		5	611677801
+2823186	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Beridinae	Chorisops_tibialis	no	NA	GCA_963669355.1	idChoTibi2.1	WSI	10.12688/wellcomeopenres.23454.1	OY770265.1		5	933366346
+2998541	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Stratiomyinae	Oxycera_nigricornis	no	NA	GCA_963942545.1	idOxyNigr1.1	WSI		NA		6	455922914
+2719050	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Beridinae	Beris_chalybata	no	NA	GCA_949128065.1	idBerChal2.1	WSI	10.12688/wellcomeopenres.21159.2	OX421898.1		6	533733621
+511597	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Stratiomyinae	Stratiomys_singularior	no	NA	GCA_954870665.1	idStrSing1.1	WSI	10.12688/wellcomeopenres.23294.1	OX940882.1		6	1066270848
+931494	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Beridinae	Beris_morrisii	no	NA	GCA_951812415.1	idBerMorr1.1	WSI	10.12688/wellcomeopenres.20352.1	OX638314.1		5	426988186
+2867256	Brachycera	Stratiomyoidea	Stratiomyidae	KEEP	Stratiomyinae	Oxycera_pygmaea	no	NA	GCA_965211965.1	idOxyPygm2.1	WSI		OZ243012.1		7	379057608
+414876	Brachycera	Syrphoidea	Syrphidae	EXCLUDE	Syrphinae	Philhelius_pedissequus	yes	permission	GCA_910595825.1	idXanPedi1.1	WSI	10.12688/wellcomeopenres.17559.1			6	553719552
+414846	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Platycheirus_albimanus	no	NA	GCA_916050605.2	idPlaAlba1.2	WSI	10.12688/wellcomeopenres.20494.1	OU696699.1		4	585939837
+1352473	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Volucella_bombylans	no	NA	GCA_949129095.1	idVolBomb1.1	WSI	10.12688/wellcomeopenres.22843.1	OX422145.1		6	481831138
+2767528	Brachycera	Syrphoidea	Syrphidae	KEEP	Microdontinae	Microdon_myrmicae	no	NA	GCA_963931805.1	idMicMyrm1.1	WSI	10.12688/wellcomeopenres.23903.1	OZ007500.1		8	397509674
+92598	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Melanostoma_scalare	no	NA	GCA_949752695.1	idMelScal2.1	WSI	10.12688/wellcomeopenres.20171.1	OX456987.1		5	861271419
+226161	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Rhingia_campestris	no	NA	GCA_932526625.1	idRhiCamp1.1	WSI	10.12688/wellcomeopenres.19036.1	OW052186.1		5	327681692
+1206372	Brachycera	Oestroidea	Sarcophagidae	KEEP	Sarcophaginae	Sarcophaga_rosellei	no	NA	GCA_930367235.1	idSarRose1.1	WSI	10.12688/wellcomeopenres.18874.1	OV884022.1		6	603331834
+2884232	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Melangyna_quadrimaculata	no	NA	GCA_949320155.1	idMelQuad1.1	WSI	10.12688/wellcomeopenres.22798.1	OX439486.1		5	806670906
+653684	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Melanostoma_mellinum	no	NA	GCA_914767635.1	idMelMell2.1	WSI	10.12688/wellcomeopenres.17615.1	OU612061.1		5	830662365
+1352472	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Platycheirus_rosarum	no	NA	GCA_963971375.1	idPlaRosa1.1	WSI	10.12688/wellcomeopenres.23046.1	OZ020511.1		6	660317991
+1244581	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Dasysyrphus_tricinctus	no	NA	GCA_963921185.1	idDasTrii1.1	WSI	10.12688/wellcomeopenres.22892.1	OY992534.1		5	147838017
+323313	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Chrysotoxum_bicinctum	no	NA	GCA_911387755.1	idChrBici1.1	WSI	10.12688/wellcomeopenres.17382.1	OU426991.1		5	459805883
+2867103	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Neoascia_interrupta	no	NA	GCA_947623515.1	idNeoInte1.1	WSI	10.12688/wellcomeopenres.20353.1	OX392465.1		4	325024677
+2867251	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Eumerus_sabulonum	no	NA	GCA_951905685.1	idEumSabu1.1	WSI	10.12688/wellcomeopenres.23127.1	OX645065.1		6	373721851
+323312	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Leucozona_laternaria	no	NA	GCA_932273885.2	idLeuLate1.2	WSI	10.12688/wellcomeopenres.18661.1	OW026370.1		5	552754929
+414876	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Philhelius_pedissequus	no	NA	GCA_910595825.1	idXanPedi1.1	WSI	10.12688/wellcomeopenres.17559.1	OU343164.1		6	523327223
+1572519	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Eristalis_pertinax	no	NA	GCA_907269125.1	idEriPert2.1	WSI	10.12688/wellcomeopenres.17267.2	OU026150.1		7	211488707
+286459	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Episyrphus_balteatus	no	NA	GCF_945859705.1	idEpiBalt1.1	WSI		NC_079138.1		5	211488707
+2234001	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Brachypalpus_laphriformis	no	NA	GCA_945910035.1	idBraLaph1.1	WSI	10.12688/wellcomeopenres.20885.1	OX246757.1		5	556610010
+1124515	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Eristalis_arbustorum	no	NA	GCA_916610145.1	idEriArbu1.1	WSI	10.12688/wellcomeopenres.17580.1	OU744321.1		6	545163065
+431829	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Meliscaeva_auricollis	no	NA	GCA_948107695.1	idMelAuri2.1	WSI	10.12688/wellcomeopenres.20843.1	OX403620.1		5	158033125
+1352479	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Epistrophe_grossulariae	no	NA	GCA_929447395.1	idEpiGros1.1	WSI	10.12688/wellcomeopenres.19665.1	OV839570.1		5	352647813
+2849643	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Brachyopa_scutellaris	no	NA	GCA_949775065.1	idBraScut1.1	WSI	10.12688/wellcomeopenres.20635.1	NA		5	464011135
+2017640	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Eristalinus_aeneus	no	NA	GCA_955652365.1	idEriAene1.1	WSI	10.12688/wellcomeopenres.20636.2	NA		6	753274378
+1124511	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Epistrophe_eligans	no	NA	GCA_951394125.1	idEpiElig2.1	WSI	10.12688/wellcomeopenres.20336.1	OX596032.1		5	1119117637
+323314	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Chrysotoxum_festivum	no	NA	GCA_963931855.1	idChrFest1.1	WSI	10.12688/wellcomeopenres.22773.2	NA		5	161813688
+226170	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Chalcosyrphus_nemorum	no	NA	GCA_949716465.1	idChaNemo1.1	WSI	10.12688/wellcomeopenres.20892.1	OX454336.1		5	489255493
+2721518	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Rhingia_rostrata	no	NA	GCA_949824845.1	idRhiRost1.1	WSI	10.12688/wellcomeopenres.19939.1	OX463759.1		5	212951475
+511117	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Merodon_equestris	no	NA	GCA_958301585.1	idMerEque2.1	WSI	10.12688/wellcomeopenres.20654.1	NA		6	420451300
+2867115	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Pocota_personata	no	NA	GCA_963082735.1	idPocPers1.1	WSI	10.12688/wellcomeopenres.22761.1	OY720433.1		5	209784476
+414801	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Dasysyrphus_albostriatus	no	NA	GCA_946251815.1	idDasAlbo1.1	WSI	10.12688/wellcomeopenres.20887.1	OX276339.1		5	179623920
+2714349	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Myathropa_florea	no	NA	GCA_930367185.1	idMyaFlor2.1	WSI	10.12688/wellcomeopenres.20139.1	OV884006.1		6	1114613643
+2725509	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Eristalinus_sepulchralis	no	NA	GCA_944738645.1	idEriSepu1.1	WSI	10.12688/wellcomeopenres.19587.1	OX122887.1		6	205167228
+1859540	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Eristalis_intricaria	no	NA	GCA_964034865.1	idEriIntr1.1	WSI		OZ035878.1		6	353900987
+414814	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Epistrophella_euchroma	no	NA	GCA_947049315.1	idEpiEuco1.1	WSI	10.12688/wellcomeopenres.19622.1	OX346249.1		6	196508426
+139045	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_coustani	no	NA	GCF_943734705.1	idAnoCousDA_361_x.2	WSI		NC_071290.1		3	214279773
+345580	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_ziemanni	no	NA	GCF_943734765.1	idAnoZiCoDA_A2_x.2	WSI		NC_080707.1		3	245444597
+226145	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Ferdinandea_cuprea	no	NA	GCA_963576555.1	idFerCupr2.1	WSI	10.12688/wellcomeopenres.23365.1	NA		5	234611697
+173985	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Cheilosia_urbana	no	NA	GCA_946477585.1	idCheUrba1.1	WSI	10.12688/wellcomeopenres.19569.2	OX297857.1		5	249545448
+139047	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_bellator	no	NA	GCF_943735745.2	idAnoBellAS_SP24_06.2	WSI		NC_071287.1		3	234366716
+1637456	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Criorhina_ranunculi	no	NA	GCA_951813785.1	idCriRanu1.1	WSI	10.12688/wellcomeopenres.20141.1	OX638386.1		6	1261499790
+198635	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Eristalis_tenax	no	NA	GCA_905231855.2	idEriTena2.2	WSI	10.12688/wellcomeopenres.17357.1	HG993129.1		6	170269595
+226149	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Volucella_inflata	no	NA	GCA_928272305.1	idVolInfl1.1	WSI	10.12688/wellcomeopenres.19845.1	OV743721.1		6	1160150026
+511121	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Volucella_zonaria	no	NA	GCA_963966105.1	idVolZona1.1	WSI	10.12688/wellcomeopenres.23738.1	OZ014535.1		7	170012351
+68878	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_cruzii	no	NA	GCF_943734635.1	idAnoCruzAS_RS32_06	WSI		NC_069143.1		3	173357492
+2867105	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Orthonevra_nobilis	no	NA	GCA_963555765.1	idOrtNobi1.1	WSI	10.12688/wellcomeopenres.22459.1	NA		5	958925804
+1496333	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_maculipalpis	no	NA	GCF_943734695.1	idAnoMacuDA_375_x	WSI		NC_064870.1		3	181538275
+374263	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Xylota_segnis	no	NA	GCA_963583995.1	idXylSegn2.1	WSI	10.12688/wellcomeopenres.22582.1	OY757240.1		5	409247771
+62324	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_funestus	no	NA	GCF_943734845.2	idAnoFuneDA-416_04	WSI		NC_064597.1		3	690792407
+43151	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_darlingi	no	NA	GCF_943734745.1	idAnoDarlMG_H_01	WSI		NC_064873.1		3	458202660
+226160	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Portevinia_maculata	no	NA	GCA_949715645.1	idPorMacu1.1	WSI	10.12688/wellcomeopenres.20649.1	OX454529.1		6	955807611
+273407	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Cheilosia_pagana	no	NA	GCA_936431705.1	idChePaga1.1	WSI	10.12688/wellcomeopenres.20627.1	OW386171.1		6	908545269
+1521116	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_marshallii	no	NA	GCF_943734725.1	idAnoMarsDA_429_01	WSI		NC_071325.1		3	1204071576
+186751	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_moucheti	no	NA	GCF_943734755.1	idAnoMoucSN_F20_07	WSI		NC_069142.1		3	1096929967
+7165	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_gambia	no	NA	GCF_943734735.2	idAnoGambNW_F1_1	WSI		NC_064600.1		3	623814952
+1518534	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_coluzzii	no	NA	GCF_943734685.1	AcolN3	WSI		NC_064669.1		3	431777128
+2741129	Nematocera	Tipuloidea	Tipulidae	KEEP	Tipulinae	Tipula_vernalis	no	NA	GCA_958295665.1	idTipVern1.1	WSI	10.12688/wellcomeopenres.23203.1	NA		4	665738308
+2867262	Nematocera	Tipuloidea	Tipulidae	KEEP	Tipulinae	Tipula_helvola	no	NA	GCA_963556165.1	idTipHelv1.1	WSI	10.12688/wellcomeopenres.23207.1	NA		4	214884321
+185578	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_nili	no	NA	GCF_943737925.1	idAnoNiliSN_F5_01	WSI		NC_071293.1		3	549446285
+42839	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_aquasalis	no	NA	GCA_943734665.2	idAnoAquaMG_Q_19.2	WSI		OX030884.1	OX030885.1	4	361558228
+226151	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Volucella_inanis	no	NA	GCA_907269105.1	idVolInan1.1	WSI	10.12688/wellcomeopenres.18897.1	OU026158.1		6	459999375
+2663927	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Criorhina_berberina	no	NA	GCA_917880715.2	idCriBerb1.2	WSI	10.12688/wellcomeopenres.18705.1	OU862873.1		4	470376048
+2867263	Nematocera	Tipuloidea	Tipulidae	KEEP	Tipulinae	Tipula_unca	no	NA	GCA_951394425.1	idTipUnca1.1	WSI	10.12688/wellcomeopenres.20298.1	NA		4	675935469
+226147	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Blera_fallax	no	NA	GCA_946965025.1	idBleFall4.1	WSI	10.12688/wellcomeopenres.19034.1	OX337249.1		7	318451763
+1219204	Brachycera	Conopoidea	Conopidae	KEEP	Myopinae	Sicus_ferrugineus	no	NA	GCA_922984085.2	idSicFerr1.1	WSI	10.12688/wellcomeopenres.17748.1	SUPER_X1	SUPER_X2	8	404629009
+2881093	Nematocera	Tipuloidea	Tipulidae	KEEP	Tipulinae	Nephrotoma_guestfalica	no	NA	GCA_963691935.1	idNepGues1.1	WSI	10.12688/wellcomeopenres.23321.1	NA		4	382003934
+2715158	Nematocera	Tipuloidea	Cylindrotomidae	KEEP	Cylindrotominae	Diogma_glabrata	no	NA	GCA_963693315.1	idDioGlab1.1	WSI	10.12688/wellcomeopenres.23462.1	NA		4	479878290
+2741127	Nematocera	Tipuloidea	Tipulidae	KEEP	Tipulinae	Nephrotoma_appendiculata	no	NA	GCA_947310385.1	idNepAppe1.1	WSI	10.12688/wellcomeopenres.20886.1	OX371226.1		4	414757870
+2025111	Nematocera	Tipuloidea	Tipulidae	KEEP	Tipulinae	Tipula_lateralis	no	NA	GCA_963932295.1	idTipLate1.1	WSI	10.12688/wellcomeopenres.23899.1	NA		4	250149802
+423616	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Cheilosia_vernalis	no	NA	GCA_949126925.1	idCheVern2.1	WSI	10.12688/wellcomeopenres.21219.1	OX421363.1		6	827526365
+2881124	Nematocera	Tipuloidea	Tipulidae	KEEP	Tipulinae	Tipula_confusa	no	NA	GCA_963556175.1	idTipConf1.1	WSI	10.12688/wellcomeopenres.22470.1	OY744478.1		5	320047146
+210248	Brachycera	Nemestrinoidea	Acroceridae	KEEP	Acrocerinae	Acrocera_orbiculus	no	NA	GCA_947359355.1	idAcrOrbc1.1	WSI	10.12688/wellcomeopenres.20891.1	OX375760.1		5	559588684
+273442	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Cheilosia_grossa	no	NA	GCA_963082955.1	idCheGros1.1	WSI	10.12688/wellcomeopenres.23189.1	OY720149.1		6	818510109
+374264	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Xylota_sylvarum	no	NA	GCA_905220385.1	idXylSylv2.1	WSI	10.12688/wellcomeopenres.19241.1	LR999961.1		5	777166948
+273429	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Cheilosia_scutellata	no	NA	GCA_955612985.1	idCheScut6.1	WSI	10.12688/wellcomeopenres.20838.1	OY015315.1		6	441011861
+53552	Nematocera	Culicoidea	Culicidae	KEEP	Culicinae	Sabethes_cyaneus	no	NA	GCF_943734655.1	idSabCyanKW18_F2	WSI		NA		3	614623957
+2735243	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Sphaerophoria_taeniata	no	NA	GCA_943590905.1	idSphTaen1.1	WSI	10.12688/wellcomeopenres.19921.1	OX016543.1		5	1195030408
+273409	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Cheilosia_vulpina	no	NA	GCA_916610125.1	idCheVulp2.1	WSI	10.12688/wellcomeopenres.17491.1	OU744281.1		6	379970624
+273439	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Cheilosia_impressa	no	NA	GCA_948293265.1	idCheImpr3.1	WSI	10.12688/wellcomeopenres.20624.1	OX411885.1		6	616421331
+368781	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Cheilosia_soror	no	NA	GCA_949372485.1	idCheSoro4.1	WSI		OX443565.1		6	747624169
+273447	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Cheilosia_variabilis	no	NA	GCA_951230905.1	idCheVari2.1	WSI	10.12688/wellcomeopenres.19851.1	OX579681.1		7	842142300
+2882575	Nematocera	Tipuloidea	Pediciidae	KEEP	Pediciinae	Pedicia_rivosa	no	NA	GCA_963082725.1	idPedRivo1.1	WSI	10.12688/wellcomeopenres.20501.1	OY720156.1		7	751975483
+1464561	Nematocera	Culicoidea	Culicidae	KEEP	Culicinae	Culex_laticinctus	no	NA	GCA_964187845.1	idCulLati1.1	WSI		NA		3	825986620
+219539	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Scaeva_pyrastri	no	NA	GCA_905146935.1	idScaPyra1.1	WSI	10.12688/wellcomeopenres.18892.1	LR989930.1		4	1207525575
+1124558	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Eupeodes_latifasciatus	no	NA	GCA_920104205.1	idEupLati1.1	WSI	10.12688/wellcomeopenres.18113.1	OV049927.1		4	257890209
+226178	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Baccha_elongata	no	NA	GCA_951217065.1	idBacElon1.1	WSI		NA		3	723106424
+1124559	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Eupeodes_luniger	no	NA	GCA_951509635.1	idEupLuni2.1	WSI	10.12688/wellcomeopenres.20144.1	OX608077.1		4	846513494
+224256	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Syrphus_vitripennis	no	NA	GCA_958431115.1	idSyrVitr1.1	WSI	10.12688/wellcomeopenres.20837.1	OY288111.1		5	516841480
+290404	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Eupeodes_corollae	no	NA	GCF_945859685.1	idEupCoro1.1	WSI		NC_079150.1		4	650099340
+414834	Brachycera	Syrphoidea	Syrphidae	KEEP	Syrphinae	Meliscaeva_cinctella	no	NA	GCA_965212275.1	idMelCint3.1	WSI		Na		5	437296770
+2867258	Brachycera	Asiloidea	Therevidae	KEEP	Therevinae	Thereva_unica	no	NA	GCA_949987705.1	idTheUnic2.1	WSI	10.12688/wellcomeopenres.20828.1	NA		6	588819524
+1676147	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Sericomyia_silentis	no	NA	GCA_964264485.1	idSerSile2.1	WSI		OZ183054.1		7	242748396
+1774267	Brachycera	Asiloidea	Therevidae	KEEP	Therevinae	Thereva_nobilitata	no	NA	GCA_963855945.1	idTheNobi1.1	WSI	10.12688/wellcomeopenres.23970.1	OY979699.1		6	163711612
+226150	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Volucella_pellucens	no	NA	GCA_965234375.1	idVolPell3.hap1.1	WSI		OZ248635.1		7	178454024
+1547359	Brachycera	Tabanoidea	Tabanidae	KEEP	Chrysopsinae	Chrysops_caecutiens	no	NA	GCA_963971475.1	idChrCaec1.1	WSI		NA		4	216800705
+3093584	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Orthonevra_brevicornis	no	NA	GCA_965283055.1	idOrtBrev1.hap1.1	WSI		OZ259523.1		6	173097275
+1918144	Brachycera	Oestroidea	Tachinidae	KEEP	Phasiinae	Phasia_obesa	no	NA	GCA_949628195.1	idPhaObes1.1	WSI	10.12688/wellcomeopenres.21577.1	OX451220.1		6	156679183
+1918232	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Dexiosoma_caninum	no	NA	GCA_963924685.1	idDexCann1.1	WSI	10.12688/wellcomeopenres.23193.1	NA		6	318411875
+2025112	Brachycera	Tabanoidea	Athericidae	KEEP	NA	Atherix_ibis	no	NA	GCA_958298945.2	idAthIbis2.2	WSI	10.12688/wellcomeopenres.23045.1	NA		5	923338055
+569090	Brachycera	Oestroidea	Tachinidae	KEEP	Exoristinae	Sturmia_bella	no	NA	GCA_963662145.1	idStuBell1.1	WSI		NA		7	700042564
+631317	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Gymnocheta_viridis	no	NA	GCA_956483585.1	idGymViri1.1	WSI	10.12688/wellcomeopenres.23435.1	OY101445.1		6	617258151
+2867102	Brachycera	Conopoidea	Conopidae	KEEP	Myopinae	Myopa_testacea	no	NA	GCA_949629155.1	idMyoTest1.1	WSI	10.12688/wellcomeopenres.20647.1	OX451348.1		5	577393670
+77129	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_helvetica	no	NA	GCA_963969585.1	idDroHelv2.1	WSI	10.12688/wellcomeopenres.22764.1	OZ018401.1		6	428796530
+309002	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Ormia_ochracea	no	NA	GCA_963402855.1	idOrmOchr111.1	WSI		OY727110.1		6	889498021
+141258	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Tachina_grossa	no	NA	GCA_949987645.1	idTacGros1.1	WSI	10.12688/wellcomeopenres.23102.1	NA		6	403781388
+1918221	Brachycera	Oestroidea	Tachinidae	KEEP	Phasiinae	Cistogaster_globosa	no	NA	GCA_937654795.1	idCisGlob1.1	WSI	10.12688/wellcomeopenres.19924.1	OW569408.1		7	472480515
+1776473	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Lypha_dubia	no	NA	GCA_947311025.1	idLypDubi1.1	WSI	10.12688/wellcomeopenres.21295.1	OX371265.1		6	177382248
+1918084	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Germaria_angustata	no	NA	GCA_963681545.1	idGerAngu1.1	WSI	10.12688/wellcomeopenres.23197.1	NA		6	64997717
+1918187	Brachycera	Oestroidea	Tachinidae	KEEP	Dexiinae	Thelaira_solivaga	no	NA	GCA_947397855.1	idTheSoli1.1	WSI	10.12688/wellcomeopenres.19639.1	OX377615.1		7	173354883
+631329	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Tachina_lurida	no	NA	GCA_944452675.1	idTacLuri1.1	WSI	10.12688/wellcomeopenres.19635.1	OX101757.1		6	94132596
+1335495	Brachycera	Tephritoidea	Ulidiidae	KEEP	Otitinae	Melieria_crassipennis	no	NA	GCA_963668005.1	idMelCras1.1	WSI	10.12688/wellcomeopenres.23224.1	NA		4	52632985
+1262360	Brachycera	Tephritoidea	Ulidiidae	KEEP	Otitinae	Melieria_omissa	no	NA	GCA_963971225.1	idMelOmis1.1	WSI		NA		4	141812575
+500284	Brachycera	Opomyzoidea	Anthomyzidae	KEEP	NA	Anthomyza_gracilis	no	NA	GCA_964263875.1	idAntGrac1.hap1.1	WSI		NA		6	33854152
+1606781	Brachycera	Oestroidea	Rhiniidae	KEEP	Rhiniinae	Stomorhina_lunata	no	NA	GCA_933228675.1	idStoLuna1.1	WSI	10.12688/wellcomeopenres.19532.1	OW121745.1		6	31037916
+2259328	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_mascarensis	no	NA	GCA_965266975.1	idAnoMasc1.1	WSI		OZ253851.1		3	549996371
+112268	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_minimus	no	NA	GCA_965234385.1	idAnoMini7.1	WSI		OZ248560.1		3	117612815
+58237	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_oryzalimnetes	no	NA	GCA_964417245.1	idAnoOryz6.1	WSI		OZ207299.1		3	558567402
+1620269	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_pauliani	no	NA	GCA_965234765.1	idAnoPaul1.1	WSI		OZ248576.1		3	751606852
+221566	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_pharoensis	no	NA	GCA_965231785.1	idAnoPhar1.1	WSI		OZ246921.1		3	202267517
+1141471	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_pretoriensis	no	NA	GCA_965234755.1	idAnoPret1.1	WSI		OZ248580.1		4	201310503
+911292	Nematocera	Culicoidea	Culicidae	KEEP	Anophelinae	Anopheles_squamosus	no	NA	GCA_965234655.1	idAnoSqua2.1	WSI		OZ248584.1		3	175645253
+545656	Nematocera	Culicoidea	Culicidae	KEEP	Culicinae	Culex_modestus	no	NA	GCA_964213205.1	idCulMode1.1	WSI		NA		3	180322364
+943103	Nematocera	Culicoidea	Culicidae	KEEP	Culicinae	Culex_perexiguus	no	NA	GCA_964243045.1	idCulPerx1.1	WSI		NA		3	286422004
+561267	Nematocera	Culicoidea	Culicidae	KEEP	Culicinae	Culex_theileri	no	NA	GCA_964340515.1	idCulThei1.1	WSI		NA		3	200700618
+34682	Brachycera	Syrphoidea	Syrphidae	KEEP	Eristalinae	Syritta_pipiens	no	NA	GCA_905187475.1	idSyrPipi1.1	WSI	10.12688/wellcomeopenres.19848.1	LR994575.1		5	295213631
+631328	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Tachina_fera	no	NA	GCA_905220375.1	idTacFera2.1	WSI	10.12688/wellcomeopenres.17760.1	LR999968.1		6	666877738
+7221	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_funebris	no	NA	GCA_958295475.1	idDroFune2.1	WSI		OY282424.1		7	425705316
+7282	Brachycera	Ephydroidea	Drosophilidae	KEEP	Drosophilinae	Drosophila_obscura	no	NA	GCA_964023925.1	idDroObsc58.1	WSI		OZ030370.1		6	803720379
+2882903	Brachycera	Sphaeroceroidea	Heleomyzidae	KEEP	Suilliinae	Suillia_affinis	no	NA	GCA_964659615.1	idSuiAffi2.hap1.1	WSI		NA		6	756257083
+170916	Brachycera	Hippoboscoidea	Hippoboscidae	KEEP	Ornithomyinae	Ornithomya_avicularia	no	NA	GCA_965250645.1	idOrnAvic1.hap1.1	WSI		OZ252614.1		6	396435886
+1776471	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Linnaemya_vulpina	no	NA	GCA_963675445.1	idLinVulp1.1	WSI	10.12688/wellcomeopenres.23296.1	OY776281.1		7	146921032
+670618	Brachycera	Oestroidea	Tachinidae	KEEP	Phasiinae	Phania_funesta	no	NA	GCA_963932375.1	idPhaFune2.1	WSI	10.12688/wellcomeopenres.23440.1	OZ010657.1		6	168780336
+92596	Brachycera	Phoroidea	Lonchopteridae	KEEP	NA	Lonchoptera_lutea	no	NA	GCA_965234885.1	idLonLute3.1	WSI		OZ249197.1		6	223251840
+1643962	Brachycera	Muscoidea	Muscidae	KEEP	Azeliinae	Azelia_nebulosa	no	NA	GCA_964235425.1	idAzeNebu1.hap1.1	WSI		NA		5	380259986
+1511665	Brachycera	Muscoidea	Muscidae	KEEP	Phaoniinae	Phaonia_angelicae	no	NA	GCA_965111845.1	idPhaAnge1.hap1.1	WSI		NA		5	161148450
+559703	Brachycera	Muscoidea	Muscidae	KEEP	Muscinae	Polietes_lardarius	no	NA	GCA_965226705.1	idPolLara1.hap1.1	WSI		NA		5	547341668
+1343502	Nematocera	Sciaroidea	Mycetophilidae	KEEP	Leiinae	Leia_winthemii	no	NA	GCA_965152755.1	idLeiWinh2.1	WSI		OZ224358.1		5	539854868
+500269	Brachycera	Opomyzoidea	Opomyzidae	KEEP	NA	Geomyza_tripunctata	no	NA	GCA_965234165.1	idGeoTrip2.1	WSI		NA		3	227922222
+1266492	Brachycera	Oestroidea	Polleniidae	KEEP	NA	Pollenia_pediculata	no	NA	GCA_964300415.1	idPolPedi2.hap1.1	WSI		NA		6	682620630
+1226587	Brachycera	Sciomyzoidea	Sciomyzidae	KEEP	NA	Ilione_lineata	no	NA	GCA_965234915.1	idIliLine1.hap1.1	WSI		NA		6	1553505108
+169492	Brachycera	Sciomyzoidea	Sepsidae	KEEP	NA	Orygma_luctuosum	no	NA	GCA_965218485.1	idOryLuct2.1	WSI		NA		5	1166406975
+613196	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Nowickia_ferox	no	NA	GCA_936439885.1	idNowFero1.1	WSI	10.12688/wellcomeopenres.19575.1	OW387028.1		6	456449219
+1776468	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Linnaemya_tessellans	no	NA	GCA_951800035.1	idLinTess1.1	WSI	10.12688/wellcomeopenres.21499.1	OX637537.1		7	222138921
+1918310	Brachycera	Oestroidea	Tachinidae	KEEP	Exoristinae	Thecocarcelia_acutangulata	no	NA	GCA_914767995.1	idTheAcut1.1	WSI	10.12688/wellcomeopenres.18994.1	OU612099.1		6	590850215
+1918131	Brachycera	Oestroidea	Tachinidae	KEEP	Tachininae	Panzeria_rudis	no	NA	GCA_956483635.1	idPanRudi1.1	WSI	10.12688/wellcomeopenres.20145.1	OY101452.1		6	1154378737
+1689122	Brachycera	NA	Xylophagidae	KEEP	Xylophaginae	Xylophagus_ater	no	NA	GCA_963422695.1	idXylAter1.1	WSI		NA		9	1266007251
+798133	Brachycera	Tabanoidea	Tabanidae	KEEP	Chrysopsinae	Chrysops_viduatus	no	NA	GCA_964274935.1	idChrVidu2.1	WSI		Na		5	189575890
+381397	Brachycera	Tephritoidea	Tephritidae	KEEP	Tephritinae	Xyphosia_miliaria	no	NA	GCA_965200055.1	idXypMili3.hap1.1	WSI		OZ241501.1		7	628858877
+2719107	Nematocera	Tipuloidea	Tipulidae	KEEP	Tipulinae	Tipula_fascipennis	no	NA	GCA_965151645.1	idTipFasc1.hap1.1	WSI		OZ223791.1		5	703386565
+2736688	Nematocera	Tipuloidea	Tipulidae	KEEP	Tipulinae	Tipula_scripta	no	NA	GCA_965197065.1	idTipScri1.hap1.1	WSI		Na		4	688908432
+50603	scientific_name	scientific_name	Panorpidae	KEEP	Panorpinae	Panorpa_germanica	yes	outgroup	GCA_963678705.1	ijPanGerm4.1	WSI	10.12688/wellcomeopenres.22259.1	OY783203.1		21	835505171
+462257	Brachycera	Ephydroidea	Drosophilidae	KEEP	Steganinae	Phortica_okadai	no	NA	GCA_034638295.1	ASM3463829v1	Zunyi Medical University	10.1038/s41597-024-04239-3	NA		6	452269775
+454641	Brachycera	Tephritoidea	Ulidiidae	EXCLUDE	Otitinae	Tetanops_myopaeformis	yes	permission	GCA_050613955.1	idTetMyoa1.1	USDA	authors not contacted	NA		7	273615442
+2976917	Nematocera	Bibionoidea	Bibionidae	KEEP	Pleciidae	Plecia_longiforceps	yes	excessive_rearrangements	GCA_041753815.1	SNU_Plon_1.1	Seoul National University	10.1093/gbe/evae205	NA		8	770024824
+198433	Brachycera	Opomyzoidea	Agromyzidae	KEEP	Phytomyzinae	Liriomyza_trifolii	no	NA	GCA_043165165.1	ASM4316516v1	Yangzhou University	10.1038/s41597-024-04208-w	NaN		5	1040443198
+201502	Brachycera	Hippoboscoidea	Glossinidae	KEEP	NA	Glossina_fuscipes_fuscipes	yes	inhibited_resolving_node	GCA_049640005.1	Gff_IAEA_hifiasm_2025_v1	Yale University	10.1111/1744-7917.70085	CM112870.1		4	586156603
+88686	Brachycera	Platypezoidea	Phoridae	KEEP	Metopininae	Megaselia_abdita	no	NA	GCA_048544405.1	UofC_Mab_1	University of Chicago	10.1101/2025.01.13.631075	Na		3	438401587
+7515	Siphonaptera	Pulicoidea	Pulicidae	KEEP	NA	Ctenocephalides_felis	no	outgroup	GCA_003426905.1	ASM342690v1	West Virginia University		Na		NA	NA
+3037401	Brachycera	Tabanoidea	Tabanidae	KEEP	Tabaninae	Atylotus_latistriatus	yes	late_release	GCA_977012865.1	idAtyLati1.hap1.1	WSI		OZ349823.1		10	NA
+179676	Nematocera	Chironomoidea	Ceratopogonidae		Ceratopogoninae	Culicoides_sonorensis	yes	late_release	GCA_047716325.1	idCulSono.KS.ABADRU.1.0.female	WSI				NA	NA
+1525512	Nematocera	Chironomoidea	Ceratopogonidae		Forcipomyiinae	Forcipomyia_palustris	yes	late_release	GCA_976917515.1	idForPals1.1	WSI				NA	NA
