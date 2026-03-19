@@ -4,6 +4,7 @@ library('dplyr')
 library('tidyverse')
 library('ggplot2')
 library('gsheet')
+
 ################################################################################
 # root <- "/Users/ab66/Documents/sanger_work/diptera/diptera-ALGs/"
 #root <- paste0(getwd(), "/")
@@ -20,7 +21,7 @@ all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsh
                             stringsAsFactors = F, header = T, check.names = F)
 
 target_species_data <- all_genome_data %>% filter(species %in% target_species) %>%
-  select(species, accession, chromosome, chromsome_size_b)
+  select(species, accession, chromosome, chromosome_size_b)
 
 target_species_data$accession <- sub("\\.[0-9]", "", target_species_data$accession)
 
@@ -44,6 +45,25 @@ target_species_data <- target_species_data %>% filter(!is.na(target_species_data
 target_species_data$ALG[is.na(target_species_data$ALG)] <- "unassigned"
 
 ################################################################################
+# order chromosomes
+chr_order <- c(
+  "OU343117.1",
+  "OU343118.1",
+  "OU343114.1",
+  "OU343115.1",
+  "OU343116.1",
+  "OU343119.1"
+)
+
+target_species_data <- target_species_data %>%
+  mutate(
+    chromosome = if_else(
+      species == "Bibio_marci",
+      factor(chromosome, levels = chr_order),
+      factor(chromosome)
+    )
+  )
+
 # convert coordinates into linear format
 df_lin <- target_species_data %>% arrange(species, chromosome, start)
 df_lin$linear_start <- NA
@@ -62,7 +82,7 @@ for (i in 1:nrow(df_lin)) {
     
   } else if (df_lin$chromosome[i] != df_lin$chromosome[i - 1]) {
     # Same species but new chromosome → increase offset
-    chr_offset <- chr_offset + as.integer(df_lin$chromsome_size_b[i - 1])
+    chr_offset <- chr_offset + as.integer(df_lin$chromosome_size_b[i - 1])
   }
   
   # Assign linearized positions
@@ -105,16 +125,16 @@ sp_y <- target_species[2]
 chr_info_x <- df_lin %>%
   filter(species == sp_x) %>%
   arrange(chromosome) %>%
-  distinct(chromosome, chromsome_size_b) %>%
-  mutate(cum_end = cumsum(chromsome_size_b))
+  distinct(chromosome, chromosome_size_b) %>%
+  mutate(cum_end = cumsum(chromosome_size_b))
 
 chr_info_x$order <- 1:length(chr_info_x$chromosome)
 
 chr_info_y <- df_lin %>%
   filter(species == sp_y) %>%
   arrange(chromosome) %>%
-  distinct(chromosome, chromsome_size_b) %>%
-  mutate(cum_end = cumsum(chromsome_size_b))
+  distinct(chromosome, chromosome_size_b) %>%
+  mutate(cum_end = cumsum(chromosome_size_b))
 
 chr_info_y$order <- 1:length(chr_info_y$chromosome)
 
@@ -184,5 +204,6 @@ p <- ggplot(df_wide) +
     legend.position = "none"
   )
 
-ggsave("figures/two_species_dotplot.svg", plot = p, dpi = 600, height = 10.25, width = 11.58)
-ggsave("figures/two_species_dotplot.png", plot = p, dpi = 600, height = 10.25, width = 11.58)
+ggsave("two_species_dotplot.svg", plot = p, dpi = 600, height = 10.25, width = 11.58)
+ggsave("two_species_dotplot.png", plot = p, dpi = 600, height = 10.25, width = 11.58)
+
