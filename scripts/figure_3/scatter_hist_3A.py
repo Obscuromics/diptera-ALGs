@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -26,6 +28,15 @@ df.loc[df['accept_max']==False,'alg_max']='Unlabeled'
 df['accept_max'].sum()/df.shape[0]
 df['d6_prop'] = df['d6']/df['alg_total']
 
+df['small_dot'] = np.where(df['d6_prop']>0.5, 1, 0)
+print('Small dot chromosome size:')
+print(df[df['small_dot']==1]['chromsome_size_b'].describe())
+idx = df.groupby('species')['d6_prop'].transform(max) == df['d6_prop']
+alg6_df = df[idx]
+df.loc[idx,'alg6'] = 1
+df.loc[~idx,'alg6'] = 0
+df.to_csv('alg6.tsv', sep='\t')
+
 sns.set(font_scale=2)
 sns.set_style("white")
 
@@ -45,8 +56,8 @@ ax0.set_ylabel('Count')
 ax0.set_xticklabels(['0','0', '100', '200', '300', '400', '500'])
 ax0.legend()
 size_bins = np.arange(0, df['chromsome_size_b'].max(), 20_000_000)
-ax0.hist(df[df['alg6']==0]['chromsome_size_b'], color="#D3D3D3", bins=size_bins, alpha=0.5, label='ALGs 1-5')
-ax0.hist(df[df['alg6']==1]['chromsome_size_b'], color="#000000", bins=size_bins, alpha=0.5, label='ALG 6')
+ax0.hist(df[df['small_dot']==0]['chromsome_size_b'], color="#D3D3D3", bins=size_bins, alpha=0.5, label='ALGs 1-5')
+ax0.hist(df[df['small_dot']==1]['chromsome_size_b'], color="#000000", bins=size_bins, alpha=0.5, label='ALG 6')
 ax0.legend()
 
 data = df[['busco_odb12_complete_count','chromsome_size_b','d6_prop']]
