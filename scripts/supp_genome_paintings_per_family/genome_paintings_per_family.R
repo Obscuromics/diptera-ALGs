@@ -6,9 +6,9 @@ library(ape)
 # =========================
 # File paths
 # =========================
-setwd("scripts/supp_genome_paintings_per_family")
-tree_file <- "diptera.supermatrix.phy.treefile"
-species_file <- "diptera_species_340.tsv"
+# setwd("scripts/supp_genome_paintings_per_family")
+tree_file <- "./scripts/supp_genome_paintings_per_family/diptera.supermatrix.phy.treefile"
+species_file <- "./scripts/supp_genome_paintings_per_family/diptera_species_340.tsv"
 
 # =========================
 # Load data
@@ -95,38 +95,38 @@ names(all_family_dfs) <- names(family_trees)
 # =========================
 # Quick checks / exploration
 # =========================
-head(all_family_dfs)
-head(all_family_dfs[["Syrphidae"]])
+# head(all_family_dfs)
+# head(all_family_dfs[["Syrphidae"]])
 
-# Plot example family tree
-plot(family_trees[["Syrphidae"]], cex = 0.7)
+# # Plot example family tree
+# plot(family_trees[["Syrphidae"]], cex = 0.7)
 
 # =========================
 # Add additional species
 # =========================
-new_species <- list(
-  c("Culicoides_sonorensis", "Ceratopogonidae", "GCA_047716325.1"),
-  c("Forcipomyia_palustris", "Ceratopogonidae", "GCA_976917515.1"),
-  c("Atylotus_latistriatus", "Tabanidae", "GCA_977012865.1")
-)
+# new_species <- list(
+#   c("Culicoides_sonorensis", "Ceratopogonidae", "GCA_047716325.1"),
+#   c("Forcipomyia_palustris", "Ceratopogonidae", "GCA_976917515.1"),
+#   c("Atylotus_latistriatus", "Tabanidae", "GCA_977012865.1")
+# )
 
 # Add each new species to the corresponding family
-for (v in new_species) {
+# for (v in new_species) {
   
-  new_row <- vec_to_df(v)
-  fam <- new_row$family
+#   new_row <- vec_to_df(v)
+#   fam <- new_row$family
   
-  if (fam %in% names(all_family_dfs)) {
-    # Append to existing family
-    all_family_dfs[[fam]] <- rbind(all_family_dfs[[fam]], new_row)
-  } else {
-    # Create new family entry
-    all_family_dfs[[fam]] <- new_row
-  }
-}
+#   if (fam %in% names(all_family_dfs)) {
+#     # Append to existing family
+#     all_family_dfs[[fam]] <- rbind(all_family_dfs[[fam]], new_row)
+#   } else {
+#     # Create new family entry
+#     all_family_dfs[[fam]] <- new_row
+#   }
+# }
 
 # =========================
 # Final checks
 # =========================
-all_family_dfs[["Ceratopogonidae"]]
-all_family_dfs[["Tabanidae"]]
+# all_family_dfs[["Ceratopogonidae"]]
+# all_family_dfs[["Tabanidae"]]
