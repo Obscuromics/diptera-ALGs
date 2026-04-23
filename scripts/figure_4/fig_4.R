@@ -57,8 +57,9 @@ alg_per_chromosome <- lapply(files, get_ALGs_per_chromosome)
 alg_per_chromosome <- bind_rows(alg_per_chromosome)
 alg_per_chromosome <- tibble::rownames_to_column(alg_per_chromosome, "chromosome")
 
+
 chromosome_data <- merge(chromosome_data, alg_per_chromosome, on='chromosome', all=T)
-chromosome_data <- merge(chromosome_data, sorted_data_tips_desc[c('species','y')], on='species')
+subset_chromosome_data <- chromosome_data
 chromosome_data <- chromosome_data %>% arrange(-y)
 
 ## get d6 statistics and labels
@@ -225,7 +226,7 @@ alg6_x_plot_data <- full_join(
   select(-matches("^y")) %>%   # remove any messy y columns
   left_join(y_lookup, by = "species") %>%
   arrange(desc(y))
-  
+
 alg6_x_plot_data <- alg6_x_plot_data %>%
   mutate(x_d6_prop = tidyr::replace_na(x_d6_prop, 0))
 
@@ -271,4 +272,201 @@ ggsave("figures/fig4_core.png", plot=plt_all, dpi=600, width = 6, height = 10)
 ggsave("figures/fig4_core.svg", plot=plt_all, dpi=600, width = 6, height = 10)
 ###
 
+#cladogram fig4
+plot_cladogram_paintings <- function(data_df){
+	columns <- c('species', 'd1','d2','d3','d4','d5','d6')
+	data_df <- data_df[columns]
+	data_df <- get_cladogram_wastrels(data_df, columns)
+	molten_df <- melt(data_df, id.vars=c('species','y'),
+	            measure.vars=columns[2:7])
+	molten_df$value[is.na(molten_df$value)] <- 0
+	molten_df$variable <- factor(molten_df$variable, levels = c('d1','d2','d3','d4','d5','d6'))
+	painting_plot <- ggplot(molten_df, aes(x=value, y = factor(y, levels = rev(unique(y))), fill=variable)) +
+	         theme_minimal() +
+	         geom_bar(position="fill", stat="identity") +
+	         scale_fill_manual(values = alg_pal)+
+			 theme(panel.grid = element_blank(),
+			        #panel.grid.major.x = element_line(color = "gray", size = 0.5),
+			        axis.text.y = element_blank(),
+			        axis.title.y = element_blank(),
+			        axis.line.x.bottom = element_line(linewidth=0.5),
+			        axis.text.x = element_blank(),
+			        axis.title.x = element_blank(),
+			        legend.position = "none")
+    return(painting_plot)
+}
 
+get_cladogram_wastrels <- function(data_df, columns) {
+
+  wastrels <- unique(selected_taxa[which(!selected_taxa %in% data_df$species)])
+
+  wastrel_df <- data.frame(matrix(nrow = length(wastrels), ncol = length(columns)))
+  colnames(wastrel_df) <- columns
+  wastrel_df$species <- wastrels
+
+  chrom_map <- list(
+    #Forcipomyia_palustris   = "OZ321021.1",
+    #Culicoides_brevitarsis  = "NC_087087.1",
+    #Culicoides_sonorensis   = "CM106041.1",
+    #Ptychoptera_contaminata = "OZ012640.1",
+    #Drosophila_melanogaster = "NC_004354.4",
+    #Bibio_marci = "OU343119.1"
+
+  )
+
+  fill_cols <- c("d1","d2","d3","d4","d5","d6")
+
+  for (sp in names(chrom_map)) {
+    if (sp %in% wastrel_df$species) {
+
+      tmp <- chromosome_data[
+        chromosome_data$species == sp &
+          chromosome_data$chromosome == chrom_map[[sp]],
+        c("species", fill_cols)
+      ]
+
+      if (nrow(tmp) > 0) {
+        wastrel_df[wastrel_df$species == sp, fill_cols] <- tmp[1, fill_cols]
+      }
+    }
+  }
+
+  data_df <- rbind(as.data.frame(data_df), wastrel_df)
+
+  data_df <- merge(
+    data_df,
+    subtree_data_tips_desc[c("species","y")]
+  )
+
+  data_df <- data_df %>%
+    arrange(-y)
+
+  return(data_df)
+}
+
+tree <- read.tree("data/fixed_tree_additions.treefile")
+selected_taxa <- c('Panorpa_germanica',
+'Ctenocephalides_felis',
+#'Forcipomyia_palustris',
+#'Culicoides_sonorensis',
+#'Culicoides_brevitarsis',
+#'Chironomus_riparius',
+'Dixa_nubilipennis',
+#'Culex_pipiens',
+'Anopheles_nili',
+'Anopheles_coluzzii',
+'Tipula_confusa',
+#'Nephrotoma_appendiculata',
+#'Ptychoptera_contaminata',
+'Drosophila_melanogaster',
+'Bibio_marci'
+)
+subtree <- keep.tip(tree, selected_taxa)
+is.monophyletic(subtree, c("Panorpa_germanica", "Ctenocephalides_felis"))
+subtree_rooted <- root(
+  subtree,
+  outgroup = c("Panorpa_germanica", "Ctenocephalides_felis"),
+  resolve.root = TRUE
+)
+
+subtree_rotated <- ape::rotate(subtree_rooted, node = 11)
+subtree_rotated <- ape::rotate(subtree_rotated, node = 12)
+subtree_rotated <- ape::rotate(subtree_rotated, node = 13)
+#subtree_rotated <- subtree_rooted
+
+subtree_show <- ggtree(subtree_rotated, branch.length = "none", ladderize = FALSE) +
+  						geom_tiplab(align = TRUE, linetype = NA, offset = 0.2) +
+  						coord_cartesian(clip = "off") +
+              theme_tree2() + 
+              theme(theme(plot.margin = margin(5.5, 120, 5.5, 5.5)))+
+              scale_x_continuous(labels = abs) + 
+              xlab('') #+ geom_text2(aes(label=node), hjust = -0.3)
+
+subtree_data <- subtree_show$data %>%
+  filter(isTip)
+subtree_data_tips_desc <- subtree_data %>%
+  arrange(desc(y))
+colnames(subtree_data_tips_desc)[4] <- 'species'
+
+subtree_sex_chr_data <- subset_chromosome_data %>%
+	filter(is_X == TRUE) %>%
+  filter(species %in% selected_taxa)
+
+subtree_sex_chr_data <- merge(
+  subtree_sex_chr_data,
+  subtree_data_tips_desc[, c("species", "y")],
+  by = "species"
+)
+
+sex_chr_paintings <- plot_cladogram_paintings(subtree_sex_chr_data)
+
+### alg6 prop plot
+d6_by_species <- subset_chromosome_data %>%
+  group_by(species) %>%
+  summarise(total_d6 = sum(d6, na.rm = TRUE))
+
+x_data_d6sum <- subtree_sex_chr_data %>%
+  left_join(d6_by_species, by = "species")
+
+x_data_d6sum$x_d6_prop <- x_data_d6sum$d6/x_data_d6sum$total_d6
+
+y_lookup <- subtree_data_tips_desc %>%
+  select(species, y) %>%
+  distinct()
+
+ missing_sex_chr_data <- subset_chromosome_data %>%
+  group_by(species) %>%
+  mutate(no_X = !any(is_X)) %>%
+  ungroup() %>%
+  select(species, no_X) %>%
+  distinct() %>%
+  filter(no_X)
+
+alg6_plot_data <- full_join(
+  x_data_d6sum,
+  missing_sex_chr_data %>% filter(species %in% selected_taxa) %>% select(species, no_X),
+  by = "species"
+) %>%
+  select(-matches("^y")) %>%   # remove any messy y columns
+  left_join(y_lookup, by = "species") %>%
+  arrange(desc(y))
+
+alg6_plot_data <- alg6_plot_data %>%
+  mutate(x_d6_prop = tidyr::replace_na(x_d6_prop, 0))
+
+alg6_prop_plot <- ggplot(alg6_plot_data, aes(x = x_d6_prop, y = factor(y, levels = rev(unique(y))))) +
+			  geom_bar(stat = "identity") +
+			  xlab("Proportion of ALG6 on X chromosome") +
+			  scale_x_continuous(
+			    breaks = seq(0, max(alg6_x_plot_data$x_d6_prop, na.rm = TRUE), by = 1e6),
+			    labels = scales::label_number(scale = 1e-6)
+			  ) +
+			  theme_minimal() +
+			  theme(panel.grid = element_blank(),
+			        #panel.grid.major.x = element_line(color = "gray", size = 0.5),
+			        axis.text.y = element_blank(),
+			        axis.title.y = element_blank(),
+			        axis.line.x.bottom = element_line(size=0.5),
+			        axis.text.x = element_blank(),
+			        axis.title.x = element_blank(),
+			        legend.position = "none")
+###
+
+plt_clado <- (subtree_show | plot_spacer() | sex_chr_paintings | alg6_prop_plot) + plot_layout(widths = c(2, 2, 2, 2))
+
+ggsave("figures/fig4_root_cladogram.png", plot=plt_clado, dpi=600, width = 8, height = 5)
+ggsave("figures/fig4_root_cladogram.svg", plot=plt_clado, dpi=600, width = 8, height = 5)
+
+
+chromosome_data %>% filter(species %in% selected_taxa)
+
+result <-  tibble(chromosome_data) %>%
+  filter(species %in% selected_taxa) %>%
+  group_by(species) %>%
+  mutate(max_d6 = max(d6, na.rm = TRUE)) %>%
+  summarise(
+    max_rows_are_X = all(is_X[d6 == max_d6]),
+    any_X_at_max_d6 = any(is_X[d6 == max_d6]),
+    n_max_ties = sum(d6 == max_d6),
+    .groups = "drop"
+  )
