@@ -576,8 +576,6 @@ while read file; do
     awk -v node="n21" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n21.tsv
     # for schizophora ALGs (ds)
     awk -v node="n133" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n133.tsv
-    
--n  -lgn 
 
 done < replicates
 ```
@@ -848,4 +846,25 @@ hist(rbinom(3000, 1000, coocurence_p))
 
 qbinom(c(1e-6, 1 - 1e-6), 1000, coocurence_p)
 # 364 436
+```
+
+### family paints
+
+```bash
+line_index=1
+
+while IFS= read -r line || [[ -n "$line" ]]; do
+    echo $line_index $line
+
+    if [ "$line_index" -gt 46 ]; then
+        # 47 is the first nematoceran
+        Rscript scripts/misc/ALG_painter_ME_building_blocks.R -f $line -a tables/ALGs_syngraph_diptera.tsv -o figures/paints/clean/"$line_index"_"$line" --tree-order --alg-sort
+    else
+        Rscript scripts/misc/ALG_painter_ME_building_blocks.R -f $line -a tables/ALGs_syngraph_brachycera.tsv -o figures/paints/clean/"$line_index"_"$line" --tree-order --alg-sort
+    fi
+        
+    ((line_index++))
+done < tables/families_ordered_by_tree.tsv
+
+
 ```

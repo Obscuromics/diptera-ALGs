@@ -7,6 +7,7 @@ suppressPackageStartupMessages(library(gridExtra))
 suppressPackageStartupMessages(library(tidyr))
 suppressPackageStartupMessages(library(argparse))
 suppressPackageStartupMessages(library(gsheet))
+suppressPackageStartupMessages(library(ggtree))
 
 ################################################################################
 # function to make chromosomes coherent without steps at the ends
@@ -46,14 +47,18 @@ parser$add_argument("-l", "--list_of_species",
     help="A name of a text file with a species list (one per line, underscores between genus and species name)", default = "")
 parser$add_argument("-o", "--output",  
     dest="o", help="Base of the output name (.png will be attached)")
-parser$add_argument("-a", "--alg-set",  
+parser$add_argument("-a", "--alg-set", dest = "a", 
     help="File with BUSCO to ALG assignments", default = 'data/ALG_assignments_pruned2_m100.tsv')
-# parser$add_argument("-p", "--paint_by",  
-#     help="What reference should be used for painting", default = 'ALGs')
+parser$add_argument("-p", "--paint_by",  
+    help="What reference should be used for painting", default = 'ALGs')
 parser$add_argument("-s", "--subsample", default = 0,
     help="If there is more than -s genomes selected, subsample to this number")
 parser$add_argument("--keep-order", action="store_true", default=FALSE,
     dest="keep", help="Use the order of species as in the list/table.")
+parser$add_argument("--tree-order", action="store_true", default=FALSE,
+    dest="tree_order", help="Order species according to the tree (instead of alphabetically).")
+parser$add_argument("--alg-sort", action="store_true", default=FALSE,
+    dest="alg_sort", help="Order chromsomes by their ALG content.")
 
 args <- parser$parse_args()
 
@@ -61,6 +66,7 @@ family <- args$f
 species_list_file <- args$l 
 busco_asn_file <- args$a # 'Diptera_ALG_new.tsv'
 output_file <-  paste0(args$o, '.png')
+output_tree <-  paste0(args$o, '_tree.png')
 chromosome_files_dir <- 'data/diptera_chromosome_files/'
 busco_files_dir <- "data/busco_tables/"
 
@@ -70,81 +76,61 @@ if (family == "" && species_list_file == ""){
 
 ################################################################################
 ALG_data <- read.table(busco_asn_file, col.names = c('busco', 'chrQ'))
+# ALG_data <- read.table("tables/ALGs_syngraph_diptera.tsv", col.names = c('busco', 'chrQ'))
 # head(ALG_data)
 rownames(ALG_data) <- ALG_data[, 'busco']
 
-# internal_node_directory <- 'ALG_to_muller_nodes_with_6'
-# internal_node_files <- c("n13_final.tsv",
-#                          "n21_final.tsv",
-#                          "n35_final.tsv",
-#                          "n51_final.tsv",
-#                          "n101_final.tsv")
-
-# internal_nodes <- lapply(paste0(internal_node_directory, '/', internal_node_files), read.table, col.names = c('busco', 'chrQ', 'from', 'to'))
-# table(internal_nodes[[1]][, 'chrQ'])
-
-# n13 <- internal_nodes[[1]][, c(1, 2)]
-# n35 <- internal_nodes[[3]][, c(1, 2)]
-# colnames(n13) <- c('busco', 'n13')
-# colnames(n35) <- c('busco', 'n35')
-# muller_blocks <- merge(n13, n35)
-
-# muller_blocks[, 'ALG'] <- ALG_data[muller_blocks[, 'busco'], 'chrQ']
-# muller_blocks[is.na(muller_blocks[, 'ALG']), 'ALG'] <- 0
-
-# muller_blocks[, 'chrQ'] <- NA
-# muller_blocks[muller_blocks[, 'n13'] == 'M2' & muller_blocks[, 'ALG'] == 5, 'chrQ'] <- 'D5'
-# muller_blocks[muller_blocks[, 'n13'] == "M3" & muller_blocks[, 'ALG'] == 4, 'chrQ'] <- 'D4a'
-# muller_blocks[muller_blocks[, 'n13'] == "M6" & muller_blocks[, 'ALG'] == 4, 'chrQ'] <- 'D4b'
-# muller_blocks[muller_blocks[, 'n13'] == "M4" & muller_blocks[, 'ALG'] == 3, 'chrQ'] <- 'D3a'
-# muller_blocks[muller_blocks[, 'n13'] == "M8" & muller_blocks[, 'ALG'] == 3, 'chrQ'] <- 'D3b'
-# muller_blocks[muller_blocks[, 'n13'] == "M5" & muller_blocks[, 'ALG'] == 1, 'chrQ'] <- 'D1a'
-# muller_blocks[muller_blocks[, 'n13'] == "M7" & muller_blocks[, 'ALG'] == 1, 'chrQ'] <- 'D1b'
-# muller_blocks[muller_blocks[, 'n35'] == "M2" & muller_blocks[, 'ALG'] == 2, 'chrQ'] <- 'D2b'
-# muller_blocks[muller_blocks[, 'n35'] == "M6" & muller_blocks[, 'ALG'] == 2, 'chrQ'] <- 'D2a'
-# muller_blocks[muller_blocks[, 'ALG'] == 6, 'chrQ'] <- 'D6'
-
-# table(muller_blocks[, 'chrQ'])
-
 ################################################################################
-all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM/edit?usp=sharing", format='csv'),
-                            stringsAsFactors = F, header = T, check.names = F)
+# all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsheets/d/1K01wVWkMW-m6yT9zDX8gDekp-OECubE-9HcmD8RnmkM/edit?usp=sharing", format='csv'),
+#                             stringsAsFactors = F, header = T, check.names = F)
+all_genome_data <- read.table('tables/supplementary_table_1.tsv', sep = '\t', header = T, check.names = F)
 
 all_genome_data <- all_genome_data[all_genome_data[, 'TO ADD'] %in% c('KEEP', 'OUTGROUP'), ]
 
-# species_table <- read.table('20250510_reference_genome_table.tsv', sep = '\t', header = T)
-# species_table <- species_table[!(species_table[, 'excluded_from_ALG_inference'] %in% c('busco_fail', 'dupl_fail')), ]
-# length(species_table[, 'accession'])
 
 print(paste("Loaded ", nrow(all_genome_data), "genomes."))
 
 family_table <- all_genome_data
+# family <- "Conopidae"
 
-if ( nchar(family) != 0 ){
-  family_table <- family_table[grepl(family, family_table[, 'family']), ]
-  print(paste("Plotting ", nrow(family_table), " members of", family, 'family'))
-}
+if (args$tree_order){
+  source("scripts/supp_genome_paintings_per_family/genome_paintings_per_family.R")
+  species_to_plot <- all_family_dfs[[family]][, 'species']
 
-if ( nchar(species_list_file) != 0 ){
-  species_to_plot <- read.table(species_list_file, header = F)[, 1]
-  
   row.names(family_table) <- family_table[, 'species']
 
-  family_table <- family_table[species_to_plot, ]
-  print(paste("Subsetting to ", nrow(family_table), " species in the specified list"))
-}
+  not_in_tree <- family_table[grepl(family, family_table[, 'family']), 'species']
+  not_in_tree <- not_in_tree[!not_in_tree %in% species_to_plot]
 
-# head(family_table)
+  family_table <- family_table[c(species_to_plot, not_in_tree), ]
 
-if (nrow(family_table) > args$s & args$s != 0){
-  family_table <- family_table[sample(1:nrow(family_table), args$s), ]
-}
-
-if ( args$keep ){
-  family_table <- family_table[nrow(family_table):1, ]
 } else {
-  family_table <- family_table[order(family_table[, 'species'], decreasing = TRUE), ]
+  if ( nchar(family) != 0 ){
+    family_table <- family_table[grepl(family, family_table[, 'family']), ]
+    print(paste("Plotting ", nrow(family_table), " members of", family, 'family'))
+  }
+
+  if ( nchar(species_list_file) != 0 ){
+    species_to_plot <- read.table(species_list_file, header = F)[, 1]
+    
+    row.names(family_table) <- family_table[, 'species']
+
+    family_table <- family_table[species_to_plot, ]
+    print(paste("Subsetting to ", nrow(family_table), " species in the specified list"))
+  }
+
+  if (nrow(family_table) > args$s & args$s != 0){
+    family_table <- family_table[sample(1:nrow(family_table), args$s), ]
+  }
+
+  if ( args$keep | args$tree_order){
+    family_table <- family_table[nrow(family_table):1, ]
+  } else {
+    family_table <- family_table[order(family_table[, 'species'], decreasing = TRUE), ]
+  }
 }
+
+
 
 accesions_to_plot <- family_table[, 'accession']
 species_to_plot <- family_table[, 'species']
@@ -154,10 +140,7 @@ chrom_files <- paste0(accesions_to_plot, '.chromosomes.txt')
 busco_files <- paste0(species_to_plot, '.syngraph.buscos.tsv')
 
 ################################################################################
-
 source("scripts/20250620_colour_pal.R")
-# alg_pal <- c("d1" = "#169e73ff", "d2" = "#e59d38ff", "d3" = "#1573afff",
-#          "d4" = "#f0e354ff", "d5" = "#60b5e1ff", "d6" = "black", "100" = "white")
 
 new_colnames <- c("busco", "chrQ", "Qstart", "Qend")
 
@@ -203,21 +186,29 @@ for (j in 1:length(busco_files)) {
   # }
   busco_data_ALG <- busco_data_ALG[!is.na(busco_data_ALG$chrQ.y), ] # Remove unassigned BUSCOs
   
-  print("In BUSCOs in the genome")
-  print(table(busco_data_ALG[, "chrQ.y"]))
-  print("In BUSCOs assigned to ALGs")
-  print(table(ALG_data[, c("chrQ")]))
-  print("Proportion")
-  print(round(table(busco_data_ALG[, "chrQ.y"]) / table(ALG_data[, c("chrQ")]), 2))
+  # print("In BUSCOs in the genome")
+  # print(table(busco_data_ALG[, "chrQ.y"]))
+  # print("In BUSCOs assigned to ALGs")
+  # print(table(ALG_data[, c("chrQ")]))
+  # print("Proportion")
+  # print(round(table(busco_data_ALG[, "chrQ.y"]) / table(ALG_data[, c("chrQ")]), 2))
+  
+  
+  
 
+  if ( args$alg_sort ){
+    per_chr_weighted_order <- colSums(table(busco_data_ALG[, "chrQ.y"],  busco_data_ALG[, "chrQ.x"] ) * 1:length(table(busco_data_ALG[, "chrQ.y"]))) / colSums(table(busco_data_ALG[, "chrQ.y"],  busco_data_ALG[, "chrQ.x"] ))
+    chr_order <- names(per_chr_weighted_order)[order(per_chr_weighted_order)]
+  } else {
+    # Sort data by order of chromosomes
+    # chromosomes <- unique(busco_data_ALG$chrQ.x)
+    # chromosomes <- sort(chromosomes)
+    # chromosomes <- chromosomes[order(chrom_data$order)]
+    # chrom_data <- chrom_data[order(chrom_data$order), ]
 
-  # Sort data by order of chromosomes
-  chromosomes <- unique(busco_data_ALG$chrQ.x)
-  chromosomes <- sort(chromosomes)
-  # chromosomes <- chromosomes[order(chrom_data$order)]
-  # chrom_data <- chrom_data[order(chrom_data$order), ]
+    chr_order <- chrom_data[, 1]
+  }
 
-  chr_order <- chrom_data[, 1]
   busco_data_ALG_sorted <- busco_data_ALG[order(factor(busco_data_ALG$chrQ.x, levels = chr_order)), ]
   
   # Insert 80 empty BUSCOs between chromosomes
@@ -303,8 +294,35 @@ for (j in 1:length(busco_files)) {
   # Append the plot to the plot_list
   plot_list[[j]] <- p
 }
+
 plot_list <- rev(plot_list)
 ################################################################################
 # grid.arrange(grobs = plot_list, ncol = 1)
 ggsave(output_file, plot = grid.arrange(grobs = plot_list, ncol = 1), width = 15, height = min(2 * length(plot_list), 40))
 ################################################################################
+
+# library(tidyverse)
+# library(ape)
+# library(ggtree)
+
+# p_clean <- ggtree(family_trees[[family]], aes(x, y)) + theme_tree()
+
+# p <- ggtree(family_trees[[family]], aes(x, y), size=2) +
+#   geom_tiplab() + theme_tree()
+
+# ggsave(output_tree, plot = p, width = 5, height = min(2 * length(plot_list), 40))
+
+# facet_plot(
+#   p,
+#   panel = "Paint",
+#   data = tip_data,
+#   geom_col,
+#   mapping = aes(x = value),  # <- no y aesthetic here
+#   width = 0.8
+# )
+# png(output_tree) # , width = 15, height = min(2 * length(plot_list), 40)
+
+#   ggplot(family_trees[[family]], aes(x, y)) + geom_tree() + theme_tree()
+  
+
+# dev.off()
