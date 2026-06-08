@@ -35,7 +35,7 @@ all_genome_data <- read.csv(text = gsheet2text("https://docs.google.com/spreadsh
                             stringsAsFactors = F, header = T, check.names = F)
 
 target_species_data <- all_genome_data %>% filter(species %in% target_species) %>%
-  select(species, accession, chromosome, chromsome_size_b)
+  select(species, accession, chromosome, chromosome_size_b)
 
 target_species_data$accession <- sub("\\.[0-9]", "", target_species_data$accession)
 
@@ -76,7 +76,7 @@ for (i in 1:nrow(df_lin)) {
     
   } else if (df_lin$chromosome[i] != df_lin$chromosome[i - 1]) {
     # Same species but new chromosome → increase offset
-    chr_offset <- chr_offset + as.integer(df_lin$chromsome_size_b[i - 1])
+    chr_offset <- chr_offset + as.integer(df_lin$chromosome_size_b[i - 1])
   }
   
   # Assign linearized positions
@@ -119,16 +119,16 @@ sp_y <- target_species[2]
 chr_info_x <- df_lin %>%
   filter(species == sp_x) %>%
   arrange(chromosome) %>%
-  distinct(chromosome, chromsome_size_b) %>%
-  mutate(cum_end = cumsum(chromsome_size_b))
+  distinct(chromosome, chromosome_size_b) %>%
+  mutate(cum_end = cumsum(chromosome_size_b))
 
 chr_info_x$order <- 1:length(chr_info_x$chromosome)
 
 chr_info_y <- df_lin %>%
   filter(species == sp_y) %>%
   arrange(chromosome) %>%
-  distinct(chromosome, chromsome_size_b) %>%
-  mutate(cum_end = cumsum(chromsome_size_b))
+  distinct(chromosome, chromosome_size_b) %>%
+  mutate(cum_end = cumsum(chromosome_size_b))
 
 chr_info_y$order <- 1:length(chr_info_y$chromosome)
 

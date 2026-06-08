@@ -570,12 +570,13 @@ while read file; do
     echo $replicate; 
     # node
     # for diptera ALGs
-    awk -v node="n1" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n1.tsv
-    awk -v node="n2" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n2.tsv
+    # awk -v node="n1" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n1.tsv
+    # awk -v node="n2" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n2.tsv
     # for brachycera ALGs (db)
-    awk -v node="n21" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n21.tsv
+    awk -v node="n21" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > brachy_nodes/bootstrap."$replicate".n21.tsv
     # for schizophora ALGs (ds)
-    awk -v node="n133" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n133.tsv
+    # awk -v node="n133" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > n1n2_nodes/bootstrap."$replicate".n133.tsv
+    awk -v node="n12" 'NR==1 { for (i=1; i<=NF; i++){f[$i] = i} }{ if( $(f[node"_seq"]) != "NA" ){ print $1 "\t" $(f[node"_seq"])}}' $file > anoph_nodes/bootstrap."$replicate".n12.tsv
 
 done < replicates
 ```
@@ -591,9 +592,24 @@ replicate <- 1
 
 
 # dir('data/syngraph/bootstrap/n1n2_nodes/', pattern = 'n1.tsv')
+# brachy_nodes/
 # replicates <- sapply(strsplit(dir('n1n2_nodes/', pattern = 'n1.tsv'), '[.]'), function(x){ as.numeric(x[2]) } )
 replicates <- 1:1000
 replicate_asn <- list()
+
+loadBrachyAsn <- function(rep){
+    brachy_asn <- read.table(paste0('brachy_nodes/bootstrap.', rep, '.n21.tsv'), col.names = c('busco', 'n2'))
+    brachy_asn[, 1] <- sapply(strsplit(brachy_asn[, 1], '[.]'), function(x){x[1]})
+    return(brachy_asn)
+}
+replicate_brachy_asn <- lapply(replicates, loadBrachyAsn)
+
+loadAnoAsn <- function(rep){
+    ano_asn <- read.table(paste0('anoph_nodes/bootstrap.', rep, '.n12.tsv'), col.names = c('busco', 'n2'))
+    ano_asn[, 1] <- sapply(strsplit(ano_asn[, 1], '[.]'), function(x){x[1]})
+    return(ano_asn)
+}
+replicate_ano_asn <- lapply(replicates, loadAnoAsn)
 
 for (replicate in replicates) {
     print(replicate)
@@ -653,14 +669,26 @@ for (replicate in replicates) {
     # }
 }
 
-all_buscos <- unique(unlist(sapply(replicate_asn, rownames)))
+all_buscos <- unique(unlist(as.vector(sapply(replicate_brachy_asn, function(x){x[, 1]}))))
+all_buscos <- unique(unlist(as.vector(sapply(replicate_ano_asn, function(x){x[, 1]}))))
 
-alg_matrix <- matrix(0, nrow = length(all_buscos), ncol = length(replicates))
+# alg_matrix <- matrix(0, nrow = length(all_buscos), ncol = length(replicate_brachy_asn))
+alg_matrix <- matrix(0, nrow = length(all_buscos), ncol = length(replicate_ano_asn))
 row.names(alg_matrix) <- all_buscos
 
 for ( i in 1:length(replicates)){
-    print(replicates[i])
-    alg_matrix[replicate_asn[[replicates[i]]][, 'busco'], i] <- replicate_asn[[replicates[i]]][, 'ALG']
+    print(i)
+    alg_matrix[replicate_asn[[i]][, 'busco'], i] <- replicate_asn[[i]][, 'ALG']
+}
+
+for ( i in 1:length(replicate_brachy_asn)){
+    print(i)
+    alg_matrix[replicate_brachy_asn[[i]][, 1], i] <- replicate_brachy_asn[[i]][, 2]
+}
+
+for ( i in 1:length(replicate_ano_asn)){
+    print(i)
+    alg_matrix[replicate_ano_asn[[i]][, 1], i] <- replicate_ano_asn[[i]][, 2]
 }
 
 busco_similarity_matrix <- matrix(0, nrow = length(all_buscos), ncol = length(all_buscos))
@@ -674,13 +702,13 @@ for (b1i in 1:length(all_buscos)){
 
 busco_similarity <- as.data.frame(busco_similarity_matrix)
 colnames(busco_similarity) <- all_buscos
-write.table(busco_similarity, 'busco_bootstrap_coocurence.tsv', col.names = T, row.names = F)
+write.table(busco_similarity, 'busco_bootstrap_coocurence_anophe.tsv', col.names = T, row.names = F)
 # busco_similarity <- read.table('tables/busco_bootstrap_coocurence_wo0.tsv')
 # busco_similarity_matrix <- as.matrix(busco_similarity)
 
 # , annotation_col = all_buscos
 row.names(busco_similarity_matrix) <- all_buscos
-pdf('busco_pheatmap_annot2.pdf', width = 600, height = 600)
+pdf('busco_pheatmap_annot_annopth.pdf', width = 300, height = 300)
     pheatmap(busco_similarity_matrix)
 dev.off()
 
@@ -693,11 +721,11 @@ dev.off()
 #     pheatmap(busco_similarity_matrix_test)
 # dev.off()
 
-bootstrap <- read.table('tables/busco_bootstrap_coocurence.tsv', header = T)
+bootstrap <- read.table('tables/busco_bootstrap_coocurence_brachycera.tsv', header = T)
 all_buscos <- sapply(strsplit(colnames(bootstrap), 'X'), function(x){ x[2]})
 colnames(bootstrap) <- all_buscos
 
-hist(bootstrap[, '162912at7147'], breaks = 10, main = '162912at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
+hist(bootstrap[, '206736at7147'], breaks = 10, main = '206736at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
 hist(bootstrap[, '164810at7147'], breaks = 10, main = '164810at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
 hist(bootstrap[, '60829at7147'], breaks = 10, main = '60829at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
 hist(bootstrap[, '75965at7147'], breaks = 10, main = '75965at7147', xlab = 'coocurance', ylab = 'number of BUSCOs')
@@ -708,7 +736,7 @@ hist(bootstrap[, '245796at7147'], breaks = 10, main = '245796at7147', xlab = 'co
 
 
 
-BUSCOs <- 5067 #4526
+BUSCOs <- length(all_buscos) # 4830 #4526
 bootstrap_p <- function(n){ (1 - (1 / n))^n }
 coocurence_p <- (1 - bootstrap_p(BUSCOs))^2
 qbinom(1e-6, 1000, coocurence_p)
@@ -719,13 +747,13 @@ hist(rbinom(length(alg1)^2, 1000, coocurence_p), add = T, breaks = 150)
 assigned_to_an_alg_per_busco <- diag(as.matrix(bootstrap))
 assigned_to_an_alg_per_busco <- c(rep(0, length = BUSCOs - length(assigned_to_an_alg_per_busco)), assigned_to_an_alg_per_busco)
 
-pdf('figures/bootstrap/BUSCOs_assigned_in_an_ALG.pdf')
+pdf('figures/bootstrap/BUSCOs_assigned_in_an_ALG_Brachy.pdf')
     hist(assigned_to_an_alg_per_busco, breaks = 60, main = 'Frequency of BUSCOs assigned in an ALG', ylab = 'BUSCOs', xlab = 'Bootstrap replicate ALG asignment')
     lines(c((1 - bootstrap_p(BUSCOs)) * 1000, (1 - bootstrap_p(BUSCOs)) * 1000), c(0, 1000), lty = 3, col = 'orange', lwd = 3)
     legend('topleft', lty = 3, col = 'orange', lwd = 3, 'sampling expecation if assigned every time', bty = 'n')
 dev.off()
 
-frequenly_unconverging <- assigned_to_an_alg_per_busco < 328
+frequenly_unconverging <- assigned_to_an_alg_per_busco < 327
 
 reminding_ALGs <- bootstrap[!frequenly_unconverging, !frequenly_unconverging]
 ALGs <- list()
@@ -733,7 +761,8 @@ i <- 1
 while(nrow(reminding_ALGs) > 0){
     alg_subset <- reminding_ALGs[, 1] > 327
     if(sum(alg_subset) == 1){
-        break
+        reminding_ALGs <- reminding_ALGs[!alg_subset, !alg_subset]
+        next
     }
     ALGs[[i]] <- reminding_ALGs[alg_subset, alg_subset]
     print(paste("ALG:", i, "of", nrow(ALGs[[i]]), "markers"))
@@ -753,6 +782,8 @@ bootstrap[bootstrap[, '15074at7147'] > 1, bootstrap[, '15074at7147'] > 1]
 hist(unlist(alg2), breaks = 300, col = 'red')
 sapply(ALGs, length)
 # 493  709  840    2   16 1054  644   14   12   15   14    3
+ALGs <- ALGs[1:3]
+
 genes_in_ALGs <- lapply(ALGs, colnames)
 instable_asn_buscos <- unlist(genes_in_ALGs[c(4, 5, 8:12)])
 bigALGs <- genes_in_ALGs[c(1:3, 6:7)]
@@ -767,18 +798,21 @@ for (i in 1:5){
 }
 
 
-original_algs <- read.table('tables/ALGs_syngraph_diptera.tsv')
+original_algs <- read.table('../../../tables/ALGs_syngraph_diptera.tsv')
+original_algs <- read.table('../../../tables/ALGs_syngraph_brachycera.tsv')
 row.names(original_algs) <- original_algs[, 1]
 
 instable_asn_buscos[instable_asn_buscos %in% original_algs[, 1]]
 original_algs[c("181571at7147", "19395at7147"), ]
 # these three get removed from alg3
 
-ALG_labels <- sapply(1:5, function(x){table(original_algs[bigALGs[[x]], 2])})
+head(genes_in_ALGs)
+
+ALG_labels <- sapply(1:9, function(x){table(original_algs[bigALGs[[x]], 2])})
 
 names(bigALGs) <- names(ALG_labels)
 
-bootstrap_ALGs <- do.call("rbind", lapply(1:5, function(x){ data.frame(busco = bigALGs[[x]], names(bigALGs)[x]) } ))
+bootstrap_ALGs <- do.call("rbind", lapply(1:9, function(x){ data.frame(busco = bigALGs[[x]], names(bigALGs)[x]) } ))
 
 row.names(bootstrap_ALGs) <- bootstrap_ALGs[, 1]
 
@@ -787,16 +821,27 @@ ALG6_core_conflicts <- row.names(bootstrap_ALGs) %in% c('162912at7147', '164810a
 bootstrap_ALGs_cleaned <- bootstrap_ALGs[!ALG6_core_conflicts, ]
 colnames(bootstrap_ALGs_cleaned) <- c('busco', 'alg')
 
-ALG6_syngraph <- read.table('data/syngraph/alg6/nodes/n1_asgn.tsv')
+ALG6_syngraph <- read.table('../../../data/syngraph/alg6/nodes/n1_asgn.tsv')
+ALG6_syngraph_brachy <- read.table('../../../data/syngraph/alg6/nodes/n5_asgn.tsv')
 
-ALG6_syngraph[, 1] %in% bootstrap_ALGs_cleaned[, 1]
+ALG6_syngraph_brachy[, 1] %in% bootstrap_ALGs[, 1]
 
 core_ALG6_conflicts <- ALG6_syngraph[, 1] %in% c('162912at7147', '164810at7147', '60829at7147', '75965at7147', '61998at7147', '173520at7147', '245796at7147')
 
-final_ALGs <- rbind(bootstrap_ALGs_cleaned, data.frame(busco = ALG6_syngraph[!core_ALG6_conflicts, 1], alg = 'd6'))
+colnames(bootstrap_ALGs) <- c('busco', 'alg')
+final_ALGs <- rbind(bootstrap_ALGs, data.frame(busco = ALG6_syngraph_brachy[, 1], alg = 'db6'))
 table(final_ALGs[, 2])
+final_ALGs <- final_ALGs[order(final_ALGs[, 2]), ]
+table(original_algs[, 2])
+head(final_ALGs)
 
-write.table(final_ALGs[order(final_ALGs[, 2]), ], file = 'tables/ALGs_diptera_bootstrapping.tsv', col.names = F, quote = F, row.names = F)
+rownames(final_ALGs) <- final_ALGs[, 1]
+buscos_in <- original_algs[!original_algs[, 1] %in% final_ALGs[, 1], ]
+buscos_out <- final_ALGs[!final_ALGs[, 1] %in% original_algs[, 1], ]
+final_ALGs <- final_ALGs[c(buscos_in, buscos_out), ]
+head(final_ALGs)
+
+write.table(final_ALGs, file = 'ALGs_brachy_bootstrapping.tsv', col.names = F, quote = F, row.names = F)
 
 # 
 library(RColorBrewer)

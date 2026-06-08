@@ -39,7 +39,7 @@ output <- paste0(args$o, '.pdf') # figures/syngraph_tree_of_changes_mosquitoes.p
 simplified <- 0
 # just_internal <- TRUE
 
-subtree <- 'n2' # can be node label to plot only a subtree; n2 is Culicomorpha
+subtree <- NA # 'n1' # can be node label to plot only a subtree; n2 is Culicomorpha
 plot_level <- args$l # family, genus
 all_changes <- FALSE # if FALSE only plot nodes with changes
 including_tax <- FALSE

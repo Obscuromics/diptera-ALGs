@@ -34,21 +34,18 @@ Rscript scripts/ALG_painter_ME_building_blocks.R -a tables/ALGs_syngraph_diptera
 Rscript scripts/table_of_chromosomes_vs_ancestry.R -s Machimus_atricapillus -a tables/ALGs_syngraph_diptera.tsv
 ```
 
+#### Figure 1
+
+#### Figure 2
+
+```bash
+Rscript scripts/figure_2/20250627_figure_2_tree_with_families.R
+Rscript scripts/misc/plot_tree_with_ALGs_at_nodes.R -t data/syngraph/diptera.no_plecia.mindist.m165.newick.txt -a tables/ALGs_syngraph_diptera.tsv -l family -o figures/diptera_syngraph_tree_of_changes -r data/syngraph/diptera.no_plecia.mindist.m165.rearrangements.tsv
+```
+
 TODO: Julia needs to add centromere plotting scripts and learn how to ust git
 
-Static
 
-```bash
-Rscript scripts/plot_tree_with_ALGs_at_nodes.R # generates 'figures/syngraph_tree_of_changes.pdf'
-```
-
-Suppmenetary figure showing % of ALGs together on chromosomes of contemporary species.
-
-```bash
-Rscript scripts/20251106_stability.R -a tables/ALGs_syngraph_schizophora_syrphidae.tsv -o figures/ALG_stability_histograms_ds
-Rscript scripts/20251106_stability.R -a tables/ALGs_syngraph_brachycera.tsv -o figures/ALG_stability_histograms_db
-Rscript scripts/20251106_stability.R -a tables/ALGs_syngraph_diptera.tsv -o figures/ALG_stability_histograms_d
-```
 
 #### Figure 3
 
@@ -58,19 +55,24 @@ Sex chromosome panel
 scripts/figure_3/20250228_sex_chromosomes_in_all_species.R
 ```
 
-## Others
+#### Supps
 
-- [The task list](https://github.com/orgs/Obscuromics/projects/1)
+Suppmenetary figure showing % of ALGs together on chromosomes of contemporary species.
 
+```bash
+Rscript scripts/20251106_stability.R -a tables/ALGs_syngraph_schizophora_syrphidae.tsv -o figures/ALG_stability_histograms_ds
+Rscript scripts/20251106_stability.R -a tables/ALGs_syngraph_brachycera.tsv -o figures/ALG_stability_histograms_db
+Rscript scripts/20251106_stability.R -a tables/ALGs_syngraph_diptera.tsv -o figures/ALG_stability_histograms_d
+```
 
-### Paintings
+#### Paintings
 
 ```bash
 Rscript scripts/ALG_painter_ME_building_blocks.R -a tables/ALGs_syngraph_diptera.tsv -l tables/species_lists/selected_mosquitos.tsv -o figures/paints/mosquito_pick # selected culicomorphan genomes
 Rscript scripts/ALG_painter_ME_building_blocks.R -a tables/ALGs_syngraph_diptera.tsv -l tables/species_lists/excluded_species -o figures/paints/excluded
 ```
 
-### plotting dotplots
+#### plotting dotplots
 
 ```bash
 Rscript scripts/plot_dotplot.R -s1 Bibio_marci -s2 Ptychoptera_contaminata -o figures/dotplot_test
@@ -85,7 +87,7 @@ Rscript scripts/plot_dotplot.R -s1 Culex_modestus -s2 Aedes_aegypti -o figures/d
 
  
 Rscript scripts/plot_dotplot.R -s1 Drosophila_sechellia -s2 Drosophila_melanogaster -o figures/dotplot_Dros_1_sechellia_melanogaster
-Rscript scripts/plot_dotplot.R -s1 Drosophila_triauraria -s2 Drosophila_melanogaster -o figures/dotplot_Dros_triauraria_melanogaster
+Rscript scripts/misc/plot_dotplot.R -s1 Drosophila_triauraria -s2 Drosophila_melanogaster -o figures/dotplot_Dros_triauraria_melanogaster
 Rscript scripts/plot_dotplot.R -s1 Drosophila_yakuba -s2 Drosophila_melanogaster -o figures/dotplot_Dros_yakuba_melanogaster
 Rscript scripts/plot_dotplot.R -s1 Drosophila_ananassae -s2 Drosophila_melanogaster -o figures/dotplot_Dros_ananassae_melanogaster
 Rscript scripts/plot_dotplot.R -s1 Drosophila_pseudoobscura -s2 Drosophila_melanogaster -o figures/dotplot_Dros_pseudoobscura_melanogaster
@@ -110,4 +112,8 @@ Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Chironomus_striatipen
 Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Polypedilum_vanderplanki -o figures/_dotplots/dotplot_Chironomus_riparius_3_Polypedilum_vanderplanki
 Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Smittia_aterrima -o figures/_dotplots/dotplot_Chironomus_riparius_4_Smittia_aterrima
 Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Propsilocerus_akamusi -o figures/_dotplots/dotplot_Chironomus_riparius_5_Smittia_aterrima
+
+Rscript scripts/plot_dotplot.R -s1 Chironomus_riparius -s2 Propsilocerus_akamusi -o figures/_dotplots/dotplot_Chironomus_riparius_5_Smittia_aterrima
+
+Rscript scripts/misc/plot_dotplot.R -s1 Merodon_equestris -s2 Blera_fallax -o figures/_dotplots/dotplot_Merodon_equestris_Blera_fallax
 ```
