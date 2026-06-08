@@ -1,21 +1,34 @@
-# diptera-ALGs
+# 340 dipteran genomes reveal the origin of Muller elements and sex chromosomes in Diptera
+
+This is a repository accompaning this preprint: https://www.biorxiv.org/content/10.64898/2026.06.01.729285v1
+
+## Organisation
+
+This repository was used for the work, therefore the history contains lots of code specific to our cluster environment and the scripts still need some reorganisation and polishing. This repository contains only the code and some small files and tables
+
+### data directly in the repository 
+
+The tree based on 5067 BUSCO genes found in 340 dipteran genomes and a mecopteran _Panorpa germanica_ as an outgroup. Sequences were alinged using MAFFT v7.525, trimAl v1.4.rev15 using `-gt 0.8 -st 0.001 -resoverlap 0.75 -seqoverlap 80` parameters. 4298 alignment passing the trimming step were used to infer the tree using iqtree with autoselection of the substitution model (Q.insect+I+G4 substitution model with gamma rate variation) and 1000 ultrafast bootstrap replicates. The final tree is available in this repository:
+
+```
+data/syngraph/iqtree/diptera.supermatrix.phy.treefile
+```
+
+The ancestral linkage groups were infered using syngraph (see Methods of the manuscript). Here are the final assignments of BUSCOs to ALGs for common ancestor of all Diptera: `tables/ALGs_syngraph_diptera.tsv` (karyotype α), Brachycera: `tables/ALGs_syngraph_brachycera.tsv` (karyotype β). We include also assignments for the common ancestor of schizophora and relatives (karyotype γ), however, we would advise using Brachyceran ALGs instead, as typical schizophoran chormosomes are metacentric chromosomes with two chromosome arms corresponding to two different brachyceran ALGs. This ALGs are found here: `ALGs_syngraph_schizophora_syrphidae.tsv`. Karyotype γ is moreless corresponding to Muller Elements (the biggest difference is in 'the dot').
+
+### data to fetch from a cloud
+
+TODO
+This section will be done after finalisation of all the files during the review process.
+
+## Rerunning scripts
+
+TODO (most of the script will have missing data)
 
 ## Basic Genome Stats
 
-To get basic summaries about the genomes run following script
 
-```bash
-Rscript scripts/20250702_genome_summaries.R 
-```
-
-## Writing
-
-- [Julia's thesis](https://docs.google.com/document/d/1bfhqvAD_j3B5yVDeCrSt0J82xKEFOqUfy64Hq547xIE)
-- [Drafting space](https://docs.google.com/document/d/1fc5yGJq-1laB7v4YSdKUrmTqiotB-RvVQa6od_DRAJU/edit?tab=t.0)
-- [Clean manuscript](https://docs.google.com/document/d/18QSRY8k8Z5xc9gZTiWP54esINj1GxGQF7-9OgIyaJoo/edit?tab=t.0)
-- [Supps](https://docs.google.com/document/d/1qPkfJt6ZOQZzHlvTzJtfGthx2J_9wtrOV4KQKjn2PjE/edit?tab=t.0#heading=h.32dn0pko8wct)
-
-## Figures
+## Regenerating figures
 
  - [drafting slideck](https://docs.google.com/presentation/d/1M6Vxeka0wPZDs_RF7VTUbJoILGp6jp1BJcpDHgwQSoI/edit?usp=sharing)
 

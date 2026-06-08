@@ -1,34 +1,28 @@
-### Running syngraph on the cluster
+### Running syngraph 
 
-It runs fast, but it's more than what should be on the headnode, therefore it's better to do it in an interactive job.
+TODO: add running nextflow instructions
 
-```bash
-bsub -G team360 -Is -n 16 -M 10240 -R "select[mem>10240] rusage[mem=10240]" bash -l
-```
-
-#### Sam's instructions for modifying syngraph run
+#### Instructions on modifying the syngraph run
 
 ```bash
-cd /data/tol/teams/jaron/lustre/users/se13/diptera_alg
 module load syngraph/0.0.1-c3
 ```
-You need biopython somehow too
 
 The included busco files are in:
 
 ```bash
-./data/results/infer_alg_diptera/syngraph_busco_tables/
+data/results/infer_alg_diptera/syngraph_busco_tables/
 ```
 
 If you want to change the included files modify them in place, or to exclude them move them to:
 
 ```bash
-./data/results/infer_alg_diptera/excluded_syngraph_busco_tables/
+data/results/infer_alg_diptera/excluded_syngraph_busco_tables/
 ```
 and run
 
 ```bash
-./scripts/prep_syngraph_tree.py 
+scripts/prep_syngraph_tree.py # TODO: THIS SCRIPT IS MISSING
 ```
 
 which will create a new tree, modifying the iqtree output by removing the leaves which have files in /excluded_syngraph_busco_tables. Theres also a line you can change from 'None' to the outgroup clade file if you want and then it will reroot the tree.
